@@ -24,14 +24,22 @@ import java.util.List;
  * Created by DrHales on 2/29/2016.
  */
 public class HelperCommands implements NewCommandExtension {
-    //<editor-fold defaultstate="collapsed" desc="Rank">
-    private final Rank rank = Rank.HELPER;
-    //</editor-fold>
+
+    private abstract class Command extends NewCommand {
+        public Command(String key, long delay, CommandInput... requiredInput) {
+            super(key, Rank.HELPER, delay, requiredInput);
+        }
+
+        public Command(String key, CommandInput... requiredInput) {
+            super(key, Rank.HELPER, requiredInput);
+        }
+    }
+    
     //<editor-fold defaultstate="collapsed" desc="Commands List">
     @Override
     public List<NewCommand> init() {
         return Arrays.asList(
-                new NewCommand("gestats", rank, new CommandInput<Integer>(integer -> ItemDefinition.forId(integer) != null, "Integer", "An Item ID")) {
+                new Command("gestats", new CommandInput<Integer>(integer -> ItemDefinition.forId(integer) != null, "Integer", "An Item ID")) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         player.sendf("Grand Exchange is current %s@bla@.", JGrandExchange.enabled ? "@gre@Enabled" : "@red@Disabled");
@@ -51,7 +59,7 @@ public class HelperCommands implements NewCommandExtension {
                         return true;
                     }
                 },
-                new NewCommand("help", rank, new CommandInput<String>(World::playerIsOnline, "Player", "An Online Player")) {
+                new Command("help", new CommandInput<String>(World::playerIsOnline, "Player", "An Online Player")) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         final Player target = World.getPlayerByName(input[0].trim());
@@ -63,7 +71,7 @@ public class HelperCommands implements NewCommandExtension {
                         return true;
                     }
                 },
-                new NewCommand("removejail", rank, new CommandInput<String>(World::playerIsOnline, "Player", "An Online Player in Jail")) {
+                new Command("removejail", new CommandInput<String>(World::playerIsOnline, "Player", "An Online Player in Jail")) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         final Player target = World.getPlayerByName(input[0].trim());
@@ -73,7 +81,7 @@ public class HelperCommands implements NewCommandExtension {
                         return true;
                     }
                 },
-                new NewCommand("jail", rank, new CommandInput<String>(World::playerIsOnline, "Player", "An Online Player")) {
+                new Command("jail", new CommandInput<String>(World::playerIsOnline, "Player", "An Online Player")) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         final Player target = World.getPlayerByName(input[0].trim());
@@ -91,7 +99,7 @@ public class HelperCommands implements NewCommandExtension {
                         return true;
                     }
                 },
-                new NewCommand("tojail", rank) {
+                new Command("tojail") {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         if (player.duelAttackable > 0) {
@@ -102,7 +110,7 @@ public class HelperCommands implements NewCommandExtension {
                         return true;
                     }
                 },
-                new NewCommand("unjail", rank, new CommandInput<String>(World::playerIsOnline, "Player", "An Online Player")) {
+                new Command("unjail", new CommandInput<String>(World::playerIsOnline, "Player", "An Online Player")) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         final Player target = World.getPlayerByName(input[0].trim());
@@ -116,7 +124,7 @@ public class HelperCommands implements NewCommandExtension {
                         return true;
                     }
                 },
-                new NewCommand("tounjail", rank) {
+                new Command("tounjail") {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         if (player.duelAttackable > 0) {
@@ -127,14 +135,14 @@ public class HelperCommands implements NewCommandExtension {
                         return true;
                     }
                 },
-                new NewCommand("authenticator", rank, Time.FIVE_SECONDS) {
+                new Command("authenticator", Time.FIVE_SECONDS) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         PlayerAuthenticationGenerator.startAuthenticationDialogue(player);
                         return true;
                     }
                 },
-                new NewCommand("checktickets", rank) {
+                new Command("checktickets") {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         /*Ticket.checkTickets(player);
@@ -144,14 +152,14 @@ public class HelperCommands implements NewCommandExtension {
                         return true;
                     }
                 },
-                new NewCommand("syell", rank, new CommandInput<String>(string -> string != null, "String", "Message")) {
+                new Command("syell", new CommandInput<String>(string -> string != null, "String", "Message")) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         PushMessage.pushStaffMessage(input[0].trim(), player);
                         return true;
                     }
                 },
-                new NewCommand("assist", rank, new CommandInput<String>(World::playerIsOnline, "Player", "An Online Player")) {
+                new Command("assist", new CommandInput<String>(World::playerIsOnline, "Player", "An Online Player")) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         if (!player.canSpawnSet()) {
@@ -172,7 +180,7 @@ public class HelperCommands implements NewCommandExtension {
                         return true;
                     }
                 },
-                new NewCommand("clearnulls", rank) {
+                new Command("clearnulls") {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         World.getPlayers().stream().filter(target -> target == null).forEach(target -> {
@@ -182,7 +190,7 @@ public class HelperCommands implements NewCommandExtension {
                         return true;
                     }
                 },
-                new NewCommand("kdisplay", rank, new CommandInput<String>(string -> string != null && !string.toLowerCase().contains("arre") && !string.toLowerCase().contains("jet") && !string.toLowerCase().contains("ferry") && !string.contains("@"), "String", "Display Name")) {
+                new Command("kdisplay", new CommandInput<String>(string -> string != null && !string.toLowerCase().contains("arre") && !string.toLowerCase().contains("jet") && !string.toLowerCase().contains("ferry") && !string.contains("@"), "String", "Display Name")) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         if (player.getName().toLowerCase().equals("knightmare")) {

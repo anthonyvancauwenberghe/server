@@ -697,6 +697,12 @@ public class Container {
         return getSlotById(id) != - 1;
     }
 
+	public boolean hasItem(Item item) {
+		int amount = getCount(item.getId());
+		return (item.getCount() <= 0 && contains(item.getId()))
+				|| (contains(item.getId()) && amount >= item.getCount());
+	}
+
 	/**
 	 * Checks if there is room in the inventory for an item.
 	 *

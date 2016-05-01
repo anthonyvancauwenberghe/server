@@ -165,7 +165,6 @@ public class Player extends Entity implements Persistable, Cloneable {
 	 * LONG
 	 */
 	private final long logintime = System.currentTimeMillis();
-	public long splitDelay = 0L;
 	public long lastTicketRequest;
 	public long foodTimer = System.currentTimeMillis();
 	public long comboFoodTimer = System.currentTimeMillis();
@@ -2076,9 +2075,7 @@ public class Player extends Entity implements Persistable, Cloneable {
 	}
 
 	public ActionSender sendHeadedMessage(final String color, final String header, final Object... message) {
-		for(Object o : message) {
-			actionSender.sendMessage((color == null ? "" : color) + (header == null ? "" : header + " ") + o.toString());
-		}
+		Arrays.asList(message).forEach(value -> actionSender.sendMessage(String.format("%s%s%s", (color != null ? color : ""), (header != null ? String.format("%s ", header) : ""), value.toString())));
 		return getActionSender();
 	}
 

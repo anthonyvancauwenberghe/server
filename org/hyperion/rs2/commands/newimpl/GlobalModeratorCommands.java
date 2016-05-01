@@ -1,28 +1,36 @@
 package org.hyperion.rs2.commands.newimpl;
 //<editor-fold defaultstate="collapsed" desc="Imports">
+
 import org.hyperion.rs2.commands.NewCommand;
 import org.hyperion.rs2.commands.NewCommandExtension;
 import org.hyperion.rs2.commands.util.CommandInput;
-import org.hyperion.rs2.model.Player;
-import org.hyperion.rs2.model.Rank;
-import org.hyperion.rs2.model.World;
-import org.hyperion.rs2.model.Yelling;
+import org.hyperion.rs2.model.*;
+import org.hyperion.rs2.util.TextUtils;
 
 import java.util.Arrays;
 import java.util.List;
 //</editor-fold>
+
 /**
  * Created by DrHales on 2/29/2016.
  */
 public class GlobalModeratorCommands implements NewCommandExtension {
-    //<editor-fold defaultstate="collapsed" desc="Rank">
-    private final Rank rank = Rank.GLOBAL_MODERATOR;
-    //</editor-fold>
+
+    private abstract class Command extends NewCommand {
+        public Command(String key, long delay, CommandInput... requiredInput) {
+            super(key, Rank.GLOBAL_MODERATOR, delay, requiredInput);
+        }
+
+        public Command(String key, CommandInput... requiredInput) {
+            super(key, Rank.GLOBAL_MODERATOR, requiredInput);
+        }
+    }
+
     //<editor-fold defaultstate="collapsed" desc="Commands List">
     @Override
     public List<NewCommand> init() {
         return Arrays.asList(
-                new NewCommand("setplayertag", rank, new CommandInput<String>(World::playerIsOnline, "Player", "An Online Player"), new CommandInput<String>(string -> string != null, "Player", "An Online Player")) {
+                new Command("setplayertag", new CommandInput<String>(World::playerIsOnline, "Player", "An Online Player"), new CommandInput<String>(string -> string != null, "Player", "An Online Player")) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         final Player target = World.getPlayerByName(input[0].trim());
@@ -34,7 +42,7 @@ public class GlobalModeratorCommands implements NewCommandExtension {
                         return true;
                     }
                 },
-                new NewCommand("removeplayertag", rank, new CommandInput<String>(World::playerIsOnline, "Player", "An Online Player")) {
+                new Command("removeplayertag", new CommandInput<String>(World::playerIsOnline, "Player", "An Online Player")) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         final Player target = World.getPlayerByName(input[0].trim());
@@ -42,6 +50,22 @@ public class GlobalModeratorCommands implements NewCommandExtension {
                             return true;
                         }
                         target.getYelling().setYellTitle("");
+                        return true;
+                    }
+                },
+                new Command("givedice", new CommandInput<String>(World::playerIsOnline, "Player", "An Online Player")) {
+                    @Override
+                    protected boolean execute(Player player, String[] input) {
+                        final Player target = World.getPlayerByName(input[0].trim());
+                        final Item item = Item.create(15098, 1);
+                        final boolean space = target.getInventory().hasRoomFor(item);
+                        if (space) {
+                            target.getInventory().add(item);
+                        } else {
+                            target.getBank().add(item);
+                        }
+                        player.sendf("%s has been given a Dicing Bag.", TextUtils.titleCase(target.getName()));
+                        target.sendf("%s has put a Dicing bag into your %s.",TextUtils.titleCase(player.getName()), space ? "Inventory" : "Bank");
                         return true;
                     }
                 }

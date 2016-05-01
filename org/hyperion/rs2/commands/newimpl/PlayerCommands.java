@@ -5,7 +5,9 @@ import org.hyperion.Configuration;
 import org.hyperion.rs2.commands.NewCommand;
 import org.hyperion.rs2.commands.NewCommandExtension;
 import org.hyperion.rs2.commands.NewCommandHandler;
+import org.hyperion.rs2.commands.impl.cmd.ClanCommand;
 import org.hyperion.rs2.commands.impl.cmd.SkillSetCommand;
+import org.hyperion.rs2.commands.impl.cmd.SpawnCommand;
 import org.hyperion.rs2.commands.impl.cmd.WikiCommand;
 import org.hyperion.rs2.commands.util.CommandInput;
 import org.hyperion.rs2.model.*;
@@ -48,21 +50,31 @@ import org.hyperion.util.Time;
 
 import java.util.*;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 //</editor-fold>
 
 /**
  * Created by DrHales on 2/29/2016.
  */
 public class PlayerCommands implements NewCommandExtension {
-    //<editor-fold defaultstate="collapsed" desc="Rank">
-    private final Rank rank = Rank.PLAYER;
-
-    //</editor-fold>
+    
+    private abstract class Command extends NewCommand {
+        public Command(String key, long delay, CommandInput... requiredInput) {
+            super(key, Rank.PLAYER, delay, requiredInput);
+        }
+        
+        public Command(String key, CommandInput... requiredInput) {
+            super(key, Rank.PLAYER, requiredInput);
+        }
+    }
+    
     //<editor-fold defaultstate="collapsed" desc="Commands List">
     @Override
     public List<NewCommand> init() {
         return Arrays.asList(
-                new NewCommand("yaks", rank, Time.FIVE_SECONDS) {
+                new ClanCommand("cc"),
+                new ClanCommand("clan"),
+                new Command("yaks", Time.FIVE_SECONDS) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         Magic.teleport(player, 3051, 3515, 0, false);
@@ -70,14 +82,14 @@ public class PlayerCommands implements NewCommandExtension {
                         return true;
                     }
                 },
-                new NewCommand("buyshards", rank, Time.FIVE_SECONDS) {
+                new Command("buyshards", Time.FIVE_SECONDS) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         player.sendMessage("Spirit shard packs are available inside the emblem pt store");
                         return true;
                     }
                 },
-                new NewCommand("changecompcolors", rank, Time.FIFTEEN_SECONDS, new CommandInput<String>(string -> string != null, "Primary Color", "A Color Name"), new CommandInput<String>(string -> string != null, "Secondary Color", "A Color Name")) {
+                new Command("changecompcolors", Time.FIFTEEN_SECONDS, new CommandInput<String>(string -> string != null, "Primary Color", "A Color Name"), new CommandInput<String>(string -> string != null, "Secondary Color", "A Color Name")) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         final String primary_color = input[0].trim();
@@ -111,7 +123,7 @@ public class PlayerCommands implements NewCommandExtension {
                         return true;
                     }
                 },
-                new NewCommand("viewprofile", rank, Time.FIFTEEN_SECONDS, new CommandInput<String>(PlayerLoading::playerExists, "Player", "An Existing Player")) {
+                new Command("viewprofile", Time.FIFTEEN_SECONDS, new CommandInput<String>(PlayerLoading::playerExists, "Player", "An Existing Player")) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         final String name = input[0].trim();
@@ -121,7 +133,7 @@ public class PlayerCommands implements NewCommandExtension {
                         return true;
                     }
                 },
-                new NewCommand("exchangeimps", rank, Time.TEN_SECONDS) {
+                new Command("exchangeimps", Time.TEN_SECONDS) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         for (final Item array : player.getInventory().toArray()) {
@@ -132,7 +144,7 @@ public class PlayerCommands implements NewCommandExtension {
                         return true;
                     }
                 },
-                new NewCommand("buyrocktails", rank, Time.FIFTEEN_SECONDS, new CommandInput<Integer>(integer -> integer > 0 && integer < Integer.MAX_VALUE, "Amount", String.format("An Amount between 0 & %s", Integer.MAX_VALUE))) {
+                new Command("buyrocktails", Time.FIFTEEN_SECONDS, new CommandInput<Integer>(integer -> integer > 0 && integer < Integer.MAX_VALUE, "Amount", String.format("An Amount between 0 & %s", Integer.MAX_VALUE))) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         int amount = Math.min(Integer.parseInt(input[0].trim()), player.getPoints().getPkPoints());
@@ -145,56 +157,56 @@ public class PlayerCommands implements NewCommandExtension {
                         return true;
                     }
                 },
-                new NewCommand("thread", rank, Time.THIRTY_SECONDS, new CommandInput<Integer>(integer -> integer > 0 && integer < Integer.MAX_VALUE, "Thread Number", "A Thread Number")) {
+                new Command("thread", Time.THIRTY_SECONDS, new CommandInput<Integer>(integer -> integer > 0 && integer < Integer.MAX_VALUE, "Thread Number", "A Thread Number")) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         player.getActionSender().sendWebpage(String.format("http://forums.arteropk.com/index.php?showtopic=%d", Integer.parseInt(input[0].trim())));
                         return true;
                     }
                 },
-                new NewCommand("acceptyellrules", rank, Time.FIFTEEN_SECONDS) {
+                new Command("acceptyellrules", Time.FIFTEEN_SECONDS) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         DialogueManager.openDialogue(player, 198);
                         return true;
                     }
                 },
-                new NewCommand("forums", rank, Time.THIRTY_SECONDS) {
+                new Command("forums", Time.THIRTY_SECONDS) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         player.getActionSender().sendWebpage("http://forums.arteropk.com/portal/");
                         return true;
                     }
                 },
-                new NewCommand("moneymaking", rank, Time.THIRTY_SECONDS) {
+                new Command("moneymaking", Time.THIRTY_SECONDS) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         player.getActionSender().sendWebpage("http://forums.arteropk.com/topic/23523-money-making-guide/");
                         return true;
                     }
                 },
-                new NewCommand("rules", rank, Time.THIRTY_SECONDS) {
+                new Command("rules", Time.THIRTY_SECONDS) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         player.getActionSender().sendWebpage("http://forums.arteropk.com/forum/28-in-game-rules/");
                         return true;
                     }
                 },
-                new NewCommand("skullmyself", rank, Time.FIFTEEN_SECONDS) {
+                new Command("skullmyself", Time.FIFTEEN_SECONDS) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         player.setSkulled(true);
                         return true;
                     }
                 },
-                new NewCommand("support", rank, Time.THIRTY_SECONDS) {
+                new Command("support", Time.THIRTY_SECONDS) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         player.sendMessage("l4unchur13 http://support.arteropk.com/helpdesk/");
                         return true;
                     }
                 },
-                new NewCommand("dicing", rank, Time.THIRTY_SECONDS) {
+                new Command("dicing", Time.THIRTY_SECONDS) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         Magic.teleport(player, Position.create(3048, 4979, 1), false);
@@ -202,7 +214,7 @@ public class PlayerCommands implements NewCommandExtension {
                         return true;
                     }
                 },
-                new NewCommand("tutorial", rank, Time.ONE_MINUTE) {
+                new Command("tutorial", Time.ONE_MINUTE) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         if (player.getTutorialProgress() == 0) {
@@ -212,14 +224,14 @@ public class PlayerCommands implements NewCommandExtension {
                         return true;
                     }
                 },
-                new NewCommand("ks", rank, Time.FIFTEEN_SECONDS) {
+                new Command("ks", Time.FIFTEEN_SECONDS) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         player.sendf("You are on a '@red@%,d@bla@' killstreak!", player.getKillStreak());
                         return true;
                     }
                 },
-                new NewCommand("toggleprofile", rank, Time.THIRTY_SECONDS) {
+                new Command("toggleprofile", Time.THIRTY_SECONDS) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         player.getPermExtraData().put("disableprofile", !player.getPermExtraData().getBoolean("disableprofile"));
@@ -227,14 +239,14 @@ public class PlayerCommands implements NewCommandExtension {
                         return true;
                     }
                 },
-                new NewCommand("top10", rank, Time.THIRTY_SECONDS) {
+                new Command("top10", Time.THIRTY_SECONDS) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         LastManStanding.getLastManStanding().loadTopTenInterface(player);
                         return true;
                     }
                 },
-                new NewCommand("combine", rank, Time.TEN_SECONDS) {
+                new Command("combine", Time.TEN_SECONDS) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         if (!Position.inAttackableArea(player)) {
@@ -243,7 +255,7 @@ public class PlayerCommands implements NewCommandExtension {
                         return true;
                     }
                 },
-                new NewCommand("wiki", rank, Time.THIRTY_SECONDS, new CommandInput<String>(string -> string != null, "String", "Wiki Shortcut")) {
+                new Command("wiki", Time.THIRTY_SECONDS, new CommandInput<String>(string -> string != null, "String", "Wiki Shortcut")) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         final String shortcut = input[0].trim();
@@ -255,49 +267,49 @@ public class PlayerCommands implements NewCommandExtension {
                         return true;
                     }
                 },
-                new NewCommand("graves", rank, Time.FIFTEEN_SECONDS) {
+                new Command("graves", Time.FIFTEEN_SECONDS) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         DialogueManager.openDialogue(player, 194);
                         return true;
                     }
                 },
-                new NewCommand("wests", rank, Time.FIFTEEN_SECONDS) {
+                new Command("wests", Time.FIFTEEN_SECONDS) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         DialogueManager.openDialogue(player, 196);
                         return true;
                     }
                 },
-                new NewCommand("answertrivia", rank, Time.FIVE_SECONDS, new CommandInput<String>(string -> string != null, "String", "Custom Trivia Answer")) {
+                new Command("answertrivia", Time.FIVE_SECONDS, new CommandInput<String>(string -> string != null, "String", "Custom Trivia Answer")) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         CustomTriviaManager.processAnswer(player, input[0].trim());
                         return true;
                     }
                 },
-                new NewCommand("viewtrivia", rank, Time.FIFTEEN_SECONDS) {
+                new Command("viewtrivia", Time.FIFTEEN_SECONDS) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         CustomTriviaManager.send(player);
                         return true;
                     }
                 },
-                new NewCommand("vote", rank, Time.ONE_MINUTE) {
+                new Command("vote", Time.ONE_MINUTE) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         player.getActionSender().sendWebpage(String.format("http://vote.arteropk.com/index.php?toplist_id=0&username=%s", player.getName()));
                         return true;
                     }
                 },
-                new NewCommand("viewchallenges", rank, Time.FIFTEEN_SECONDS) {
+                new Command("viewchallenges", Time.FIFTEEN_SECONDS) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         ChallengeManager.send(player, false);
                         return true;
                     }
                 },
-                new NewCommand("changepass", rank, new CommandInput<String>(string -> string.matches("[a-zA-Z0-9]+") && string.length() > 5, "password", "The new password to use.")) {
+                new Command("changepass", new CommandInput<String>(string -> string.matches("[a-zA-Z0-9]+") && string.length() > 5, "password", "The new password to use.")) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         if (player.getPassword().equalsIgnoreCase(EncryptionStandard.encryptPassword(input[0]))) {
@@ -312,7 +324,7 @@ public class PlayerCommands implements NewCommandExtension {
                         return true;
                     }
                 },
-                new NewCommand("prayers", rank, Time.FIVE_SECONDS) {
+                new Command("prayers", Time.FIVE_SECONDS) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         StringBuilder builder = new StringBuilder();
@@ -325,7 +337,7 @@ public class PlayerCommands implements NewCommandExtension {
                         return true;
                     }
                 },
-                new NewCommand("onlinestaff", rank, Time.TEN_SECONDS) {
+                new Command("onlinestaff", Time.TEN_SECONDS) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         List<Player> online = StaffManager.getOnlineStaff();
@@ -338,14 +350,14 @@ public class PlayerCommands implements NewCommandExtension {
                         return true;
                     }
                 },
-                new NewCommand("clearwalkinterface", rank, Time.TEN_SECONDS) {
+                new Command("clearwalkinterface", Time.TEN_SECONDS) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         player.getActionSender().showInterfaceWalkable(-1);
                         return true;
                     }
                 },
-                new NewCommand("bork", rank, Time.FIVE_MINUTES) {
+                new Command("bork", Time.FIVE_MINUTES) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         long delay;
@@ -367,7 +379,7 @@ public class PlayerCommands implements NewCommandExtension {
                         return true;
                     }
                 },
-                new NewCommand("testcolors", rank, Time.TEN_SECONDS) {
+                new Command("testcolors", Time.TEN_SECONDS) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         Arrays.asList(Yelling.COLOUR_SUFFICES).stream().forEach(string -> {
@@ -376,7 +388,7 @@ public class PlayerCommands implements NewCommandExtension {
                         return true;
                     }
                 },
-                new NewCommand("guessnumber", rank, Time.TEN_SECONDS, new CommandInput<Integer>(integer -> integer > Lottery.MIN_GUESS && integer < Lottery.MAX_GUESS, "Integer", String.format("An amount between %,d & %,d", Lottery.MIN_GUESS, Lottery.MAX_GUESS))) {
+                new Command("guessnumber", Time.TEN_SECONDS, new CommandInput<Integer>(integer -> integer > Lottery.MIN_GUESS && integer < Lottery.MAX_GUESS, "Integer", String.format("An amount between %,d & %,d", Lottery.MIN_GUESS, Lottery.MAX_GUESS))) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         int value = Integer.parseInt(input[0].trim());
@@ -384,35 +396,35 @@ public class PlayerCommands implements NewCommandExtension {
                         return true;
                     }
                 },
-                new NewCommand("lotteryinfo", rank, Time.TEN_SECONDS) {
+                new Command("lotteryinfo", Time.TEN_SECONDS) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         player.getActionSender().openLotteryInformation();
                         return true;
                     }
                 },
-                new NewCommand("mymail", rank, Time.FIFTEEN_SECONDS) {
+                new Command("mymail", Time.FIFTEEN_SECONDS) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         player.sendf("[Mail]: %d", player.getMail());
                         return true;
                     }
                 },
-                new NewCommand("setmail", rank, Time.ONE_MINUTE, new CommandInput<String>(string -> string != null, "String", "e-Mail")) {
+                new Command("setmail", Time.ONE_MINUTE, new CommandInput<String>(string -> string != null, "String", "e-Mail")) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         player.getMail().setTempmail(input[0].trim());
                         return true;
                     }
                 },
-                new NewCommand("answer", rank, Time.FIVE_SECONDS, new CommandInput<String>(string -> string != null, "String", "Trivia Answer")) {
+                new Command("answer", Time.FIVE_SECONDS, new CommandInput<String>(string -> string != null, "String", "Trivia Answer")) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         TriviaBot.sayAnswer(player, input[0].trim());
                         return true;
                     }
                 },
-                new NewCommand("getprice", rank, Time.TEN_SECONDS, new CommandInput<Integer>(integer -> ItemDefinition.forId(integer) != null, "Integer", "Item ID")) {
+                new Command("getprice", Time.TEN_SECONDS, new CommandInput<Integer>(integer -> ItemDefinition.forId(integer) != null, "Integer", "Item ID")) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         int id = Integer.parseInt(input[0].trim());
@@ -421,7 +433,7 @@ public class PlayerCommands implements NewCommandExtension {
                         return true;
                     }
                 },
-                new NewCommand("sellitem", rank, Time.FIVE_SECONDS, new CommandInput<Integer>(integer -> ItemDefinition.forId(integer) != null, "", ""), new CommandInput<Integer>(integer -> integer > 0 && integer < 1000, "Integer", "An amount between 0 & 1,000")) {
+                new Command("sellitem", Time.FIVE_SECONDS, new CommandInput<Integer>(integer -> ItemDefinition.forId(integer) != null, "", ""), new CommandInput<Integer>(integer -> integer > 0 && integer < 1000, "Integer", "An amount between 0 & 1,000")) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         int id = Integer.parseInt(input[0].trim());
@@ -443,28 +455,28 @@ public class PlayerCommands implements NewCommandExtension {
                         return true;
                     }
                 },
-                new NewCommand("resetparse", rank, Time.ONE_MINUTE) {
+                new Command("resetparse", Time.ONE_MINUTE) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         DungeoneeringManager.setItems(DungeoneeringManager.parse());
                         return true;
                     }
                 },
-                new NewCommand("reqhelp", rank, Time.ONE_MINUTE) {
+                new Command("reqhelp", Time.ONE_MINUTE) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         player.write(Interface.createStatePacket(Interface.SHOW, 3));
                         return true;
                     }
                 },
-                new NewCommand("accountvalue", rank, Time.THIRTY_SECONDS) {
+                new Command("accountvalue", Time.THIRTY_SECONDS) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         player.sendf("[Account Value]: %,d", player.getAccountValue().getTotalValue());
                         return true;
                     }
                 },
-                new NewCommand("commands", rank, Time.FIFTEEN_SECONDS) {
+                new Command("commands", Time.FIFTEEN_SECONDS) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         final List<Rank> list = new ArrayList<>(NewCommandHandler.getCommandsList().keySet());
@@ -475,19 +487,23 @@ public class PlayerCommands implements NewCommandExtension {
                         return true;
                     }
                 },
-                new NewCommand("findcommand", rank, Time.FIFTEEN_SECONDS, new CommandInput<String>(string -> string != null, "String", "A Command Phrase to Search for")) {
+                new Command("findcommand", Time.FIFTEEN_SECONDS, new CommandInput<String>(string -> string != null, "String", "A Command Phrase to Search for")) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         final String value = input[0].toLowerCase().trim();
                         final List<Rank> list = new ArrayList<>(NewCommandHandler.getCommandsList().keySet());
                         final List<String> commands = new ArrayList<>();
                         list.stream().filter(rank -> Rank.hasAbility(player, rank)).forEach(rank -> NewCommandHandler.getCommandsList().get(rank).stream().filter(command -> command.toLowerCase().contains(value)).forEach(command -> commands.add(command.replace(value, String.format("@red@%s@bla@", value)))));
+                        if (commands.isEmpty()) {
+                            player.sendf("No commands found with the phrase '@red@%s@bla@'", value);
+                            return true;
+                        }
                         Collections.sort(commands, String.CASE_INSENSITIVE_ORDER);
                         player.getActionSender().displayCommands(commands);
                         return true;
                     }
                 },
-                new NewCommand("settag", rank, Time.THIRTY_SECONDS, new CommandInput<String>(string -> string != null && !(string.length() > 14) && !(Yelling.isValidTitle(string).length() > 1), "String", "Yell Tag")) {
+                new Command("settag", Time.THIRTY_SECONDS, new CommandInput<String>(string -> string != null && !(string.length() > 14) && !(Yelling.isValidTitle(string).length() > 1), "String", "Yell Tag")) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         if (player.getPoints().getDonatorPointsBought() < 25000) {
@@ -500,7 +516,7 @@ public class PlayerCommands implements NewCommandExtension {
                         return true;
                     }
                 },
-                new NewCommand("challenge", rank, Time.TEN_SECONDS, new CommandInput<String>(string -> string != null, "String", "Challenge Answer")) {
+                new Command("challenge", Time.TEN_SECONDS, new CommandInput<String>(string -> string != null, "String", "Challenge Answer")) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         final String value = input[0].trim();
@@ -517,14 +533,14 @@ public class PlayerCommands implements NewCommandExtension {
                         return true;
                     }
                 },
-                new NewCommand("maxhit", rank, Time.FIFTEEN_SECONDS) {
+                new Command("maxhit", Time.FIFTEEN_SECONDS) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         player.sendf("[Melee]: %d, [Range]: %d", CombatAssistant.calculateMaxHit(player), CombatAssistant.calculateRangeMaxHit(player));
                         return true;
                     }
                 },
-                new NewCommand("zombies", rank, Time.THIRTY_SECONDS) {
+                new Command("zombies", Time.THIRTY_SECONDS) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         if (!player.getExtraData().getBoolean("zombietele")) {
@@ -537,7 +553,7 @@ public class PlayerCommands implements NewCommandExtension {
                         return true;
                     }
                 },
-                new NewCommand("placebounty", rank, Time.ONE_MINUTE, new CommandInput<String>(PlayerLoading::playerExists, "Player", "An Existing Player"), new CommandInput<Integer>(integer -> integer > 0 && integer < Integer.MAX_VALUE, "Integer", "PKP Amount")) {
+                new Command("placebounty", Time.ONE_MINUTE, new CommandInput<String>(PlayerLoading::playerExists, "Player", "An Existing Player"), new CommandInput<Integer>(integer -> integer > 0 && integer < Integer.MAX_VALUE, "Integer", "PKP Amount")) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         final String other = input[0].trim();
@@ -555,21 +571,21 @@ public class PlayerCommands implements NewCommandExtension {
                         return true;
                     }
                 },
-                new NewCommand("checkbounties", rank, Time.ONE_MINUTE) {
+                new Command("checkbounties", Time.ONE_MINUTE) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         BountyHandler.listBounties(player);
                         return true;
                     }
                 },
-                new NewCommand("selectitem", rank, Time.FIFTEEN_SECONDS, new CommandInput<Integer>(integer -> ItemDefinition.forId(integer) != null, "Integer", "Item ID")) {
+                new Command("selectitem", Time.FIFTEEN_SECONDS, new CommandInput<Integer>(integer -> ItemDefinition.forId(integer) != null, "Integer", "Item ID")) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         player.getGrandExchangeTracker().selectItem(Integer.parseInt(input[0].trim()), Entry.Type.BUYING);
                         return true;
                     }
                 },
-                new NewCommand("setlvl", rank, Time.FIVE_SECONDS, new CommandInput<Integer>(integer -> integer > -1 && integer < 7, "Integer", "Skill ID"), new CommandInput<Integer>(integer -> integer > 0 && integer < 100, "Integer", "Level")) {
+                new Command("setlvl", Time.FIVE_SECONDS, new CommandInput<Integer>(integer -> integer > -1 && integer < 7, "Integer", "Skill ID"), new CommandInput<Integer>(integer -> integer > 0 && integer < 100, "Integer", "Level")) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         if (!SkillSetCommand.canChangeLevel(player)
@@ -584,14 +600,14 @@ public class PlayerCommands implements NewCommandExtension {
                         return true;
                     }
                 },
-                new NewCommand("rest", rank, Time.FIVE_SECONDS) {
+                new Command("rest", Time.FIVE_SECONDS) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         player.playAnimation(Animation.create(11786));
                         return true;
                     }
                 },
-                new NewCommand("dismiss", rank, Time.THIRTY_SECONDS) {
+                new Command("dismiss", Time.THIRTY_SECONDS) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         player.SummoningCounter = 0;
@@ -599,7 +615,7 @@ public class PlayerCommands implements NewCommandExtension {
                         return true;
                     }
                 },
-                new NewCommand("resetmyappearance", rank, Time.ONE_MINUTE) {
+                new Command("resetmyappearance", Time.ONE_MINUTE) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         player.getAppearance().resetAppearance();
@@ -608,7 +624,7 @@ public class PlayerCommands implements NewCommandExtension {
                         return true;
                     }
                 },
-                new NewCommand("switchmode", rank, Time.THIRTY_SECONDS) {
+                new Command("switchmode", Time.THIRTY_SECONDS) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         if (player.getExtraData().getBoolean("switchmode")) {
@@ -621,21 +637,21 @@ public class PlayerCommands implements NewCommandExtension {
                         return true;
                     }
                 },
-                new NewCommand("upcount", rank, Time.FIFTEEN_SECONDS) {
+                new Command("upcount", Time.FIFTEEN_SECONDS) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         player.sendf("[Player Count]: %,d", World.getPlayers().size());
                         return true;
                     }
                 },
-                new NewCommand("13s", rank, Time.FIFTEEN_SECONDS) {
+                new Command("13s", Time.FIFTEEN_SECONDS) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         Magic.goTo13s(player);
                         return true;
                     }
                 },
-                new NewCommand("nextbonus", rank, Time.FIVE_MINUTES) {
+                new Command("nextbonus", Time.FIVE_MINUTES) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         int day = (Calendar.getInstance().get(Calendar.DAY_OF_YEAR) + 4);
@@ -651,7 +667,7 @@ public class PlayerCommands implements NewCommandExtension {
                         return true;
                     }
                 },
-                new NewCommand("nameitem", rank, Time.FIVE_SECONDS, new CommandInput<String>(string -> string != null, "String", "Item Phrase")) {
+                new Command("nameitem", Time.FIVE_SECONDS, new CommandInput<String>(string -> string != null, "String", "Item Phrase")) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         final String value = input[0].toLowerCase().trim();
@@ -666,7 +682,7 @@ public class PlayerCommands implements NewCommandExtension {
                         return true;
                     }
                 },
-                new NewCommand("vengrunes", rank, Time.TEN_SECONDS) {
+                new Command("vengrunes", Time.TEN_SECONDS) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         if (ItemSpawning.canSpawn(player, false)
@@ -678,7 +694,7 @@ public class PlayerCommands implements NewCommandExtension {
                         return true;
                     }
                 },
-                new NewCommand("barragerunes", rank, Time.TEN_SECONDS) {
+                new Command("barragerunes", Time.TEN_SECONDS) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         if (ItemSpawning.canSpawn(player, false)
@@ -690,7 +706,7 @@ public class PlayerCommands implements NewCommandExtension {
                         return true;
                     }
                 },
-                new NewCommand("copy", rank, Time.THIRTY_SECONDS, new CommandInput<String>(World::playerIsOnline, "Player", "An Online Player")) {
+                new Command("copy", Time.THIRTY_SECONDS, new CommandInput<String>(World::playerIsOnline, "Player", "An Online Player")) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         if (ItemSpawning.canSpawn(player, false)
@@ -708,7 +724,7 @@ public class PlayerCommands implements NewCommandExtension {
                         return true;
                     }
                 },
-                new NewCommand("copyinv", rank, Time.THIRTY_SECONDS, new CommandInput<String>(World::playerIsOnline, "Player", "An Online Player")) {
+                new Command("copyinv", Time.THIRTY_SECONDS, new CommandInput<String>(World::playerIsOnline, "Player", "An Online Player")) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         if (ItemSpawning.canSpawn(player, false)
@@ -726,7 +742,7 @@ public class PlayerCommands implements NewCommandExtension {
                         return true;
                     }
                 },
-                new NewCommand("copylvl", rank, Time.THIRTY_SECONDS, new CommandInput<String>(World::playerIsOnline, "Player", "An Online Player")) {
+                new Command("copylvl", Time.THIRTY_SECONDS, new CommandInput<String>(World::playerIsOnline, "Player", "An Online Player")) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         if (ItemSpawning.canSpawn(player, false)
@@ -748,7 +764,7 @@ public class PlayerCommands implements NewCommandExtension {
                         return true;
                     }
                 },
-                new NewCommand("resetrfd", rank, Time.TEN_MINUTES) {
+                new Command("resetrfd", Time.TEN_MINUTES) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         player.RFDLevel = 0;
@@ -756,14 +772,14 @@ public class PlayerCommands implements NewCommandExtension {
                         return true;
                     }
                 },
-                new NewCommand("findids", rank, Time.FIFTEEN_SECONDS) {
+                new Command("findids", Time.FIFTEEN_SECONDS) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         Arrays.asList(player.getInventory().toArray()).stream().filter(item -> item != null).forEach(item -> player.sendf("[Name]: %s, [ID]: %d", item.getDefinition().getName(), item.getDefinition().getId()));
                         return true;
                     }
                 },
-                new NewCommand("showwildinterface", rank, Time.FIFTEEN_SECONDS) {
+                new Command("showwildinterface", Time.FIFTEEN_SECONDS) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         player.showEP = false;
@@ -772,7 +788,7 @@ public class PlayerCommands implements NewCommandExtension {
                         return true;
                     }
                 },
-                new NewCommand("clearfriendslist", rank, Time.TEN_MINUTES) {
+                new Command("clearfriendslist", Time.TEN_MINUTES) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         player.getFriends().clear();
@@ -780,38 +796,35 @@ public class PlayerCommands implements NewCommandExtension {
                         return true;
                     }
                 },
-                new NewCommand("wildlvl", rank, Time.FIVE_SECONDS) {
+                new Command("wildlvl", Time.FIVE_SECONDS) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         player.sendf("[Wilderness Level]: %d", player.wildernessLevel);
                         return true;
                     }
                 },
-                new NewCommand("myep", rank, Time.ONE_MINUTE) {
+                new Command("myep", Time.ONE_MINUTE) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         player.sendf("[EP Level]: %d", player.EP);
                         return true;
                     }
                 },
-                new NewCommand("givemetabsplz", rank, Time.FIFTEEN_SECONDS) {
+                new Command("givemetabsplz", Time.FIFTEEN_SECONDS) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
-                        final int[] value = new int[]{8007, 8008, 8009, 8010, 8011, 8012};
-                        for (int array : value) {
-                            ContentEntity.addItem(player, array, 1000);
-                        }
+                        Arrays.asList(8007, 8008, 8009, 8010, 8011, 8012).forEach(value -> ContentEntity.addItem(player, value, 1000));
                         return true;
                     }
                 },
-                new NewCommand("myopp", rank, Time.TEN_SECONDS) {
+                new Command("myopp", Time.TEN_SECONDS) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         player.sendf("[Opponent]: %s", player.cE.getOpponent());
                         return true;
                     }
                 },
-                new NewCommand("buytickets", rank, Time.FIFTEEN_SECONDS, new CommandInput<Integer>(integer -> integer > 0 && integer < 100000, "Integer", "Pk Tickets Amount")) {
+                new Command("buytickets", Time.FIFTEEN_SECONDS, new CommandInput<Integer>(integer -> integer > 0 && integer < 100000, "Integer", "Pk Tickets Amount")) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         if (!Position.inAttackableArea(player)) {
@@ -835,7 +848,7 @@ public class PlayerCommands implements NewCommandExtension {
                         return true;
                     }
                 },
-                new NewCommand("selltickets", rank, Time.FIFTEEN_SECONDS, new CommandInput<Integer>(integer -> integer > 0 && integer < Integer.MAX_VALUE, "Integer", "Pk Tickets Amount")) {
+                new Command("selltickets", Time.FIFTEEN_SECONDS, new CommandInput<Integer>(integer -> integer > 0 && integer < Integer.MAX_VALUE, "Integer", "Pk Tickets Amount")) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         if (!Position.inAttackableArea(player)) {
@@ -851,7 +864,7 @@ public class PlayerCommands implements NewCommandExtension {
                         return true;
                     }
                 },
-                new NewCommand("empty", rank, Time.TEN_SECONDS) {
+                new Command("empty", Time.TEN_SECONDS) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         if (!player.getPosition().inPvPArea()) {
@@ -860,15 +873,18 @@ public class PlayerCommands implements NewCommandExtension {
                         return true;
                     }
                 },
-                new NewCommand("players", rank, Time.FIFTEEN_SECONDS) {
+                new Command("players", Time.FIFTEEN_SECONDS) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
-                        player.sendServerMessage(String.format("There are currently %,d players online.", (int)(World.getPlayers().size() * Configuration.getDouble(Configuration.ConfigurationObject.PLAYER_MULTIPLIER)) - 1));
-                        player.getActionSender().openPlayersInterface();
+                        final List<Player> list = World.getPlayers().stream().filter(other -> !other.isHidden()).collect(Collectors.toList());
+                        player.sendf("There are currently '%,d' players playing %s.", list.size(), null);
+                        player.sendServerMessage(String.format("There are currently %,d players online.", list.size()));
+                        Collections.sort(list, (one, two) -> new String(one.getName()).compareTo(two.getName()));
+                        player.getActionSender().openPlayersOnline(list);
                         return true;
                     }
                 },
-                new NewCommand("kdr", rank, Time.TEN_SECONDS) {
+                new Command("kdr", Time.TEN_SECONDS) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         double kdr = (double) player.getKillCount() / (double) player.getDeathCount();
@@ -877,7 +893,7 @@ public class PlayerCommands implements NewCommandExtension {
                         return true;
                     }
                 },
-                new NewCommand("switchoption", rank, Time.FIVE_SECONDS, new CommandInput<String>(string -> string != null, "String", "Player Option")) {
+                new Command("switchoption", Time.FIVE_SECONDS, new CommandInput<String>(string -> string != null, "String", "Player Option")) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         final String option = input[0].toLowerCase().trim();
@@ -903,7 +919,7 @@ public class PlayerCommands implements NewCommandExtension {
                         return true;
                     }
                 },
-                new NewCommand("mypos", rank, Time.TEN_SECONDS) {
+                new Command("mypos", Time.TEN_SECONDS) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         final int x = player.getPosition().getX();
@@ -915,7 +931,7 @@ public class PlayerCommands implements NewCommandExtension {
                         return true;
                     }
                 },
-                new NewCommand("reqticket", rank, Time.ONE_MINUTE, new CommandInput<String>(string -> string != null, "String", "Help Reason")) {
+                new Command("reqticket", Time.ONE_MINUTE, new CommandInput<String>(string -> string != null, "String", "Help Reason")) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         if (System.currentTimeMillis() - player.lastTickReq() < 60000) {
@@ -933,14 +949,14 @@ public class PlayerCommands implements NewCommandExtension {
                         return true;
                     }
                 },
-                new NewCommand("npclogs", rank, Time.THIRTY_SECONDS) {
+                new Command("npclogs", Time.THIRTY_SECONDS) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         player.getActionSender().openQuestInterface("NPC Logs", player.getNPCLogs().getDisplay());
                         return true;
                     }
                 },
-                new NewCommand("clearjunk", rank, Time.FIVE_MINUTES) {
+                new Command("clearjunk", Time.FIVE_MINUTES) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         Arrays.asList(player.getBank().toArray()).stream().filter(item -> item.getCount() < 10 && ItemSpawning.canSpawn(item.getId())).forEach(item -> player.getBank().remove(item));
@@ -948,7 +964,7 @@ public class PlayerCommands implements NewCommandExtension {
                         return true;
                     }
                 },
-                new NewCommand("listcolors", rank, Time.FIFTEEN_SECONDS) {
+                new Command("listcolors", Time.FIFTEEN_SECONDS) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         final Color[] colors = Color.values();
@@ -960,7 +976,7 @@ public class PlayerCommands implements NewCommandExtension {
                         return true;
                     }
                 },
-                new NewCommand("verify", rank, 0, new CommandInput<String>(string -> string != null, "String", "Verification Code")) {
+                new Command("verify", 0, new CommandInput<String>(string -> string != null, "String", "Verification Code")) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         final String value = input[0].trim();
@@ -980,6 +996,15 @@ public class PlayerCommands implements NewCommandExtension {
                         }
                         player.verificationCodeEntered = true;
                         player.sendMessage("Successfully verified.");
+                        return true;
+                    }
+                },
+                new Command("kitem", 250L, new CommandInput<String>(string -> SpawnCommand.getKeywords().get(string) != null, "String", "Item Keyword"), new CommandInput<Integer>(integer -> integer > 0 && integer < Integer.MAX_VALUE, "Integer", "Item Amount")) {
+                    @Override
+                    protected boolean execute(Player player, String[] input) {
+                        final int id = SpawnCommand.getKeywords().get(input[0].trim());
+                        final int amount = Integer.parseInt(input[1].trim());
+                        ItemSpawning.spawnItem(player, id, amount);
                         return true;
                     }
                 }

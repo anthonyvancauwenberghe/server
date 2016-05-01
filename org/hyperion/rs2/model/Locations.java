@@ -9,10 +9,6 @@ import org.hyperion.rs2.model.content.misc2.Edgeville;
 import org.hyperion.rs2.model.content.misc2.Jail;
 import org.hyperion.util.Misc;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
 /**
  * Created by Gilles on 3/03/2016.
  */
@@ -98,6 +94,42 @@ public class Locations {
         TSUTSAROTH_ROOM(new int[]{2918, 2936, 2937, 2940}, new int[]{5318, 5331, 5322, 5326}, true, false, false, false, false, false, Rank.PLAYER),
         ZILYANA_ROOM(new int[]{2889, 2907, 2885, 2888}, new int[]{5258, 5276, 5267, 5270}, true, true, false, false, false, false, Rank.PLAYER),
         KBD_AREA(new int[]{2256, 2287}, new int[]{4680, 4711}, new int[]{0}, true, true, true, false, false, false, Rank.PLAYER),
+        OSPK_BANK_AREA(new int[]{2256, 2261}, new int[]{4680, 4711}, new int[]{600}, false, false, false, false, true, true, Rank.PLAYER),
+        OSPK_AREA(new int[]{2262, 2287}, new int[]{4680, 4711}, new int[]{600}, false, false, true, false, false, false, Rank.PLAYER) {
+            @Override
+            public void enter(Player player) {
+                if (!player.attackOption) {
+                    player.getActionSender().sendPlayerOption("Attack", 2, 0);
+                    player.setCanSpawnSet(false);
+                    player.attackOption = true;
+                    if (player.getNpcState()) {
+                        player.setPNpc(-1);
+                    }
+                    if (player.isOverloaded())
+                        OverloadStatsTask.OverloadFactory.applyBoosts(player);
+                }
+            }
+
+            @Override
+            public void leave(Player player) {
+                player.setCanSpawnSet(true);
+                player.cE.getDamageDealt().clear();
+                player.getActionSender().sendPlayerOption("null", 2, 1);
+                player.attackOption = false;
+                player.getActionSender().sendWildLevel(getWildernessLevel(player));
+                player.wildernessLevel = getWildernessLevel(player);
+            }
+
+            @Override
+            public boolean canAttack(Player player, Player target) {
+                return validWildernessDifference(player, target);
+            }
+
+            @Override
+            public void process(Player player) {
+                processWilderness(player);
+            }
+        },
         PURE_PK_BANK_AREA(new int[]{2256, 2261}, new int[]{4680, 4711}, new int[]{444}, false, false, false, false, true, true, Rank.PLAYER),
         PURE_PK_AREA(new int[]{2262, 2287}, new int[]{4680, 4711}, new int[]{444}, false, false, true, false, false, false, Rank.PLAYER) {
             @Override
@@ -254,6 +286,7 @@ public class Locations {
                 processWilderness(player);
             }
         },
+        _13S_AREA(new int[]{2971, 2982}, new int[]{3606, 3615}, new int[]{24}, false, true, false, false, true, true, Rank.PLAYER),
         WILDERNESS(new int[]{2941, 3392, 2986, 3012, 3653, 3706, 3650, 3653}, new int[]{3520, 3968, 10338, 10366, 3441, 3538, 3457, 3472}, false, true, true, true, false, false, Rank.PLAYER) {
             @Override
             public void enter(Player player) {
@@ -352,7 +385,8 @@ public class Locations {
             }
         },
         FIGHT_PITS_WAIT_ROOM(new int[]{2393, 2404}, new int[]{5168, 5176}, false, false, false, false, false, false, Rank.PLAYER),
-        DUEL_ARENA(new int[]{3332, 3358, 3333, 3357, 3334, 3356, 3335, 3355, 3336, 3354, 3337, 3353, 3338, 3352, 3339, 3351, 3363, 3389, 3364, 3388, 3365, 3387, 3366, 3386, 3367, 3385, 3368, 3384, 3369, 3383, 3370, 3382, 3332, 3358, 3333, 3357, 3334, 3356, 3335, 3355, 3336, 3354, 3337, 3353, 3338, 3352, 3339, 3351, 3363, 3389, 3364, 3388, 3365, 3387, 3366, 3386, 3367, 3385, 3368, 3384, 3369, 3383, 3370, 3382, 3332, 3358, 3333, 3357, 3334, 3356, 3335, 3355, 3336, 3354, 3337, 3353, 3338, 3352, 3339, 3351, 3363, 3389, 3364, 3388, 3365, 3387, 3366, 3386, 3367, 3385, 3368, 3384, 3369, 3383, 3370, 3382}, new int[]{3250, 3252, 3249, 3253, 3248, 3255, 3246, 3256, 3246, 3256, 3245, 3257, 3245, 3257, 3244, 3258, 3250, 3252, 3249, 3253, 3247, 3255, 3246, 3256, 3246, 3256, 3245, 3257, 3245, 3257, 3244, 3258, 3231, 3233, 3230, 3234, 3228, 3236, 3227, 3237, 3227, 3237, 3226, 3238, 3226, 3238, 3225, 3239, 3231, 3233, 3230, 3234, 3228, 3236, 3227, 3237, 3227, 3237, 3226, 3238, 3226, 3238, 3225, 3239, 3212, 3214, 3211, 3215, 3209, 3217, 3208, 3218, 3208, 3218, 3207, 3219, 3207, 3219, 3206, 3220, 3212, 3214, 3211, 3215, 3209, 3217, 3208, 3218, 3208, 3218, 3207, 3219, 3207, 3219, 3206, 3220}, false, false, false, false, false, false, Rank.PLAYER) {
+        DUEL_ARENA_BANK(new int[]{3380, 3384}, new int[]{3267, 3271}, false, false, false, false, true, true, Rank.PLAYER),
+        DUEL_ARENA(new int[]{3332, 3358, 3333, 3357, 3334, 3356, 3335, 3355, 3336, 3354, 3337, 3353, 3338, 3352, 3339, 3351, 3363, 3389, 3364, 3388, 3365, 3387, 3366, 3386, 3367, 3385, 3368, 3384, 3369, 3383, 3370, 3382, 3332, 3358, 3333, 3357, 3334, 3356, 3335, 3355, 3336, 3354, 3337, 3353, 3338, 3352, 3339, 3351, 3363, 3389, 3364, 3388, 3365, 3387, 3366, 3386, 3367, 3385, 3368, 3384, 3369, 3383, 3370, 3382, 3332, 3358, 3333, 3357, 3334, 3356, 3335, 3355, 3336, 3354, 3337, 3353, 3338, 3352, 3339, 3351, 3363, 3389, 3364, 3388, 3365, 3387, 3366, 3386, 3367, 3385, 3368, 3384, 3369, 3383, 3370, 3382}, new int[]{3250, 3252, 3249, 3253, 3247, 3255, 3246, 3256, 3246, 3256, 3245, 3257, 3244, 3258, 3244, 3258, 3250, 3252, 3249, 3253, 3247, 3255, 3246, 3256, 3246, 3256, 3245, 3257, 3245, 3257, 3244, 3258, 3231, 3233, 3230, 3234, 3228, 3236, 3227, 3237, 3227, 3237, 3226, 3238, 3226, 3238, 3225, 3239, 3231, 3233, 3230, 3234, 3228, 3236, 3227, 3237, 3227, 3237, 3226, 3238, 3226, 3238, 3225, 3239, 3212, 3214, 3211, 3215, 3209, 3217, 3208, 3218, 3208, 3218, 3207, 3219, 3207, 3219, 3206, 3220, 3212, 3214, 3211, 3215, 3209, 3217, 3208, 3218, 3208, 3218, 3207, 3219, 3207, 3219, 3206, 3220}, false, false, false, false, false, false, Rank.PLAYER) {
             @Override
             public void enter(Player player) {
                 if (player.duelAttackable <= 0) {
@@ -390,20 +424,20 @@ public class Locations {
 
             @Override
             public boolean canAttack(Player player, Player target) {
-                if (player.duelAttackable > 0) {
-                    if (target.getIndex() == player.duelAttackable) {
-                        return true;
-                    }
+                if (player.duelAttackable > 0
+                        && player.duelAttackable == target.getIndex()) {
+                    return true;
                 }
                 player.sendMessage("This is not your opponent!");
                 return false;
             }
         },
-        DUEL_ARENA_LOBBY(new int[]{3322, 3394, 3311, 3323, 3331, 3391}, new int[]{3195, 3291, 3223, 3248, 3242, 3260}, false, false, false, false, false, false, Rank.PLAYER) {
+        //DUEL_ARENA_LOBBY(new int[]{3322, 3394, 3311, 3323, 3331, 3391}, new int[]{3195, 3291, 3223, 3248, 3242, 3260}, false, false, false, false, false, false, Rank.PLAYER) {
+        DUEL_ARENA_LOBBY(new int[]{3355, 3379, 3374, 3379, 3327, 3392}, new int[]{3267, 3279, 3280, 3286, 3203, 3266}, new int[]{0}, false, false, false, false, false, false, Rank.PLAYER) {
             @Override
             public void enter(Player player) {
                 if (!player.duelOption) {
-                    player.getActionSender().sendPlayerOption("Challenge", 5, 1);
+                    player.getActionSender().sendPlayerOption("Challenge", 5, 0);
                     if (player.getNpcState()) {
                         player.setPNpc(-1);
                     }
@@ -718,6 +752,7 @@ public class Locations {
                 : (y >= 3520 && y <= 3967 && x <= 3392 && x >= 2942) ? (((y - 3520) / 8) + 3)
                 : (y <= 10349 && x >= 3010 && x <= 3058 && y >= 10306) ? 57
                 : (x >= 3064 && x <= 3070 && y >= 10252 && y <= 10260) ? 53
+                : (player.getLocation().equals(Location.OSPK_AREA) || player.getLocation().equals(Location.PURE_PK_AREA)) ? 12
                 : -1;
     }
 

@@ -963,18 +963,16 @@ public class CombatAssistant {
 		return max;
 	}
 
-	public static boolean darkBow(int itemId) {
-		switch(itemId) {
-			case 11235:
-			case 15701:
-			case 15702:
-			case 15703:
-			case 15704:
-            case 16337:
-            case 16887:
-				return true;
-		}
-		return FightPits.isBow(itemId);
+	public static boolean darkBow(int value) {
+		return value == 11235
+				|| value == 13405
+				|| value == 15701
+				|| value == 15702
+				|| value == 15703
+				|| value == 15704
+				|| value == 16337
+				|| value == 16887
+				|| FightPits.isBow(value);
 	}
 
 	/**

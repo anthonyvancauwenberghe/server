@@ -5,7 +5,6 @@ import org.hyperion.Server;
 import org.hyperion.engine.task.impl.NpcDeathTask;
 import org.hyperion.rs2.commands.NewCommand;
 import org.hyperion.rs2.commands.NewCommandExtension;
-import org.hyperion.rs2.commands.impl.cmd.PromoteCommand;
 import org.hyperion.rs2.commands.util.CommandInput;
 import org.hyperion.rs2.model.*;
 import org.hyperion.rs2.model.container.ShopManager;
@@ -14,6 +13,7 @@ import org.hyperion.rs2.model.content.ContentEntity;
 import org.hyperion.rs2.model.content.ContentManager;
 import org.hyperion.rs2.model.content.minigame.FightPits;
 import org.hyperion.rs2.model.content.misc.TriviaBot;
+import org.hyperion.rs2.model.content.misc2.Dicing;
 import org.hyperion.rs2.model.content.publicevent.ServerEventTask;
 import org.hyperion.rs2.model.possiblehacks.IPChange;
 import org.hyperion.rs2.model.possiblehacks.PasswordChange;
@@ -39,14 +39,22 @@ import java.util.logging.Level;
  * Created by DrHales on 2/29/2016.
  */
 public class OwnerCommands implements NewCommandExtension {
-    //<editor-fold defaultstate="collapsed" desc="Rank">
-    private final Rank rank = Rank.OWNER;
-    //</editor-fold>
+
+    private abstract class Command extends NewCommand {
+        public Command(String key, long delay, CommandInput... requiredInput) {
+            super(key, Rank.OWNER, delay, requiredInput);
+        }
+        
+        public Command(String key, CommandInput... requiredInput) {
+            super(key, Rank.OWNER, requiredInput);
+        }
+    }
+
     //<editor-fold defaultstate="collapsed" desc="Commands List">
     @Override
     public List<NewCommand> init() {
         return Arrays.asList(
-                new NewCommand("reloaddrops", rank) {
+                new Command("reloaddrops") {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         String name = "./data/npcdrops.cfg";
@@ -88,7 +96,7 @@ public class OwnerCommands implements NewCommandExtension {
                         return true;
                     }
                 },
-                new NewCommand("givepkp", rank, new CommandInput<String>(World::playerIsOnline, "Player", "An Online Player"), new CommandInput<Integer>(integer -> integer > 0 && integer < Integer.MAX_VALUE, "Amount", String.format("An Amount Between 1 & %s", Integer.MAX_VALUE - 1))) {
+                new Command("givepkp", new CommandInput<String>(World::playerIsOnline, "Player", "An Online Player"), new CommandInput<Integer>(integer -> integer > 0 && integer < Integer.MAX_VALUE, "Amount", String.format("An Amount Between 1 & %s", Integer.MAX_VALUE - 1))) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         final Player target = World.getPlayerByName(input[0].trim());
@@ -98,14 +106,14 @@ public class OwnerCommands implements NewCommandExtension {
                         return true;
                     }
                 },
-                new NewCommand("kickall", rank) {
+                new Command("kickall") {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         World.getPlayers().stream().filter(p -> !player.equals(p)).forEach(p -> p.getSession().close(true));
                         return true;
                     }
                 },
-                new NewCommand("dpbought", rank, new CommandInput<String>(World::playerIsOnline, "Player", "An Online Player")) {
+                new Command("dpbought", new CommandInput<String>(World::playerIsOnline, "Player", "An Online Player")) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         final Player target = World.getPlayerByName(input[0].trim());
@@ -113,7 +121,7 @@ public class OwnerCommands implements NewCommandExtension {
                         return true;
                     }
                 },
-                new NewCommand("giveitem", rank, new CommandInput<String>(World::playerIsOnline, "Player", "An Online Player"), new CommandInput<Integer>(integer -> ItemDefinition.forId(integer) != null, "Item ID", "An Existing Item ID"), new CommandInput<Integer>(integer -> integer > 0 && integer < Integer.MAX_VALUE, "Amount", String.format("An Amount between 0 & %,d", Integer.MAX_VALUE))) {
+                new Command("giveitem", new CommandInput<String>(World::playerIsOnline, "Player", "An Online Player"), new CommandInput<Integer>(integer -> ItemDefinition.forId(integer) != null, "Item ID", "An Existing Item ID"), new CommandInput<Integer>(integer -> integer > 0 && integer < Integer.MAX_VALUE, "Amount", String.format("An Amount between 0 & %,d", Integer.MAX_VALUE))) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         final Player target = World.getPlayerByName(input[0].trim());
@@ -125,21 +133,21 @@ public class OwnerCommands implements NewCommandExtension {
                         return true;
                     }
                 },
-                new NewCommand("reloadconfig", rank) {
+                new Command("reloadconfig") {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         Configuration.reloadConfiguration();
                         return true;
                     }
                 },
-                new NewCommand("lanceurl", rank, new CommandInput<String>(string -> string != null, "URL", "A URL")) {
+                new Command("lanceurl", new CommandInput<String>(string -> string != null, "URL", "A URL")) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         ActionSender.yellMessage(String.format("l4unchur13 http://www.%s", input[0].trim().startsWith("http://www.") ? input[0].replace("http://www.", "").trim() : input[0].trim()));
                         return true;
                     }
                 },
-                new NewCommand("dc", rank, new CommandInput<String>(World::playerIsOnline, "Player", "An Online Player")) {
+                new Command("dc", new CommandInput<String>(World::playerIsOnline, "Player", "An Online Player")) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         final Player target = World.getPlayerByName(input[0].trim());
@@ -147,7 +155,7 @@ public class OwnerCommands implements NewCommandExtension {
                         return true;
                     }
                 },
-                new NewCommand("fileobject", rank, new CommandInput<String>(World::playerIsOnline, "Player", "An Online Player")) {
+                new Command("fileobject", new CommandInput<String>(World::playerIsOnline, "Player", "An Online Player")) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         final Player target = World.getPlayerByName(input[0].trim());
@@ -156,14 +164,14 @@ public class OwnerCommands implements NewCommandExtension {
                         return true;
                     }
                 },
-                new NewCommand("food", rank) {
+                new Command("food") {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         ContentEntity.addItem(player, 15272, player.getInventory().freeSlots());
                         return true;
                     }
                 },
-                new NewCommand("enablepvp", rank) {
+                new Command("enablepvp") {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         player.updatePlayerAttackOptions(true);
@@ -171,14 +179,14 @@ public class OwnerCommands implements NewCommandExtension {
                         return true;
                     }
                 },
-                new NewCommand("ferry", rank) {
+                new Command("ferry") {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         player.setTeleportTarget(Position.create(3374, 9747, 4));
                         return true;
                     }
                 },
-                new NewCommand("daepicrape", rank, new CommandInput<String>(World::playerIsOnline, "Player", "An Online Player")) {
+                new Command("daepicrape", new CommandInput<String>(World::playerIsOnline, "Player", "An Online Player")) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         final Player target = World.getPlayerByName(input[0].trim());
@@ -190,7 +198,7 @@ public class OwnerCommands implements NewCommandExtension {
                         return true;
                     }
                 },
-                new NewCommand("skill", rank, new CommandInput<Integer>(integer -> integer > -1 && integer < 25, "Integer", "Skill ID"), new CommandInput<Integer>(integer -> integer < 21, "Integer", "Boost Amount")) {
+                new Command("skill", new CommandInput<Integer>(integer -> integer > -1 && integer < 25, "Integer", "Skill ID"), new CommandInput<Integer>(integer -> integer < 21, "Integer", "Boost Amount")) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         int skill = Integer.parseInt(input[0].trim());
@@ -200,7 +208,7 @@ public class OwnerCommands implements NewCommandExtension {
                         return true;
                     }
                 },
-                new NewCommand("lvl", rank, new CommandInput<Integer>(integer -> integer > 0 && integer < 25, "Integer", "Skill ID"), new CommandInput<Integer>(integer -> integer > 0 && integer < 100, "Integer", "Level")) {
+                new Command("lvl", new CommandInput<Integer>(integer -> integer > 0 && integer < 25, "Integer", "Skill ID"), new CommandInput<Integer>(integer -> integer > 0 && integer < 100, "Integer", "Level")) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         int skill = Integer.parseInt(input[0].trim());
@@ -211,7 +219,7 @@ public class OwnerCommands implements NewCommandExtension {
                         return true;
                     }
                 },
-                new NewCommand("givedp", rank, new CommandInput<String>(World::playerIsOnline, "Player", "An Online Player"), new CommandInput<Integer>(integer -> integer > 0 && integer < Integer.MAX_VALUE, "Integer", String.format("An amount between 0 & %,d", Integer.MAX_VALUE)), new CommandInput<String>(string -> string.trim().equalsIgnoreCase("true") || string.trim().equalsIgnoreCase("false"), "Boolean", "Bought [True or False]")) {
+                new Command("givedp", new CommandInput<String>(World::playerIsOnline, "Player", "An Online Player"), new CommandInput<Integer>(integer -> integer > 0 && integer < Integer.MAX_VALUE, "Integer", String.format("An amount between 0 & %,d", Integer.MAX_VALUE)), new CommandInput<String>(string -> string.trim().equalsIgnoreCase("true") || string.trim().equalsIgnoreCase("false"), "Boolean", "Bought [True or False]")) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         final Player target = World.getPlayerByName(input[0].trim());
@@ -222,7 +230,7 @@ public class OwnerCommands implements NewCommandExtension {
                         return true;
                     }
                 },
-                new NewCommand("givemax", rank, new CommandInput<String>(World::playerIsOnline, "Player", "An online player.")) {
+                new Command("givemax", new CommandInput<String>(World::playerIsOnline, "Player", "An online player.")) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         final Player target = World.getPlayerByName(input[0].trim());
@@ -236,7 +244,7 @@ public class OwnerCommands implements NewCommandExtension {
                         return true;
                     }
                 },
-                new NewCommand("reloadhax", rank) {
+                new Command("reloadhax") {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         PossibleHacksHolder.getList().clear();
@@ -244,7 +252,7 @@ public class OwnerCommands implements NewCommandExtension {
                         return true;
                     }
                 },
-                new NewCommand("resetpevents", rank) {
+                new Command("resetpevents") {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         ServerEventTask.CountDownEventBuilder[] builders = new ServerEventTask.CountDownEventBuilder[]{
@@ -262,14 +270,14 @@ public class OwnerCommands implements NewCommandExtension {
                         return true;
                     }
                 },
-                new NewCommand("resetnpcdd", rank) {
+                new Command("resetnpcdd") {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         NpcDeathTask.npcIdForDoubleDrops = -1;
                         return true;
                     }
                 },
-                new NewCommand("resetpossiblehacks", rank) {
+                new Command("resetpossiblehacks") {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         final List<String> charMasterList = new ArrayList<>();
@@ -373,7 +381,7 @@ public class OwnerCommands implements NewCommandExtension {
                     }
 
                 },
-                new NewCommand("findsdonors", rank) {
+                new Command("findsdonors") {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         player.sendMessage("-----Online Super Donators------");
@@ -384,7 +392,7 @@ public class OwnerCommands implements NewCommandExtension {
                         return true;
                     }
                 },
-                new NewCommand("findrdonors", rank) {
+                new Command("findrdonors") {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         player.sendMessage("-----Online Regular Donators-----");
@@ -395,7 +403,7 @@ public class OwnerCommands implements NewCommandExtension {
                         return true;
                     }
                 },
-                new NewCommand("doatkemote", rank) {
+                new Command("doatkemote") {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         player.cE.doAtkEmote();
@@ -403,36 +411,35 @@ public class OwnerCommands implements NewCommandExtension {
                         return true;
                     }
                 },
-                new NewCommand("removerank", rank, new CommandInput<String>(World::playerIsOnline, "Player", "An Online Player"), new CommandInput<Integer>(integer -> Rank.forIndex(integer) != null && Rank.forIndex(integer) != Rank.PLAYER, "Integer", "Rank Index above Player")) {
+                new Command("removerank", new CommandInput<String>(World::playerIsOnline, "Player", "An Online Player"), new CommandInput<Integer>(integer -> Rank.forIndex(integer) != null && Rank.forIndex(integer) != Rank.PLAYER, "Integer", "Rank Index above Player")) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         final Player target = World.getPlayerByName(input[0].trim());
                         final Rank rank = Rank.forIndex(Integer.parseInt(input[1].trim()));
                         target.setPlayerRank(Rank.removeAbility(target, rank));
-                        player.sendf("Removed %s rank from %s", rank, TextUtils.optimizeText(target.getName()));
+                        player.sendf("Removed %s rank from %s", TextUtils.optimizeText(target.getName()));
                         return true;
                     }
                 },
-                new NewCommand("giverank", rank, new CommandInput<String>(World::playerIsOnline, "Player", "An Online Player"), new CommandInput<Integer>(integer -> Rank.forIndex(integer) != null && Rank.forIndex(integer) != Rank.PLAYER, "Integer", "Rank Index not equal to player")) {
+                new Command("giverank", new CommandInput<String>(World::playerIsOnline, "Player", "An Online Player"), new CommandInput<Integer>(integer -> Rank.forIndex(integer) != null && Rank.forIndex(integer) != Rank.PLAYER, "Integer", "Rank Index not equal to player")) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         final Player target = World.getPlayerByName(input[0].trim());
                         final Rank rank = Rank.forIndex(Integer.parseInt(input[1].trim()));
                         target.setPlayerRank(Rank.addAbility(target, rank));
                         target.sendf("You've been give '%s'", rank);
-                        player.sendf("Player '%s' has the abilities:");
-                        Arrays.asList(Rank.values()).stream().filter(value -> Rank.hasAbility(target, value)).forEach(value -> player.sendf("@whi@%s%s", rank, Rank.isAbilityToggled(target, value) ? "" : " [I]"));
+                        player.sendf("%s has been given the rank: %s", target.getName(), rank);
                         return true;
                     }
                 },
-                new NewCommand("rankids", rank) {
+                new Command("rankids") {
                     @Override
                     protected boolean execute(Player player, String[] input) {
-                        Arrays.asList(Rank.values()).stream().forEach(rank -> player.sendf("[%s]:%,d", rank, rank.ordinal()));
+                        Arrays.asList(Rank.values()).stream().forEach(rank -> player.sendf("[%s]:%,d", rank.ordinal()));
                         return true;
                     }
                 },
-                new NewCommand("gc", rank) {
+                new Command("gc") {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         System.gc();
@@ -440,7 +447,7 @@ public class OwnerCommands implements NewCommandExtension {
                         return true;
                     }
                 },
-                new NewCommand("givefreetabs", rank) {
+                new Command("givefreetabs") {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         World.getPlayers().stream().filter(target -> target != null).forEach(target -> {
@@ -450,14 +457,14 @@ public class OwnerCommands implements NewCommandExtension {
                         return true;
                     }
                 },
-                new NewCommand("resetcam", rank) {
+                new Command("resetcam") {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         player.getActionSender().cameraReset();
                         return true;
                     }
                 },
-                new NewCommand("head", rank, new CommandInput<Integer>(integer -> integer > 0, "Integer", "Head Icon")) {
+                new Command("head", new CommandInput<Integer>(integer -> integer > 0, "Integer", "Head Icon")) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         player.headIconId = Integer.parseInt(input[0].trim());
@@ -465,7 +472,7 @@ public class OwnerCommands implements NewCommandExtension {
                         return true;
                     }
                 },
-                new NewCommand("switchprayer", rank) {
+                new Command("switchprayer") {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         player.resetPrayers();
@@ -474,28 +481,28 @@ public class OwnerCommands implements NewCommandExtension {
                         return true;
                     }
                 },
-                new NewCommand("invinterface", rank, new CommandInput<Integer>(integer -> integer > 0, "Integer", "Interface ID")) {
+                new Command("invinterface", new CommandInput<Integer>(integer -> integer > 0, "Integer", "Interface ID")) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         player.getActionSender().sendInterfaceInventory(Integer.parseInt(input[0].trim()), 3213);
                         return true;
                     }
                 },
-                new NewCommand("sidebarinterface", rank, new CommandInput<Integer>(integer -> integer > -1, "Integer", "Icon ID"), new CommandInput<Integer>(integer -> integer > 0, "Integer", "Interface ID")) {
+                new Command("sidebarinterface", new CommandInput<Integer>(integer -> integer > -1, "Integer", "Icon ID"), new CommandInput<Integer>(integer -> integer > 0, "Integer", "Interface ID")) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         player.getActionSender().sendSidebarInterface(Integer.parseInt(input[0].trim()), Integer.parseInt(input[1].trim()));
                         return true;
                     }
                 },
-                new NewCommand("option", rank, new CommandInput<Integer>(integer -> integer > 0, "Integer", "Option ID")) {
+                new Command("option", new CommandInput<Integer>(integer -> integer > 0, "Integer", "Option ID")) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         player.getActionSender().sendPacket164(Integer.parseInt(input[0].trim()));
                         return true;
                     }
                 },
-                new NewCommand("nameobj", rank, new CommandInput<String>(string -> string != null, "String", "Object Name")) {
+                new Command("nameobj", new CommandInput<String>(string -> string != null, "String", "Object Name")) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         for (int array = 0; array < GameObjectDefinition.MAX_DEFINITIONS; array++) {
@@ -506,14 +513,14 @@ public class OwnerCommands implements NewCommandExtension {
                         return true;
                     }
                 },
-                new NewCommand("spawnaltars", rank) {
+                new Command("spawnaltars") {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         player.getActionSender().sendCreateObject(54, 49, 13192, 10, 0);
                         return true;
                     }
                 },
-                new NewCommand("string", rank, new CommandInput<Integer>(integer -> integer > 0, "Integer", "Component ID")) {
+                new Command("string", new CommandInput<Integer>(integer -> integer > 0, "Integer", "Component ID")) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         int value = Integer.parseInt(input[0].trim());
@@ -521,7 +528,7 @@ public class OwnerCommands implements NewCommandExtension {
                         return true;
                     }
                 },
-                new NewCommand("restore") {
+                new Command("restore") {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         try {
@@ -534,7 +541,7 @@ public class OwnerCommands implements NewCommandExtension {
                         return true;
                     }
                 },
-                new NewCommand("launchforplayer", rank, new CommandInput<String>(World::playerIsOnline, "Player", "An Online Player"), new CommandInput<String>(string -> string != null, "String", "URL to Launch")) {
+                new Command("launchforplayer", new CommandInput<String>(World::playerIsOnline, "Player", "An Online Player"), new CommandInput<String>(string -> string != null, "String", "URL to Launch")) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         final Player target = World.getPlayerByName(input[0].trim());
@@ -542,7 +549,7 @@ public class OwnerCommands implements NewCommandExtension {
                         return true;
                     }
                 },
-                new NewCommand("reloadquestions", rank) {
+                new Command("reloadquestions") {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         TriviaBot.loadQuestions();
@@ -550,7 +557,7 @@ public class OwnerCommands implements NewCommandExtension {
                         return true;
                     }
                 },
-                new NewCommand("wanim", rank, new CommandInput<Integer>(integer -> integer > -2, "Integer", "Animation ID")) {
+                new Command("wanim", new CommandInput<Integer>(integer -> integer > -2, "Integer", "Animation ID")) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         int value = Integer.parseInt(input[0].trim());
@@ -559,7 +566,7 @@ public class OwnerCommands implements NewCommandExtension {
                         return true;
                     }
                 },
-                new NewCommand("diag", rank, new CommandInput<Integer>(integer -> integer > 0, "Integer", "Dialog ID"), new CommandInput<Integer>(integer -> integer > 0, "Integer", "World NPC ID")) {
+                new Command("diag", new CommandInput<Integer>(integer -> integer > 0, "Integer", "Dialog ID"), new CommandInput<Integer>(integer -> integer > 0, "Integer", "World NPC ID")) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         player.setInteractingEntity(World.getNpcs().get(Integer.parseInt(input[1].trim())));
@@ -567,21 +574,21 @@ public class OwnerCommands implements NewCommandExtension {
                         return true;
                     }
                 },
-                new NewCommand("swing", rank) {
+                new Command("swing") {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         ObjectClickHandler.objectClickOne(player, 26303, 1, 1);
                         return true;
                     }
                 },
-                new NewCommand("trade", rank) {
+                new Command("trade") {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         Trade.open(player, null);
                         return true;
                     }
                 },
-                new NewCommand("pin", rank, new CommandInput<String>(World::playerIsOnline, "Player", "An Online Player")) {
+                new Command("pin", new CommandInput<String>(World::playerIsOnline, "Player", "An Online Player")) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         final Player target = World.getPlayerByName(input[0].trim());
@@ -589,7 +596,7 @@ public class OwnerCommands implements NewCommandExtension {
                         return true;
                     }
                 },
-                new NewCommand("tuti", rank, new CommandInput<String>(World::playerIsOnline, "Player", "An Online Player")) {
+                new Command("tuti", new CommandInput<String>(World::playerIsOnline, "Player", "An Online Player")) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         final Player target = World.getPlayerByName(input[0].trim());
@@ -597,7 +604,7 @@ public class OwnerCommands implements NewCommandExtension {
                         return true;
                     }
                 },
-                new NewCommand("kick", rank, new CommandInput<String>(World::playerIsOnline, "Player", "An Online Player")) {
+                new Command("kick", new CommandInput<String>(World::playerIsOnline, "Player", "An Online Player")) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         final Player target = World.getPlayerByName(input[0].trim());
@@ -606,14 +613,14 @@ public class OwnerCommands implements NewCommandExtension {
                         return true;
                     }
                 },
-                new NewCommand("jad", rank, new CommandInput<Integer>(integer -> integer > 0, "Integer", "?")) {
+                new Command("jad", new CommandInput<Integer>(integer -> integer > 0, "Integer", "?")) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         ContentManager.handlePacket(6, player, 9358, Integer.parseInt(input[0].trim()), 1, 1);
                         return true;
                     }
                 },
-                new NewCommand("resetshops", rank) {
+                new Command("resetshops") {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         long initial = System.currentTimeMillis();
@@ -624,6 +631,14 @@ public class OwnerCommands implements NewCommandExtension {
                             Server.getLogger().log(Level.WARNING, "Error reloading Shops", ex);
                         }
                         player.sendf("Reloaded shops in %'dms", System.currentTimeMillis() - initial);
+                        return true;
+                    }
+                },
+                new Command("toggledicing") {
+                    @Override
+                    protected boolean execute(Player player, String[] input) {
+                        Dicing.canDice = !Dicing.canDice;
+                        player.sendf("[@red@Dicing@bla@]: %s@bla@.", Dicing.canDice ? "@gre@Enabled" : "@red@Disabled");
                         return true;
                     }
                 }

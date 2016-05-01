@@ -15,16 +15,13 @@ import org.hyperion.rs2.model.content.ClickId;
 import org.hyperion.rs2.model.content.ClickType;
 import org.hyperion.rs2.model.content.ContentEntity;
 import org.hyperion.rs2.model.content.ContentManager;
-import org.hyperion.rs2.model.content.minigame.DangerousPK;
-import org.hyperion.rs2.model.content.minigame.FightPits;
-import org.hyperion.rs2.model.content.minigame.LastManStanding;
+import org.hyperion.rs2.model.content.minigame.*;
 import org.hyperion.rs2.model.content.misc.ItemDegrading;
 import org.hyperion.rs2.model.content.skill.Prayer;
 import org.hyperion.rs2.model.content.skill.slayer.SlayerTask;
 import org.hyperion.rs2.model.content.specialareas.SpecialArea;
 import org.hyperion.rs2.model.content.specialareas.SpecialAreaHolder;
 import org.hyperion.rs2.model.shops.SlayerShop;
-import org.hyperion.rs2.util.TextUtils;
 import org.hyperion.util.Misc;
 import org.hyperion.util.Time;
 
@@ -50,9 +47,13 @@ public class Combat {
             if (combatEntity.predictedAtk > System.currentTimeMillis()) {
                 return true;
             }
-            //a player shouldnt be attacking himself anyways
-            //if (!canAttack(combatEntity, combatEntity))
-            //    return false;
+
+            String message = canAtk(combatEntity, combatEntity.getOpponent());
+            if (message.length() > 1) {
+                if (combatEntity.getEntity() instanceof Player)
+                    combatEntity.getPlayer().getActionSender().sendMessage(message);
+                return false;
+            }
             /**
              * Add opponent to attackers list
              */
@@ -68,7 +69,7 @@ public class Combat {
             int distance = combatEntity.getEntity().getPosition().distance((combatEntity.getOpponent().getEntity().getPosition()));
             /*Checks if standing on eachother*/
             if (distance == 0) {
-                /*If standing on eachother and frozen*/
+				/*If standing on eachother and frozen*/
                 if (combatEntity.isFrozen())
                     return false;
                 if (!combatEntity.getOpponent().vacating) {
@@ -458,15 +459,15 @@ public class Combat {
             }
 
 			/*
-             * if(!WorldMap.projectileClear(combatEntity.getEntity().
+			 * if(!WorldMap.projectileClear(combatEntity.getEntity().
 			 * getLocation().getZ(),
-			 * combatEntity.getEntity().getLocation().getX(),
-			 * combatEntity.getEntity().getLocation().getY(),
+			 * combatEntity.getEntity().getPosition().getX(),
+			 * combatEntity.getEntity().getPosition().getY(),
 			 * combatEntity
-			 * .getOpponent().getEntity().getLocation().getX() +
+			 * .getOpponent().getEntity().getPosition().getX() +
 			 * combatEntity
 			 * .getOpponent().getOffsetX(),combatEntity.getOpponent
-			 * ().getEntity().getLocation().getY() +
+			 * ().getEntity().getPosition().getY() +
 			 * combatEntity.getOpponent().getOffsetY())) return true;
 			 */
 
@@ -483,11 +484,11 @@ public class Combat {
                 combatEntity.predictedAtk = System.currentTimeMillis() + 2400;
 
             			/*
-             * else
+			 * else
 			 * combatEntity.getPlayer().getActionSender().resetFollow();
 			 */// this isnt too nessary in melee, only magic and range
-            /*if(bowType != Constants.RANGEDNOARROWS)
-                combatEntity.doAtkEmote();
+			/*if(bowType != Constants.RANGEDNOARROWS)
+				combatEntity.doAtkEmote();
 			else
 				combatEntity.doAnim(422);*/// you dont try shoot arrows
             // wen u have no arrows
@@ -506,8 +507,8 @@ public class Combat {
                      */
                     int MeleeAtk = CombatAssistant.calculateMeleeAttack(combatEntity.getPlayer());
                     int MeleeDef = CombatAssistant.calculateMeleeDefence(combatEntity.getOpponent().getPlayer());
-                    /*if(combatEntity.getPlayer().getName().toLowerCase().equals("dr house")){
-                        combatEntity.getPlayer().getActionSender().sendMessage("Atk : " + MeleeAtk + " Def : " + MeleeDef);
+					/*if(combatEntity.getPlayer().getName().toLowerCase().equals("dr house")){
+						combatEntity.getPlayer().getActionSender().sendMessage("Atk : " + MeleeAtk + " Def : " + MeleeDef);
 					}*/
                     int deltaBonus = MeleeAtk - MeleeDef;
                     int toAdd = Misc.random(deltaBonus / 3);
@@ -632,7 +633,9 @@ public class Combat {
                 /**
                  * Another verification check incase of glitchers.
                  */
-                if (!canAttack(combatEntity, opponent)) {
+                String message = canAtk(combatEntity, opponent);
+                if (message.length() > 1) {
+                    combatEntity.getPlayer().getActionSender().sendMessage(message);
                     this.stop();
                     return;
                 }
@@ -696,7 +699,7 @@ public class Combat {
                     if (opponent.getEntity() instanceof Player
                             || opponent.getNPC().getDefinition().doesDefEmote())
                         opponent.doDefEmote();
-                    if ((opponent.getEntity() instanceof NPC || opponent.getEntity() instanceof Player)
+                    if (opponent.getEntity() instanceof NPC
                             || opponent.getPlayer().autoRetailate) {
                         opponent.setOpponent(combatEntity);
                     }
@@ -855,7 +858,7 @@ public class Combat {
                     if (combatEntity.getEntity() instanceof Player
                             || combatEntity.getNPC().getDefinition().doesDefEmote())
                         combatEntity.doDefEmote();
-                    if ((combatEntity.getEntity() instanceof NPC || combatEntity.getEntity() instanceof Player)
+                    if (combatEntity.getEntity() instanceof NPC
                             || combatEntity.getPlayer().autoRetailate) {
                         //System.out.println("SETING OPP LOOL3");
                         combatEntity.setOpponent(npc.cE);
@@ -909,73 +912,153 @@ public class Combat {
                     + n.cE.getOffsetY(), n.cE.getAbsX() + n.cE.getOffsetX(), offsetY, offsetX, 50, speed, gfx, height, 35, hitId, slope);
     }
 
-    private static boolean playerVsPlayer(Player player, Player target) {
-        System.out.println(String.format("[Player x Player]:%s -> %s", player.getName(), target.getName()));
-        if (!player.getLocation().isMulti() && !target.getLocation().isMulti()) {
-            if (getTime(target.getLastAttack().timeSinceLastAttack()) < 5000
-                    && (target.getCombat().getOpponent() != null && !target.getCombat().getOpponent().equals(player))) {
-                player.sendMessage("This player is already in combat");
-                return false;
-            } else if (getTime(target.getCombat().lastHit) < 5000
-                    && (player.getCombat().getOpponent() != null && !player.getCombat().getOpponent().equals(target))) {
-                player.sendMessage("I am already in combat.");
-                return false;
-            }
-        }
-        return player.getLocation().canAttack(player, target) && target.getLocation().canAttack(target, player);
-    }
-
-    private static boolean npcVsNpc(NPC attacker, NPC opponent) {
-        System.out.println(String.format("[NPC x NPC]:%s -> %s", attacker.getDefinition().getName(), opponent.getDefinition().getName()));
-        //TODO: Summoning
-        return false;
-    }
-
-    private static boolean playerVsNpc(Player player, NPC npc) {
-        System.out.println(String.format("[Player x NPC]:%s -> %s", player.getName(), npc.getDefinition().getName()));
-        if (npc.ownerId > 0) {
-            player.sendMessage("You cannot attack Summoning Familiars.");
-            //TODO: Summoning
-            return false;
-        }
-        if (!player.getLocation().isMulti() && !npc.getLocation().isMulti()) {
-            if (getTime(npc.getCombat().lastHit) < 9000
-                    && (npc.getCombat().getOpponent() != null && !npc.getCombat().getOpponent().equals(player.getCombat()))) {
-                player.sendMessage("This NPC is already in combat.");
-                return false;
-            } else if (getTime(player.getCombat().lastHit) < 5000
-                    && (player.getCombat().getOpponent() != null && !player.getCombat().getOpponent().equals(npc.getCombat()))) {
-                player.sendMessage("I am already in combat.");
-                return false;
-            }
-        }
+    public static boolean canAttack() {
+        /**
+         * Attacking is permitted
+         *
+         * Not enough wilderness Level
+         *
+         * Already in Combat
+         *
+         * being attacked & cannot attack another entity
+         */
         return true;
     }
 
-    private static boolean npcVsPlayer(NPC npc, Player player) {
-        System.out.println(String.format("[NPC x Player]:%s -> %s", npc.getDefinition().getName(), player.getName()));
-        return ((npc.getLocation().isMulti() && player.getLocation().isMulti())) || !((getTime(player.getCombat().lastHit) < 9000
-                && (player.getCombat().getOpponent() != null && !player.getCombat().getOpponent().equals(npc.getCombat()))) || (getTime(npc.getCombat().lastHit) < 5000
-                && (npc.getCombat().getOpponent() != null && !npc.getCombat().getOpponent().equals(player.getCombat()))));
-    }
+    // 1 - attack is ok
+    // 0 - wild level not enough
+    // 2 - aready in combat them
+    // 3 - your being attacked
 
+    public static String canAtk(CombatEntity combatEntity, CombatEntity opponent) {
+        if (combatEntity.getEntity() instanceof Player && opponent.getEntity() instanceof Player) {
+            Player p = combatEntity.getPlayer();
+            Player opp = opponent.getPlayer();
 
-    private static long getTime(final long value) {
-        return System.currentTimeMillis() - value;
-    }
+            if (!Position.inAttackableArea(opp))
+                return "This player is not in an attackable area";
+            if (!Position.inAttackableArea(p))
+                return "You are not in an attackable area";
+            if (FightPits.isSameTeam(p, opp))
+                return "Friend, not food";
+        }
+        if (combatEntity.getAbsZ() != opponent.getAbsZ())
+            return "This player is too far away to attack!";
 
-    public static boolean canAttack(CombatEntity primary, CombatEntity secondary) {
-        return !((primary == secondary)
-                || (primary == null || secondary == null)
-                || (primary.getAbsZ() != secondary.getAbsZ()))
-                && primary.getEntity() instanceof Player && secondary.getEntity() instanceof Player
-                ? playerVsPlayer(primary.getPlayer(), secondary.getPlayer())
-                : primary.getEntity() instanceof NPC && secondary.getEntity() instanceof NPC
-                ? npcVsNpc(primary.getNPC(), secondary.getNPC())
-                : primary.getEntity() instanceof Player && secondary.getEntity() instanceof NPC
-                ? playerVsNpc(primary.getPlayer(), secondary.getNPC())
-                : (primary.getEntity() instanceof NPC && secondary.getEntity() instanceof Player)
-                && npcVsPlayer(primary.getNPC(), secondary.getPlayer());
+        if (!isInMulti(combatEntity) || !isInMulti(opponent)) {
+			/* Summon Npcs */
+            if (combatEntity.getEntity() instanceof NPC) {
+                if (combatEntity.getNPC().getDefinition().getId() == 21 || combatEntity.getNPC().getDefinition().getId() == 2256)
+                    return "blablabla";
+                if (combatEntity.getNPC().summoned) {
+                    if (opponent.getEntity() instanceof NPC)// summon attacking
+                        // another npc
+                        // in a singles
+                        // area = OK
+                        return "1";
+                    else
+                        // otherwise there attacking a player in singles
+                        return "blablabla";
+                    //not summoned npc
+                } else {
+                    if (opponent.getEntity() instanceof Player && ((System.currentTimeMillis() - opponent.lastHit < 5000 && opponent.getPlayer().getLastAttack().getLastNpcAttack() != combatEntity.getNPC().getIndex()) || opponent.getPlayer().getLastAttack().timeSinceLastAttack() < 5000))
+                        return "blablabla";
+                }
+            }
+            if ((combatEntity.getEntity() instanceof Player)
+                    && (opponent.getEntity() instanceof Player)
+                    && ContentManager.handlePacket(6, (Player) combatEntity.getEntity(), 30000, -1, -1, -1)
+                    && ContentManager.handlePacket(6, (Player) opponent.getEntity(), 30000, -1, -1, -1))
+                return "1";
+            String type = "NPC";
+            if (opponent.getEntity() instanceof Player)
+                type = "player";
+            if (type.equals("player") && combatEntity.getEntity() instanceof Player) {
+                /**
+                 * If opponent hasent been in combat for a while, u can attack him
+                 * If he hasent, you look if his last attacker = you
+                 */
+                if (opponent.getPlayer().getLastAttack().timeSinceLastAttack() < 5000) {
+                    if (!opponent.getPlayer().getLastAttack().getName().equalsIgnoreCase(combatEntity.getPlayer().getName()))
+                        return "This player is already in combat.";
+                }
+                /**
+                 * If you are in combat, is the person who recently attacked you = person who u wanna atk?
+                 */
+                if (System.currentTimeMillis() - combatEntity.lastHit < 5000) {
+                    if (!combatEntity.getPlayer().getLastAttack().getName().equals(opponent.getPlayer().getName()))
+                        return "I am already in combat";
+                }
+            } else {
+                if (type.equalsIgnoreCase("NPC")) {
+                    NPC npc = opponent.getNPC();
+                    if (combatEntity.getPlayer() != null) {
+                        if (npc.getDefinition().getId() == 5666 &&
+                                (System.currentTimeMillis() - NpcDeathTask.borkKillers.getOrDefault(combatEntity.getPlayer().getName(), 0L) < (Time.ONE_MINUTE * 3)))
+                            return "Let someone else try killing barrelchest!";
+                        if (System.currentTimeMillis() - npc.getCombat().lastHit < 9000 && !npc.lastAttacker.equalsIgnoreCase(combatEntity.getPlayer().getName()))
+                            return "This monster is already in combat";
+                    } else if (opponent.getOpponent() != combatEntity)
+                        return "blablabla";
+                    return "1";
+                } else if (opponent.getOpponent() != null && opponent.getOpponent() != combatEntity) {
+                    return "This " + type + " is already in combat...";
+                }
+            }
+        }
+        if (combatEntity.getEntity() instanceof Player
+                && opponent.getEntity() instanceof Player) {
+            if (combatEntity.getPlayer().duelAttackable > 0) {
+                if (opponent.getEntity().getIndex() == combatEntity.getPlayer().duelAttackable) {
+                    return "1";
+                } else {
+                    return "This is not your opponent!";
+                }
+            }
+            if ((combatEntity.getAbsX() >= 2460
+                    && combatEntity.getAbsX() <= 2557
+                    && combatEntity.getAbsY() >= 3264 && combatEntity.getAbsY() <= 3335)
+                    || /* fun pk */
+                    combatEntity.getEntity().getPosition().inFunPk())// fun
+                // pk
+                // singles
+                return "1";
+            if (CastleWars.getCastleWars().canAttack(combatEntity.getPlayer(), opponent))
+                return "1";
+            int cb1 = combatEntity.getCombat();
+            int cb2 = opponent.getCombat();
+            if (combatEntity.getEntity() instanceof Player &&
+                    ContentManager.handlePacket(
+                            6, combatEntity.getPlayer(), ClickId.ATTACKABLE))
+                return "1";
+            if (LastManStanding.inLMSArea(combatEntity.getAbsX(), combatEntity.getAbsY())) {
+                Participant player = LastManStanding.getLastManStanding().participants.get(combatEntity.getPlayer().getName());
+                Participant opp = LastManStanding.getLastManStanding().participants.get(opponent.getPlayer().getName());
+                if (player == null || opp == null) {
+                    return "Something went wrong!";
+                }
+                return "1";
+            }
+            //ardy pvp code below.
+			/*if(combatEntity.getEntity().getPosition().inArdyPvPArea() && opponent.getEntity().getPosition().inArdyPvPArea()) {
+				if(Math.abs(cb1 - cb2) <= 6) {
+					return "";
+				} else {
+					return "You can not attack this opponent";
+				}
+			}*/
+            // wilderness level is too great
+            String differenceOk = "You need to move deeper into the wilderness to attack this player.";
+
+            int difference = getRealLevel(combatEntity, opponent);
+            if (cb1 - cb2 <= difference && cb1 - cb2 >= 0 && difference > 0)
+                differenceOk = "";
+            else if (cb2 - cb1 <= difference && cb2 - cb1 >= 0 && difference > 0)
+                differenceOk = "";
+            return differenceOk;
+        }
+        // this will be returned for summons in a multi area
+        return "1";
     }
 
     public static void resetAttack(CombatEntity combatEntity) {
@@ -1249,7 +1332,7 @@ public class Combat {
         if (combatEntity.getPlayer() != null)
             combatEntity.getPlayer().getActionSender().sendMessage("You have been poisoned.");
         combatEntity.setPoisoned(true);
-        TaskManager.submit(new Task(16000, "poisoned") {
+        TaskManager.submit(new Task(16000,"poisoned") {
             private int lastDamg = -1;
             private int ticks = 4;
 

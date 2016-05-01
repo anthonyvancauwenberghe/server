@@ -20,7 +20,7 @@ import java.util.logging.Level;
 public class ClanManager {
 
 	public static void joinClanChat(Player player, String clanName, boolean onLogin) {
-		clanName = clanName.replace("_", " ");
+		clanName = clanName.contains("_") ? clanName.replace("_", " ") : clanName;
 		if(! canEnter(player, clanName))
 			return;
 		Clan clan = clans.get(clanName.toLowerCase());
@@ -47,44 +47,32 @@ public class ClanManager {
 
 	}
 
-	private static void updateClanInfo(Player player, Clan clan) {
-		player.getActionSender().sendString(18139, "Talking in: "
-				+ TextUtils.titleCase(clan.getName()));
-		player.getActionSender().sendString(18140, "Owner: " + TextUtils.ucFirst(clan.getOwner()));
-		for(Player p : clan.getPlayers()) {
-			player.getActionSender().addClanMember(p.getPlayersNameInClan());
-			if(p != player)
-				p.getActionSender().addClanMember(player.getPlayersNameInClan());
-		}
+	private static void updateClanInfo(final Player player, final Clan clan) {
+        player.getActionSender().sendString(18139, String.format("Talking in: %s", TextUtils.titleCase(clan.getName())));
+		player.getActionSender().sendString(18140, String.format("Owner: %s", TextUtils.ucFirst(clan.getOwner())));
+        clan.getPlayers().forEach(member -> {
+            player.getActionSender().addClanMember(member.getPlayersNameInClan());
+            if (member != player) {
+                member.getActionSender().addClanMember(player.getPlayersNameInClan());
+            }
+        });
 	}
 
-	private static void checkClanRank(Player player, Clan clan) {
-		for(ClanMember cm : clan.getRankedMembers()) {
-			if(cm.getName().equalsIgnoreCase(player.getName())) {
-				player.setClanRank(cm.getRank());
-				break;
-			}
-		}
-
-		if(Rank.hasAbility(player, Rank.DEVELOPER))
-			player.setClanRank(7);
-		else if(Rank.hasAbility(player, Rank.MODERATOR))
-			player.setClanRank(6);
-        if(player.getName().equalsIgnoreCase(clan.getOwner())) {
-            player.setClanRank(5);
-        }
+	private static void checkClanRank(final Player player, final Clan clan) {
+        clan.getRankedMembers().stream().filter(member -> member.getName().equalsIgnoreCase(player.getName())).forEach(member -> player.setClanRank(member.getRank()));
+        player.setClanRank(Rank.hasAbility(player, Rank.DEVELOPER) ? 7 : Rank.hasAbility(player, Rank.MODERATOR) ? 6 : player.getName().equalsIgnoreCase(clan.getOwner()) ? 5 : player.getClanRank());
 	}
 
-	private static void sendLoginMessage(Player player, String clanName) {
-		player.sendClanMessage("Talking in clan '" + clanName + "'.");
+	private static void sendLoginMessage(final Player player, final String value) {
+        player.sendf("Talking in clan '%s'.", TextUtils.titleCase(value));
     }
 
 
-    public static boolean existsClan(String name) {
-        return clans.get(name.toLowerCase()) != null;
+    public static boolean existsClan(final String value) {
+        return clans.get(value.toLowerCase()) != null;
     }
 
-	public static void joinClanChat(Player player, long name) {
+	public static void joinClanChat(final Player player, final long name) {
 		String clanName;
 		try {
 			clanName = NameUtils.longToName(name);
@@ -94,7 +82,7 @@ public class ClanManager {
 		joinClanChat(player, clanName, false);
 	}
 
-	public static boolean canEnter(Player player, String nameStr) {
+	public static boolean canEnter(final Player player, final String nameStr) {
 		if(player.getClanName().equalsIgnoreCase(nameStr)) {
 			player.sendClanMessage("You are already in this clan chat.");
             return false;
@@ -154,96 +142,29 @@ public class ClanManager {
         }
     }
 
-	public static void sendClanMessage(Player player, String message, boolean toMe) {
-		// message = message+":clan:";
-
-        if(handleInternalCommands(message, player))
+	public static void sendClanMessage(final Player player, final String message, final boolean self) {
+        if(handleInternalCommands(message.toLowerCase().trim(), player)) {
             return;
-
-        message = message.replace("req:", "req");
-
-        String displayRank = player.getClanRankName().isEmpty() ? " " : "[" + player.getClanRank() + "] ";
-        if(player.isClanMainOwner())
-            displayRank = "[O] ";
-		//message = "[@blu@" + TextUtils.titleCase(player.getClanName()) + "@bla@] " + displayRank + player.getSafeDisplayName() + ": @dre@" + TextUtils.ucFirst(message.toLowerCase().replaceAll("@", ""));
-        //player.getLogManager().add(LogEntry.clanchat(player.getClanName(), message));
-        message = ""+displayRank+player.getSafeDisplayName() + ":"+TextUtils.ucFirst(message.replaceAll("@", "") + ":clan:");
-		if(player.getClanName() == "") {
-			player.sendClanMessage("You need to join a clan chat before you can send messages.");
-			return;
-		}
-
-		Clan clan = clans.get(player.getClanName());
-		if(clan == null)
-			return;
-		for(Player client : clan.getPlayers()) {
-			client.getActionSender().sendMessage(message);
-		}
-
+        }
+        if (player.getClanName().trim().isEmpty()) {
+            player.sendClanMessage("You need to join a clan chat before you can send messages.");
+            return;
+        }
+		final Clan clan = clans.get(player.getClanName());
+		if (clan != null) {
+            final String value = message.contains("req:") ? message.replace("req:", "req") : String.format("%s%s:%s:clan:", player.getClanRankName().isEmpty() ? " " : player.isClanMainOwner() ? "[O] " : String.format("[%d] ", player.getClanRank()), player.getSafeDisplayName(), TextUtils.ucFirst(message.contains("@") ? message.replace("@", "") : message));
+            clan.getPlayers().stream().forEach(member -> member.sendMessage(value));
+        }
 	}
 
 	public static void sendDiceMessage(Player player, Clan clan, int thrown) {
-		String message = "You roll @red@" + thrown
-				+ "@bla@ on the percentile dice.";
-		player.getActionSender().sendMessage(message);
-		message = "Clan Chat mate @369@" + player.getName()
-				+ "@bla@ rolled @red@" + thrown
-				+ "@bla@ on the percentile dice.";
-		for(Player client : clan.getPlayers()) {
-			if(client.getName().equals(player.getName()))
-				continue;
-			client.getActionSender().sendMessage(message);
-		}
-        player.forceMessage("ROLLED: "+thrown+"!");
-	}
-
-	public static boolean handleCommands(Player player, String s, String[] as) {
-		String s1 = as[0].toLowerCase();
-		//System.out.println(player.getClanName());
-		if(s.startsWith("cc ")) {
-			ClanManager.sendClanMessage(player, s.replace("cc ", ""), true);
-			return true;
-		}
-
-        if(s1.equalsIgnoreCase("changeclanowner") && Rank.hasAbility(player, Rank.ADMINISTRATOR)) {
-            try {
-                s = s.replace("changeclanowner ", "");
-                final String clanName = s.substring(0, s.indexOf(":"));
-                final String owner = s.substring(s.indexOf(":")+ 1, s.length());
-                final Clan clan = clans.get(clanName);
-                if(clan != null) {
-                    player.sendClanMessage("Changing "+clan.getName()+" owner from "+clan.getOwner()+" to "+owner);
-                    clan.setOwner(owner);
-                }
-            }catch(Exception ex) {
-                player.sendMessage("Use as ::changeclanowner clanName:newOwnerName");
-            }
-
-
-
-        }
-
-        if(Rank.hasAbility(player, Rank.OWNER)) {
-            if(s1.equalsIgnoreCase("enabledicing")) {
-                Dicing.canDice = true;
-            }
-            if(s1.equalsIgnoreCase("disabledicing"))
-                Dicing.canDice = false;
-        }
-
-        if(s1.equalsIgnoreCase("givedice") && Rank.hasAbility(player, Rank.GLOBAL_MODERATOR)) {
-            final String targ = s.substring(8).trim();
-            final Player target = World.getPlayerByName(targ);
-            if(target != null) {
-                target.getInventory().add(Item.create(15098));
-            }
-        }
-
-		return false;
+		player.getActionSender().sendMessage(String.format("You roll a @red@%d@bla@ on the percentile dice.", thrown));
+        final String message = String.format("Clan chat mate @369@%s@bla@ rolled @red@%d@bla@ on the percentile dice.", TextUtils.titleCase(player.getName()), thrown);
+        clan.getPlayers().stream().filter(client -> !client.getName().equals(player.getName())).forEach(client -> client.sendMessage(message));
+        player.forceMessage(String.format("ROLLED: %d!", thrown));
 	}
 
     public static boolean handleInternalCommands(final String message, Player player) {
-
         if(message.equalsIgnoreCase("makediceclan") && Rank.hasAbility(player, Rank.OWNER)) {
             Clan clan = clans.get(player.getClanName());
             clan.makeDiceClan();
@@ -252,7 +173,7 @@ public class ClanManager {
         }
         if(message.startsWith("demote"))  {
             String name = message.replace("demote ", "");
-            player.getActionSender().sendMessage("Promoting " + name);
+            player.getActionSender().sendMessage("Demoting " + name);
             Clan clan = ClanManager.clans.get(player.getClanName());
             if(! clan.getOwner().equalsIgnoreCase(player.getName())) {
                 player.sendClanMessage("Only the main owner can demote people.");
@@ -319,7 +240,23 @@ public class ClanManager {
             player.sendClanMessage("Player has been succesfully promoted.");
             return true;
         }
-
+        if (message.startsWith("kick")) {
+            final Clan clan = ClanManager.clans.get(player.getClanName());
+            final String name = message.replace("kick ", "");
+            final Player other = World.getPlayerByName(name);
+            if (player.getClanRank() < 4) {
+                player.sendClanMessage("You are not a high enough rank to kick members.");
+                return true;
+            }
+            if(other != null && other.getClanRank() >= player.getClanRank()) {
+                player.sendClanMessage("You cannot do this with someone of a higher or equal rank");
+                return true;
+            }
+            if(clan.kick(name, false)) {
+                sendClanMessage(player, String.format("%s has kicked %s from the channel.", TextUtils.optimizeText(name), TextUtils.optimizeText(player.getName())), false);
+            }
+            return true;
+        }
         if(message.startsWith("ban")) {
             String name = message.replace("ban ", "");
             Clan clan = ClanManager.clans.get(player.getClanName());
@@ -328,13 +265,12 @@ public class ClanManager {
                 player.sendClanMessage("You are not a high enough rank to ban members");
                 return true;
             }
-            if(other != null && other.getClanRank() > player.getClanRank()) {
-                player.sendClanMessage("You cannot do this with someone of a higher rank");
+            if(other != null && other.getClanRank() >= player.getClanRank()) {
+                player.sendClanMessage("You cannot do this with someone of a higher or equal rank");
                 return true;
             }
             if(clan.kick(name, false)) {
-                player.sendClanMessage("Player has been kicked succesfully");
-                sendClanMessage(player, "@bla@ "+name+ " has been KICKED from the channel", true);
+                sendClanMessage(player, String.format("%s has kicked %s from the channel.", TextUtils.optimizeText(name), TextUtils.optimizeText(player.getName())), false);
             }
             return true;
         }
@@ -361,13 +297,12 @@ public class ClanManager {
 
 
         if(message.startsWith("unban")) {
-            String name = message.replace("unban ", "");
-            Clan clan = ClanManager.clans.get(player.getClanName());
+            final String name = message.replace("unban ", "");
+            final Clan clan = ClanManager.clans.get(player.getClanName());
             if(player.getClanRank() < 3) {
                 player.sendClanMessage("You need to be a higher rank to unban");
                 return true;
             }
-
             if(clan.unban(name)) {
                 sendClanMessage(player, "@bla@ "+name+ " has been unbanned from the channel", true);
             }
@@ -375,17 +310,14 @@ public class ClanManager {
         }
 
         if(message.startsWith("listbans") && Rank.isStaffMember(player)) {
-            String name = message.replace("unban ", "");
-            Clan clan = ClanManager.clans.get(player.getClanName());
-
+            final Clan clan = ClanManager.clans.get(player.getClanName());
             clan.listBans(player);
-
             return true;
         }
         return false;
     }
 
-	public static Map<String, Clan> clans = new HashMap<String, Clan>();
+	public static Map<String, Clan> clans = new HashMap<>();
 
     private static final byte KEY = (byte)245;
 

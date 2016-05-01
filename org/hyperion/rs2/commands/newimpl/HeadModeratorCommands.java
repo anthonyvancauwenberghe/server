@@ -15,14 +15,22 @@ import java.util.List;
  * Created by DrHales on 2/29/2016.
  */
 public class HeadModeratorCommands implements NewCommandExtension {
-    //<editor-fold defaultstate="collapsed"desc="Rank">
-    private final Rank rank = Rank.HEAD_MODERATOR;
-    //</editor-fold>
+    
+    private abstract class Command extends NewCommand {
+        public Command(String key, long delay, CommandInput... requiredInput) {
+            super(key, Rank.HEAD_MODERATOR, delay, requiredInput);
+        }
+        
+        public Command(String key, CommandInput... requiredInput) {
+            super(key, Rank.HEAD_MODERATOR, requiredInput);
+        }
+    }
+    
     //<editor-fold defaultstate="collapsed" desc="Commands List">
     @Override
     public List<NewCommand> init() {
         return Arrays.asList(
-                new NewCommand("resetdeaths", rank, new CommandInput<String>(World::playerIsOnline, "Player", "An Online Player")) {
+                new Command("resetdeaths", new CommandInput<String>(World::playerIsOnline, "Player", "An Online Player")) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         final Player target = World.getPlayerByName(input[0].trim());
@@ -30,7 +38,7 @@ public class HeadModeratorCommands implements NewCommandExtension {
                         return true;
                     }
                 },
-                new NewCommand("resetkills", rank, new CommandInput<String>(World::playerIsOnline, "Player", "An Online Player")) {
+                new Command("resetkills", new CommandInput<String>(World::playerIsOnline, "Player", "An Online Player")) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         final Player target = World.getPlayerByName(input[0].trim());
@@ -38,7 +46,7 @@ public class HeadModeratorCommands implements NewCommandExtension {
                         return true;
                     }
                 },
-                new NewCommand("resetelo", rank, new CommandInput<String>(World::playerIsOnline, "Player", "An Online Player")) {
+                new Command("resetelo", new CommandInput<String>(World::playerIsOnline, "Player", "An Online Player")) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         final Player target = World.getPlayerByName(input[0].trim());
@@ -46,17 +54,21 @@ public class HeadModeratorCommands implements NewCommandExtension {
                         return true;
                     }
                 },
-                new NewCommand("update", rank) {
+                new Command("update") {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         Server.update(120, String.format("%sRestart Request", player.getName()));
                         return true;
                     }
                 },
-                new NewCommand("sethp", rank, new CommandInput<String>(World::playerIsOnline, "Player", "An Online Player"), new CommandInput<Integer>(integer -> integer > -1 && integer < Integer.MAX_VALUE, "Integer", "HP Amount")) {
+                new Command("sethp", new CommandInput<String>(World::playerIsOnline, "Player", "An Online Player"), new CommandInput<Integer>(integer -> integer > -1 && integer < Integer.MAX_VALUE, "Integer", "HP Amount")) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         final Player target = World.getPlayerByName(input[0].trim());
+                        if (!Rank.hasAbility(player, Rank.getPrimaryRank(target.getPlayerRank()))) {
+                            player.sendMessage("You cannot do this to those with a greater rank than yours.");
+                            return true;
+                        }
                         int level = Integer.parseInt(input[1].trim());
                         target.getSkills().setLevel(Skills.HITPOINTS, level);
                         player.sendf("You have set %s's hitpoints to %,d.", TextUtils.optimizeText(target.getName()), level);
@@ -64,7 +76,7 @@ public class HeadModeratorCommands implements NewCommandExtension {
                         return true;
                     }
                 },
-                new NewCommand("unlock", rank, new CommandInput<String>(World::playerIsOnline, "Player", "An Online Player")) {
+                new Command("unlock", new CommandInput<String>(World::playerIsOnline, "Player", "An Online Player")) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         final Player target = World.getPlayerByName(input[0].trim());
@@ -76,7 +88,7 @@ public class HeadModeratorCommands implements NewCommandExtension {
                         return true;
                     }
                 },
-                new NewCommand("checkclans", rank) {
+                new Command("checkclans") {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         ClanManager.clans.values().stream().filter(clan -> clan.getPlayers().size() > 0 && !clan.getName().toLowerCase().startsWith("party")).forEach(clan -> {
@@ -85,7 +97,7 @@ public class HeadModeratorCommands implements NewCommandExtension {
                         return true;
                     }
                 },
-                new NewCommand("spawnobject", rank, new CommandInput<Integer>(integer -> GameObjectDefinition.forId(integer) != null, "Integer", "Object ID"), new CommandInput<Integer>(integer -> integer > 0 && integer < 21, "Integer", "Object Face"), new CommandInput<Integer>(integer -> integer > -1 && integer < 23, "Integer", "Object Type")) {
+                new Command("spawnobject", new CommandInput<Integer>(integer -> GameObjectDefinition.forId(integer) != null, "Integer", "Object ID"), new CommandInput<Integer>(integer -> integer > 0 && integer < 21, "Integer", "Object Face"), new CommandInput<Integer>(integer -> integer > -1 && integer < 23, "Integer", "Object Type")) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         final int id = Integer.parseInt(input[0].trim());
@@ -95,33 +107,35 @@ public class HeadModeratorCommands implements NewCommandExtension {
                         return true;
                     }
                 },
-                new NewCommand("givekorasi", rank, new CommandInput<String>(World::playerIsOnline, "Player", "An Online Player")) {
+                new Command("givekorasi", new CommandInput<String>(World::playerIsOnline, "Player", "An Online Player")) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         final Player target = World.getPlayerByName(input[0].trim());
                         final Item item = new Item(19780, 1);
-                        if (!target.getInventory().add(item)) {
+                        if (!target.getInventory().hasRoomFor(item)) {
                             target.getBank().add(item);
                         } else {
                             target.getInventory().add(item);
                         }
+                        player.sendf("a Korasi's Sword has been added to your %s.", target.getInventory().hasRoomFor(item) ? "Inventory" : "Bank");
                         return true;
                     }
                 },
-                new NewCommand("givevigour", rank, new CommandInput<String>(World::playerIsOnline, "Player", "An Online Player")) {
+                new Command("givevigour", new CommandInput<String>(World::playerIsOnline, "Player", "An Online Player")) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         final Player target = World.getPlayerByName(input[0].trim());
                         final Item item = new Item(19669, 1);
-                        if (!target.getInventory().add(item)) {
+                        if (!target.getInventory().hasRoomFor(item)) {
                             target.getBank().add(item);
                         } else {
                             target.getInventory().add(item);
                         }
+                        player.sendf("a Ring of Vigour has been added to your %s.", target.getInventory().hasRoomFor(item) ? "Inventory" : "Bank");
                         return true;
                     }
                 },
-                new NewCommand("resetkdr", rank, new CommandInput<String>(World::playerIsOnline, "Player", "An Online Player")) {
+                new Command("resetkdr", new CommandInput<String>(World::playerIsOnline, "Player", "An Online Player")) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         final Player target = World.getPlayerByName(input[0].trim());

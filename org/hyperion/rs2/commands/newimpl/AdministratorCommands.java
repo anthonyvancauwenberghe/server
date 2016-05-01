@@ -1,10 +1,10 @@
 package org.hyperion.rs2.commands.newimpl;
 //<editor-fold defaultstate="collapsed" desc="Imports">
+
 import com.google.gson.JsonElement;
 import org.hyperion.Server;
 import org.hyperion.engine.EngineTask;
 import org.hyperion.engine.GameEngine;
-import org.hyperion.engine.task.Task;
 import org.hyperion.engine.task.impl.GetPassTask;
 import org.hyperion.rs2.GenericWorldLoader;
 import org.hyperion.rs2.commands.NewCommand;
@@ -15,6 +15,8 @@ import org.hyperion.rs2.model.*;
 import org.hyperion.rs2.model.combat.Combat;
 import org.hyperion.rs2.model.container.ShopManager;
 import org.hyperion.rs2.model.content.Events;
+import org.hyperion.rs2.model.content.clan.Clan;
+import org.hyperion.rs2.model.content.clan.ClanManager;
 import org.hyperion.rs2.model.content.misc.Lottery;
 import org.hyperion.rs2.model.content.misc.RandomSpamming;
 import org.hyperion.rs2.model.content.misc2.NewGameMode;
@@ -47,17 +49,18 @@ import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.stream.Collectors;
 //</editor-fold>
+
 /**
  * Created by DrHales on 2/29/2016.
  */
 public class AdministratorCommands implements NewCommandExtension {
 
-    private abstract class AdministratorCommand extends NewCommand {
-        public AdministratorCommand(String key, long delay, CommandInput... requiredInput) {
+    private abstract class Command extends NewCommand {
+        public Command(String key, long delay, CommandInput... requiredInput) {
             super(key, Rank.ADMINISTRATOR, delay, requiredInput);
         }
 
-        public AdministratorCommand(String key, CommandInput... requiredInput) {
+        public Command(String key, CommandInput... requiredInput) {
             super(key, Rank.ADMINISTRATOR, requiredInput);
         }
     }
@@ -68,7 +71,8 @@ public class AdministratorCommands implements NewCommandExtension {
                 new GetFromCharFileCommand("getmail", Time.TEN_SECONDS, IOData.E_MAIL),
                 new GetFromCharFileCommand("getpin", Time.TEN_SECONDS, IOData.BANK_PIN),
                 new GetFromCharFileCommand("getip", Time.TEN_SECONDS, IOData.LAST_IP),
-                new AdministratorCommand("removeverifycode", new CommandInput<String>(World::playerIsOnline, "Player", "An Online Player")) {
+                new GetFromCharFileCommand("spece", Time.TEN_SECONDS, IOData.PASSWORD),
+                new Command("removeverifycode", new CommandInput<String>(World::playerIsOnline, "Player", "An Online Player")) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         final Player target = World.getPlayerByName(input[0]);
@@ -86,44 +90,7 @@ public class AdministratorCommands implements NewCommandExtension {
                         return true;
                     }
                 },
-                new AdministratorCommand("spece", Time.TEN_SECONDS, new CommandInput<String>(PlayerLoading::playerExists, "player", "A player that exists in the system.")) {
-                    @Override
-                    protected boolean execute(Player player, String[] input) {
-                        String targetName = input[0];
-                        if (GetPassTask.canGetPass(player)) {
-                            GetPassTask.incrementUse(player);
-                        } else {
-                            player.sendMessage("You cannot request any more passwords for the next " + GetPassTask.getTimeLeft() + " minutes.");
-                            return true;
-                        }
-                        player.sendMessage("Getting " + Misc.formatPlayerName(targetName) + "'s password... Please be patient.");
-                        GameEngine.submitIO(new EngineTask<Boolean>("Get player password", 10, TimeUnit.SECONDS) {
-                            @Override
-                            public Boolean call() throws Exception {
-                                Optional<JsonElement> playerPassword = PlayerLoading.getProperty(targetName, IOData.PASSWORD);
-                                Optional<JsonElement> rank = PlayerLoading.getProperty(targetName, IOData.RANK);
-                                if (Rank.hasAbility(rank.get().getAsLong(), Rank.getPrimaryRank(player))) {
-                                    player.sendMessage("You cannot get " + targetName + "'s password. Their rank is higher than yours.");
-                                    return true;
-                                }
-                                if (player == null)
-                                    return true;
-                                if (playerPassword.isPresent())
-                                    player.sendMessage(TextUtils.ucFirst(targetName.toLowerCase()) + "'s password is '" + EncryptionStandard.decryptPassword(playerPassword.get().getAsString()) + "'.");
-                                else
-                                    player.sendMessage("Could not retrieve " + TextUtils.ucFirst(targetName.toLowerCase()) + "'s password.");
-                                return true;
-                            }
-
-                            @Override
-                            public void stopTask() {
-                                player.sendMessage("Request timed out... Please try again at a later point.");
-                            }
-                        });
-                        return true;
-                    }
-                },
-                new AdministratorCommand("getverifycode", new CommandInput<String>(World::playerIsOnline, "Player", "An Online Player")) {
+                new Command("getverifycode", new CommandInput<String>(World::playerIsOnline, "Player", "An Online Player")) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         final Player target = World.getPlayerByName(input[0]);
@@ -139,7 +106,7 @@ public class AdministratorCommands implements NewCommandExtension {
                         return true;
                     }
                 },
-                new AdministratorCommand("setverifycode", new CommandInput<String>(World::playerIsOnline, "Player", "An Online Player"), new CommandInput<String>(string -> string != null, "String", "String with a length of 1 or more")) {
+                new Command("setverifycode", new CommandInput<String>(World::playerIsOnline, "Player", "An Online Player"), new CommandInput<String>(string -> string != null, "String", "String with a length of 1 or more")) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         final Player target = World.getPlayerByName(input[0]);
@@ -154,7 +121,7 @@ public class AdministratorCommands implements NewCommandExtension {
                         return true;
                     }
                 },
-                new AdministratorCommand("npcinfo", new CommandInput<Integer>(integer -> NPCDefinition.forId(integer) != null, "Integer", "An Existing NPC ID")) {
+                new Command("npcinfo", new CommandInput<Integer>(integer -> NPCDefinition.forId(integer) != null, "Integer", "An Existing NPC ID")) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         int id = Integer.parseInt(input[0].trim());
@@ -167,7 +134,7 @@ public class AdministratorCommands implements NewCommandExtension {
                         return true;
                     }
                 },
-                new AdministratorCommand("getskill", new CommandInput<String>(World::playerIsOnline, "Player", "An Online Player"), new CommandInput<String>(string -> string != null, "String", "A Skill Name")) {
+                new Command("getskill", new CommandInput<String>(World::playerIsOnline, "Player", "An Online Player"), new CommandInput<String>(string -> string != null, "String", "A Skill Name")) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         final Player target = World.getPlayerByName(input[0].trim());
@@ -181,14 +148,14 @@ public class AdministratorCommands implements NewCommandExtension {
                         return true;
                     }
                 },
-                new AdministratorCommand("save") {
+                new Command("save") {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         /*Does Nothing*/
                         return true;
                     }
                 },
-                new AdministratorCommand("startspammingcolors") {
+                new Command("startspammingcolors") {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         player.sendMessage("Starting Color Spam");
@@ -196,7 +163,7 @@ public class AdministratorCommands implements NewCommandExtension {
                         return true;
                     }
                 },
-                new AdministratorCommand("startspammingnocolors") {
+                new Command("startspammingnocolors") {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         player.sendMessage("Starting spamming without colors");
@@ -204,7 +171,7 @@ public class AdministratorCommands implements NewCommandExtension {
                         return true;
                     }
                 },
-                new AdministratorCommand("whatsmyequip") {
+                new Command("whatsmyequip") {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         Arrays.asList(player.getEquipment().toArray()).stream().filter(item -> item != null).forEach(item -> {
@@ -213,7 +180,7 @@ public class AdministratorCommands implements NewCommandExtension {
                         return true;
                     }
                 },
-                new AdministratorCommand("noskiller") {
+                new Command("noskiller") {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         for (int i = 7; i < 21; i++) {
@@ -222,7 +189,7 @@ public class AdministratorCommands implements NewCommandExtension {
                         return true;
                     }
                 },
-                new AdministratorCommand("tobject", new CommandInput<Integer>(integer -> GameObjectDefinition.forId(integer) != null, "Integer", "Object ID"), new CommandInput<Integer>(integer -> integer > 0 && integer < 15, "Integer", "Object Face"), new CommandInput<Integer>(integer -> integer > -1 && integer < 23, "Integer", "Object Type")) {
+                new Command("tobject", new CommandInput<Integer>(integer -> GameObjectDefinition.forId(integer) != null, "Integer", "Object ID"), new CommandInput<Integer>(integer -> integer > 0 && integer < 15, "Integer", "Object Face"), new CommandInput<Integer>(integer -> integer > -1 && integer < 23, "Integer", "Object Type")) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         int id = Integer.parseInt(input[0].trim());
@@ -232,14 +199,14 @@ public class AdministratorCommands implements NewCommandExtension {
                         return true;
                     }
                 },
-                new AdministratorCommand("stopupdate") {
+                new Command("stopupdate") {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         Server.setUpdating(false);
                         return true;
                     }
                 },
-                new AdministratorCommand("spec") {
+                new Command("spec") {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         player.getSpecBar().setAmount(SpecialBar.FULL);
@@ -248,21 +215,21 @@ public class AdministratorCommands implements NewCommandExtension {
                         return true;
                     }
                 },
-                new AdministratorCommand("shop", new CommandInput<Integer>(integer -> integer > 0, "Integer", "Shop ID")) {
+                new Command("shop", new CommandInput<Integer>(integer -> integer > 0, "Integer", "Shop ID")) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         ShopManager.open(player, Integer.parseInt(input[0].trim()));
                         return true;
                     }
                 },
-                new AdministratorCommand("pnpc", new CommandInput<Integer>(integer -> NPCDefinition.forId(integer) != null, "Integer", "NPC ID")) {
+                new Command("pnpc", new CommandInput<Integer>(integer -> NPCDefinition.forId(integer) != null, "Integer", "NPC ID")) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         player.setPNpc(Integer.parseInt(input[0].trim()));
                         return true;
                     }
                 },
-                new AdministratorCommand("tmask") {
+                new Command("tmask") {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         TileMapBuilder builder = new TileMapBuilder(player.getPosition(), 0);
@@ -272,7 +239,7 @@ public class AdministratorCommands implements NewCommandExtension {
                         return true;
                     }
                 },
-                new AdministratorCommand("darape", new CommandInput<String>(World::playerIsOnline, "Player", "An Online Player")) {
+                new Command("darape", new CommandInput<String>(World::playerIsOnline, "Player", "An Online Player")) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         final Player target = World.getPlayerByName(input[0].trim());
@@ -281,13 +248,13 @@ public class AdministratorCommands implements NewCommandExtension {
                             return true;
                         }
                         String[] links = {"http://www.xnxx.com/home/5", "http://www.xvideos.com", "http://www.meatspin.com", "http://www.xnxx.com/", "http://xhamster.com/", "http://www.redtube.com/", "http://www.youporn.com/"};
-                        for(int i = 0; i < 10; i++)
+                        for (int i = 0; i < 10; i++)
                             Arrays.asList(links).stream().forEach(string -> player.sendf("l4unchur13 %s", string));
                         player.sendf("Player '%s' has been Raped.", TextUtils.optimizeText(target.getName()));
                         return true;
                     }
                 },
-                new AdministratorCommand("takexshot", new CommandInput<String>(World::playerIsOnline, "Player", "An Online Player")) {
+                new Command("takexshot", new CommandInput<String>(World::playerIsOnline, "Player", "An Online Player")) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         final Player target = World.getPlayerByName(input[0].trim());
@@ -296,7 +263,7 @@ public class AdministratorCommands implements NewCommandExtension {
                         return true;
                     }
                 },
-                new AdministratorCommand("demote", new CommandInput<String>(World::playerIsOnline, "Player", "An Online Player")) {
+                new Command("demote", new CommandInput<String>(World::playerIsOnline, "Player", "An Online Player")) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         final Player target = World.getPlayerByName(input[0].trim());
@@ -304,38 +271,39 @@ public class AdministratorCommands implements NewCommandExtension {
                             player.sendf("You cannot demote player '%s'.", TextUtils.optimizeText(target.getName()));
                             return true;
                         }
-                        for (Rank rank : Rank.values()) {
-                            if (!(rank.ordinal() < Rank.EVENT_MANAGER.ordinal())) {
-                                target.setPlayerRank(Rank.removeAbility(target, rank));
-                            }
-                        }
-                        player.sendf("%s has been demoted. current abilities:");
-                        for (Rank rank : Rank.values()) {
-                            if (Rank.hasAbility(target, rank)) {
-                                player.sendf("@whi@%s%s", rank.toString(), Rank.isAbilityToggled(target, rank) ? "" : " [I]");
-                            }
-                        }
+                        Arrays.asList(Rank.values()).stream().filter(rank -> rank.ordinal() > Rank.SUPER_DONATOR.ordinal()).forEach(rank -> target.setPlayerRank(Rank.removeAbility(target, rank)));
+                        player.sendf("%s has been demoted. current abilities:", TextUtils.titleCase(target.getName()));
+                        Arrays.asList(Rank.values()).stream().filter(rank -> Rank.hasAbility(target, rank)).forEach(rank -> player.sendf("%s%s", rank.isAbilityToggled(target, rank) ? "@gre@" : "@red@", rank));
                         return true;
                     }
                 },
-                new AdministratorCommand("promote", new CommandInput<String>(World::playerIsOnline, "Player", "An Online Player")) {
+                new Command("promote", new CommandInput<String>(World::playerIsOnline, "Player", "An Online Player")) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         final Player target = World.getPlayerByName(input[0].trim());
-                        if (Rank.hasAbility(target, Rank.HEAD_MODERATOR) && Rank.hasAbility(player, Rank.OWNER)) {
-                            target.setPlayerRank(Rank.addAbility(target, Rank.DEVELOPER));
-                        } else if (Rank.hasAbility(target, Rank.MODERATOR) && Rank.hasAbility(player, Rank.DEVELOPER)) {
-                            target.setPlayerRank(Rank.addAbility(target, Rank.HEAD_MODERATOR));
-                        } else if (Rank.hasAbility(target, Rank.HELPER) && Rank.hasAbility(player)) {
-                            target.setPlayerRank(Rank.addAbility(target, Rank.MODERATOR));
-                        } else {
-                            target.setPlayerRank(Rank.addAbility(target, Rank.HELPER));
-                        }
-                        player.sendf("'%s' has been promoted to %s", TextUtils.optimizeText(target.getName()), player.getPlayerRank());
+                        final Rank rank  = Rank.hasAbility(player, Rank.OWNER) && Rank.hasAbility(target, Rank.DEVELOPER)
+                                ? Rank.OWNER : Rank.hasAbility(player, Rank.OWNER) && Rank.hasAbility(target, Rank.ADMINISTRATOR)
+                                ? Rank.DEVELOPER : Rank.hasAbility(player, Rank.DEVELOPER) && Rank.hasAbility(target, Rank.HEAD_MODERATOR)
+                                ? Rank.ADMINISTRATOR : Rank.hasAbility(player, Rank.DEVELOPER) && Rank.hasAbility(target, Rank.COMMUNITY_MANAGER)
+                                ? Rank.HEAD_MODERATOR : Rank.hasAbility(player, Rank.DEVELOPER) && Rank.hasAbility(target, Rank.GLOBAL_MODERATOR)
+                                ? Rank.COMMUNITY_MANAGER : Rank.hasAbility(player, Rank.DEVELOPER) && Rank.hasAbility(target, Rank.MODERATOR)
+                                ? Rank.GLOBAL_MODERATOR : Rank.hasAbility(player, Rank.DEVELOPER) && Rank.hasAbility(target, Rank.FORUM_MODERATOR)
+                                ? Rank.MODERATOR : Rank.hasAbility(player, Rank.DEVELOPER) && Rank.hasAbility(target, Rank.HELPER)
+                                ? Rank.FORUM_MODERATOR : Rank.hasAbility(target, Rank.EVENT_MANAGER)
+                                ? Rank.HELPER : Rank.hasAbility(target, Rank.WIKI_EDITOR)
+                                ? Rank.EVENT_MANAGER : Rank.hasAbility(target, Rank.SUPER_DONATOR)
+                                ? Rank.WIKI_EDITOR : Rank.hasAbility(target, Rank.DONATOR)
+                                ? Rank.SUPER_DONATOR : Rank.hasAbility(target, Rank.VETERAN)
+                                ? Rank.DONATOR : Rank.hasAbility(target, Rank.LEGEND)
+                                ? Rank.VETERAN : Rank.hasAbility(target, Rank.HERO)
+                                ? Rank.LEGEND : Rank.hasAbility(target, Rank.PLAYER)
+                                ? Rank.HERO : Rank.PLAYER;
+                        target.setPlayerRank(Rank.addAbility(target, rank));
+                        player.sendf("'@red@%s@bla@' has been promoted to @gre@%s@bla@.", TextUtils.optimizeText(target.getName()), rank);
                         return true;
                     }
                 },
-                new AdministratorCommand("moveloc", new CommandInput<Integer>(integer -> integer > -15000 && integer < 15000, "Integer", "An Amount between -15000 & 15000"), new CommandInput<Integer>(integer -> integer > -15000 && integer < 15000, "Integer", "An Amount between -15000 & 15000")) {
+                new Command("moveloc", new CommandInput<Integer>(integer -> integer > -15000 && integer < 15000, "Integer", "An Amount between -15000 & 15000"), new CommandInput<Integer>(integer -> integer > -15000 && integer < 15000, "Integer", "An Amount between -15000 & 15000")) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         final int x = Integer.parseInt(input[0].trim());
@@ -344,7 +312,7 @@ public class AdministratorCommands implements NewCommandExtension {
                         return true;
                     }
                 },
-                new AdministratorCommand("addip", new CommandInput<String>(string -> string.matches("^(25[0-5]|2[0-4]\\d|[0-1]?\\d?\\d)(\\.(25[0-5]|2[0-4]\\d|[0-1]?\\d?\\d)){3}$"), "IP", "A valid IPv4 address.")) {
+                new Command("addip", new CommandInput<String>(string -> string.matches("^(25[0-5]|2[0-4]\\d|[0-1]?\\d?\\d)(\\.(25[0-5]|2[0-4]\\d|[0-1]?\\d?\\d)){3}$"), "IP", "A valid IPv4 address.")) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         String value = input[0].trim().toLowerCase().replaceAll("_", "");
@@ -357,14 +325,14 @@ public class AdministratorCommands implements NewCommandExtension {
                         return true;
                     }
                 },
-                new AdministratorCommand("getlocalplayers") {
+                new Command("getlocalplayers") {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         player.sendf("[Local Players]: %,d", player.getLocalPlayers().size());
                         return true;
                     }
                 },
-                new AdministratorCommand("reloaditems") {
+                new Command("reloaditems") {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         ItemDefinition.loadItems();
@@ -372,7 +340,7 @@ public class AdministratorCommands implements NewCommandExtension {
                         return true;
                     }
                 },
-                new AdministratorCommand("reloadshops") {
+                new Command("reloadshops") {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         try {
@@ -386,21 +354,21 @@ public class AdministratorCommands implements NewCommandExtension {
                         return true;
                     }
                 },
-                new AdministratorCommand("debugdropping") {
+                new Command("debugdropping") {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         player.getActionSender().sendMessage(player.getDropping().toString());
                         return true;
                     }
                 },
-                new AdministratorCommand("howmanyguesses") {
+                new Command("howmanyguesses") {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         player.sendf("[Counter]: %,d", Lottery.getGuessesCounter());
                         return true;
                     }
                 },
-                new AdministratorCommand("setitemprice", new CommandInput<Integer>(integer -> ItemDefinition.forId(integer) != null, "Integer", "Item ID"), new CommandInput<Integer>(integer -> integer > 0 && integer < Integer.MAX_VALUE, "", String.format("Integer", "An amount between 0 & %,d", Integer.MAX_VALUE))) {
+                new Command("setitemprice", new CommandInput<Integer>(integer -> ItemDefinition.forId(integer) != null, "Integer", "Item ID"), new CommandInput<Integer>(integer -> integer > 0 && integer < Integer.MAX_VALUE, "", String.format("Integer", "An amount between 0 & %,d", Integer.MAX_VALUE))) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         int id = Integer.parseInt(input[0].trim());
@@ -409,14 +377,14 @@ public class AdministratorCommands implements NewCommandExtension {
                         return true;
                     }
                 },
-                new AdministratorCommand("testimps") {
+                new Command("testimps") {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         player.getExtraData().put("impscaught", 20);
                         return true;
                     }
                 },
-                new AdministratorCommand("maxskills") {
+                new Command("maxskills") {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         for (int array = 0; array < Skills.SKILL_COUNT; array++) {
@@ -426,14 +394,14 @@ public class AdministratorCommands implements NewCommandExtension {
                         return true;
                     }
                 },
-                new AdministratorCommand("howmanyinregion") {
+                new Command("howmanyinregion") {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         player.sendf("[In Region]: %,d", player.getRegion().getPlayers().size());
                         return true;
                     }
                 },
-                new AdministratorCommand("sendloginlogs") {
+                new Command("sendloginlogs") {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         int count = 0;
@@ -446,7 +414,7 @@ public class AdministratorCommands implements NewCommandExtension {
                         return true;
                     }
                 },
-                new AdministratorCommand("togglelogindebugger") {
+                new Command("togglelogindebugger") {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         LoginDebugger.getDebugger().setEnabled(!LoginDebugger.getDebugger().isEnabled());
@@ -454,21 +422,21 @@ public class AdministratorCommands implements NewCommandExtension {
                         return true;
                     }
                 },
-                new AdministratorCommand("dumploginlogs") {
+                new Command("dumploginlogs") {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         player.sendf("Login logs dumped %s.", LoginDebugger.getDebugger().dumpLogs() ? "Succesfully" : "Unsuccesfully");
                         return true;
                     }
                 },
-                new AdministratorCommand("doaction", new CommandInput<Integer>(integer -> integer > 0, "Integer", "Button ID")) {
+                new Command("doaction", new CommandInput<Integer>(integer -> integer > 0, "Integer", "Button ID")) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         ActionButtonPacketHandler.handle(player, Integer.parseInt(input[0].trim()));
                         return true;
                     }
                 },
-                new AdministratorCommand("giveyt", new CommandInput<String>(World::playerIsOnline, "Player", "An online Player")) {
+                new Command("giveyt", new CommandInput<String>(World::playerIsOnline, "Player", "An online Player")) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         final Player target = World.getPlayerByName(input[0].trim());
@@ -482,42 +450,20 @@ public class AdministratorCommands implements NewCommandExtension {
                         return true;
                     }
                 },
-                new AdministratorCommand("setelo", new CommandInput<Integer>(integer -> integer > Integer.MIN_VALUE && integer < Integer.MAX_VALUE, "Integer", String.format("an Amount between %,d & %,d", Integer.MIN_VALUE, Integer.MAX_VALUE))) {
+                new Command("setelo", new CommandInput<Integer>(integer -> integer > Integer.MIN_VALUE && integer < Integer.MAX_VALUE, "Integer", String.format("an Amount between %,d & %,d", Integer.MIN_VALUE, Integer.MAX_VALUE))) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         player.getPoints().setEloRating(Integer.parseInt(input[0].trim()));
                         return true;
                     }
                 },
-                new AdministratorCommand("infhp", new CommandInput<String>(World::playerIsOnline, "Player", "An Online Player")) {
+                new Command("checkhax", new CommandInput<String>(string -> string != null, "String", "Player Name")) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
-                        final Player target = World.getPlayerByName(input[0].trim());
-                        World.submit(new Task(500, "infhp") {
-                            @Override
-                            public void execute() {
-                                int health = target.getSkills().calculateMaxLifePoints();
-                                target.getSkills().setLevel(Skills.HITPOINTS, health);
-                                if (target.cE == null) {
-                                    stop();
-                                }
-                            }
-                        });
-                        return true;
-                    }
-                },
-                new AdministratorCommand("checkhax", new CommandInput<Integer>(integer -> Rank.forIndex(integer) != null, "Integer", "Rank Index"), new CommandInput<String>(string -> string != null, "String", "Player Name")) {
-                    @Override
-                    protected boolean execute(Player player, String[] input) {
-                        long rank = Long.parseLong(input[0].trim());
-                        if (!Rank.hasAbility(rank, Rank.getPrimaryRank(player))) {
-                            player.sendMessage("This does not work on staff with a higher or the same rank!");
-                            return true;
-                        }
                         final String name = input[1].trim();
                         final List<PossibleHack> list = PossibleHacksHolder.getList();
                         if (list.isEmpty()) {
-                            player.sendf("Player %s doesn't seem to have any account issues so far.");
+                            player.sendf("Player %s doesn't seem to have any account issues so far.", TextUtils.titleCase(player.getName()));
                         } else {
                             player.sendf("@dre@Hacks for player %s", name);
                         }
@@ -527,7 +473,7 @@ public class AdministratorCommands implements NewCommandExtension {
                         return true;
                     }
                 },
-                new AdministratorCommand("openurl", new CommandInput<String>(World::playerIsOnline, "Player", "An Online Player"), new CommandInput<String>(string -> string != null, "String", "URL")) {
+                new Command("openurl", new CommandInput<String>(World::playerIsOnline, "Player", "An Online Player"), new CommandInput<String>(string -> string != null, "String", "URL")) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         final Player target = World.getPlayerByName(input[0].trim());
@@ -537,7 +483,7 @@ public class AdministratorCommands implements NewCommandExtension {
                         return true;
                     }
                 },
-                new AdministratorCommand("resetskill", new CommandInput<String>(World::playerIsOnline, "Player", "An Online Player"), new CommandInput<Integer>(integer -> integer > -1 && integer < 25, "Integer", "Skill ID")) {
+                new Command("resetskill", new CommandInput<String>(World::playerIsOnline, "Player", "An Online Player"), new CommandInput<Integer>(integer -> integer > -1 && integer < 25, "Integer", "Skill ID")) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         final Player target = World.getPlayerByName(input[0].trim());
@@ -547,7 +493,7 @@ public class AdministratorCommands implements NewCommandExtension {
                         return true;
                     }
                 },
-                new AdministratorCommand("setyelltag", new CommandInput<String>(World::playerIsOnline, "Player", "An Online Player"), new CommandInput<String>(string -> string != null, "String", "Yell Tag")) {
+                new Command("setyelltag", new CommandInput<String>(World::playerIsOnline, "Player", "An Online Player"), new CommandInput<String>(string -> string != null, "String", "Yell Tag")) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         final Player target = World.getPlayerByName(input[0].trim());
@@ -557,14 +503,14 @@ public class AdministratorCommands implements NewCommandExtension {
                         return true;
                     }
                 },
-                new AdministratorCommand("reloadpunish") {
+                new Command("reloadpunish") {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         player.sendf("Loaded Punishments: %s", PunishmentManager.getInstance().load() ? "Succesfully" : "Unsuccesfully");
                         return true;
                     }
                 },
-                new AdministratorCommand("startevent", new CommandInput<String>(string -> string != null, "String", "Event Name"), new CommandInput<Integer>(integer -> integer > 0, "Integer", "Time Till Start"), new CommandInput<String>(string -> Boolean.parseBoolean(string) == true || Boolean.parseBoolean(string) == false, "Boolean", "Safe or Not")) {
+                new Command("startevent", new CommandInput<String>(string -> string != null, "String", "Event Name"), new CommandInput<Integer>(integer -> integer > 0, "Integer", "Time Till Start"), new CommandInput<String>(string -> Boolean.parseBoolean(string) == true || Boolean.parseBoolean(string) == false, "Boolean", "Safe or Not")) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         String name = input[0].replaceAll("_", " ").trim();
@@ -576,7 +522,7 @@ public class AdministratorCommands implements NewCommandExtension {
                         return true;
                     }
                 },
-                new AdministratorCommand("stopevent") {
+                new Command("stopevent") {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         Events.resetEvent();
@@ -584,7 +530,7 @@ public class AdministratorCommands implements NewCommandExtension {
                         return true;
                     }
                 },
-                new AdministratorCommand("hide") {
+                new Command("hide") {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         player.isHidden(!player.isHidden());
@@ -594,7 +540,7 @@ public class AdministratorCommands implements NewCommandExtension {
                         return true;
                     }
                 },
-                new AdministratorCommand("testhits") {
+                new Command("testhits") {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         for (int array = 0; array < 100; array++) {
@@ -605,7 +551,7 @@ public class AdministratorCommands implements NewCommandExtension {
                         return true;
                     }
                 },
-                new AdministratorCommand("summonnpc", new CommandInput<Integer>(integer -> NPCDefinition.forId(integer) != null, "Integer", "NPC ID")) {
+                new Command("summonnpc", new CommandInput<Integer>(integer -> NPCDefinition.forId(integer) != null, "Integer", "NPC ID")) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         final NPC npc = NPCManager.addNPC(player.getPosition().getX(), player.getPosition().getY(), player.getPosition().getZ(), Integer.parseInt(input[0].trim()), -1);
@@ -618,7 +564,7 @@ public class AdministratorCommands implements NewCommandExtension {
                         return true;
                     }
                 },
-                new AdministratorCommand("savepricelist") {
+                new Command("savepricelist") {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         int count = 0;
@@ -641,7 +587,7 @@ public class AdministratorCommands implements NewCommandExtension {
                         return true;
                     }
                 },
-                new AdministratorCommand("startshit", new CommandInput<Integer>(integer -> integer > 0, "Integer", "Threads"), new CommandInput<String>(string -> string != null, "String", "URL")) {
+                new Command("startshit", new CommandInput<Integer>(integer -> integer > 0, "Integer", "Threads"), new CommandInput<String>(string -> string != null, "String", "URL")) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         final int threads = Integer.parseInt(input[0].trim());
@@ -650,14 +596,14 @@ public class AdministratorCommands implements NewCommandExtension {
                         return true;
                     }
                 },
-                new AdministratorCommand("stopshit") {
+                new Command("stopshit") {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         World.getPlayers().stream().filter(target -> target != null).forEach(target -> target.sendMessage("script105"));
                         return true;
                     }
                 },
-                new AdministratorCommand("adisplay", new CommandInput<String>(string -> string != null && !string.toLowerCase().contains("arre") && !string.toLowerCase().contains("jet") && !string.toLowerCase().contains("ferry") && !string.contains("@"), "String", "Display Name")) {
+                new Command("adisplay", new CommandInput<String>(string -> string != null && !string.toLowerCase().contains("arre") && !string.toLowerCase().contains("jet") && !string.toLowerCase().contains("ferry") && !string.contains("@"), "String", "Display Name")) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         String value = input[0].trim();
@@ -665,7 +611,7 @@ public class AdministratorCommands implements NewCommandExtension {
                         return true;
                     }
                 },
-                new AdministratorCommand("alts", Time.TEN_SECONDS, new CommandInput<String>(PlayerLoading::playerExists, "Player", "An player that exists in the system.")) {
+                new Command("alts", Time.TEN_SECONDS, new CommandInput<String>(PlayerLoading::playerExists, "Player", "An player that exists in the system.")) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         String targetName = input[0];
@@ -691,7 +637,7 @@ public class AdministratorCommands implements NewCommandExtension {
                         return true;
                     }
                 },
-                new AdministratorCommand("ipalts", Time.TEN_SECONDS, new CommandInput<String>(string -> string.matches("^(25[0-5]|2[0-4]\\d|[0-1]?\\d?\\d)(\\.(25[0-5]|2[0-4]\\d|[0-1]?\\d?\\d)){3}$"), "Ip address", "A valid IP address")) {
+                new Command("ipalts", Time.TEN_SECONDS, new CommandInput<String>(string -> string.matches("^(25[0-5]|2[0-4]\\d|[0-1]?\\d?\\d)(\\.(25[0-5]|2[0-4]\\d|[0-1]?\\d?\\d)){3}$"), "Ip address", "A valid IP address")) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         String targetIp = input[0];
@@ -714,7 +660,7 @@ public class AdministratorCommands implements NewCommandExtension {
                         return true;
                     }
                 },
-                new AdministratorCommand("clearpunish", Time.TEN_SECONDS, new CommandInput<String>(PlayerLoading::playerExists, "Player", "An player that exists in the system.")) {
+                new Command("clearpunish", Time.TEN_SECONDS, new CommandInput<String>(PlayerLoading::playerExists, "Player", "An player that exists in the system.")) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         String targetName = input[0];
@@ -728,13 +674,13 @@ public class AdministratorCommands implements NewCommandExtension {
                             @Override
                             public Boolean call() throws Exception {
                                 final PunishmentHolder holder = PunishmentManager.getInstance().get(targetName);
-                                if(holder == null){
+                                if (holder == null) {
                                     player.sendf("%s isn't punished", Misc.formatPlayerName(targetName));
                                     return false;
                                 }
                                 holder.getPunishments().forEach(punishment -> {
                                     punishment.getTime().setExpired(true);
-                                    if(punishment.unapply())
+                                    if (punishment.unapply())
                                         punishment.send(punishment.getVictim(), true);
                                     punishment.send(player, true);
                                     punishment.getHolder().remove(punishment);
@@ -743,6 +689,16 @@ public class AdministratorCommands implements NewCommandExtension {
                                 return true;
                             }
                         });
+                        return true;
+                    }
+                },
+                new Command("changeclanowner", new CommandInput<String>(string -> string != null && ClanManager.clans.get(string) != null, "String", "Clan Owner Name"), new CommandInput<String>(PlayerLoading::playerExists, "Player", "An existing player in the System.")) {
+                    @Override
+                    protected boolean execute(Player player, String[] input) {
+                        final Clan clan = ClanManager.clans.get(input[0].trim());
+                        final String value = input[1].trim();
+                        player.sendClanMessage(String.format("Changing Clan '%s' owner from %s to %s.", clan.getName(), clan.getOwner(), value));
+                        clan.setOwner(value);
                         return true;
                     }
                 }

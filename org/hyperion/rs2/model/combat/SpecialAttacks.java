@@ -24,8 +24,10 @@ public class SpecialAttacks {
 			case 4153:
 				// maul
 				if(player.cE.getOpponent() != null) {
-					if(!Combat.canAttack(player.cE, player.cE.getOpponent()))
+					String message = Combat.canAtk(player.cE, player.cE.getOpponent());
+					if(message.length() > 1) {
 						return false;
+					}
 					player.specOn = false;
 					// int maxHit = 0;
 					int maxHit = CombatAssistant.calculateMaxHit(player);
@@ -794,7 +796,8 @@ public class SpecialAttacks {
 					World.submit(new org.hyperion.engine.task.Task(1000,"specialattacks3") {
 						@Override
 						public void execute() {
-							if(!Combat.canAttack(player.cE, player.cE.getOpponent())) {
+							String message = Combat.canAtk(player.cE, oldEntity);
+							if(message.length() > 1) {
 								this.stop();
 								return;
 							}
@@ -818,7 +821,8 @@ public class SpecialAttacks {
 					World.submit(new org.hyperion.engine.task.Task(1000,"specialattacks2") {
 						@Override
 						public void execute() {
-							if(!Combat.canAttack(player.cE, oldEntity)) {
+							String message = Combat.canAtk(player.cE, oldEntity);
+							if(message.length() > 1) {
 								this.stop();
 								return;
 							}

@@ -38,19 +38,22 @@ public class ActionButtonPacketHandler implements PacketHandler {
 		if(player.debug)
 			player.getActionSender().sendMessage("Clicked on: " + button + "");
 		ButtonAction action = ActionsManager.getManager().getButtonAction(button);
-		if(action != null)
+		if(action != null) {
 			action.handle(player, button);
-		else
+		} else {
 			handle(player, button);
+		}
 	}
 
 	public static void handle(Player player, int button) {
-
-		if(ContentManager.handlePacket(0, player, button, - 1, - 1, - 1))
+		if(ContentManager.handlePacket(0, player, button, - 1, - 1, - 1)) {
 			return;
-        if(button >= 31421 && button <= 31426)
-		    if(SetHandler.handleSet(player, button))
-			    return;
+		}
+        if(button >= 31421 && button <= 31426) {
+			if (SetHandler.handleSet(player, button)) {
+				return;
+			}
+		}
         if (Bank.bankButton(player, button)) {
             return;
         }
@@ -61,7 +64,6 @@ public class ActionButtonPacketHandler implements PacketHandler {
 			player.getGrandExchangeTracker().handleInterfaceInteraction(button);
 			return;
 		}
-
 		switch(button) {
 			case 28887:
 				player.getActionSender().removeAllInterfaces();

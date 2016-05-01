@@ -701,19 +701,21 @@ public class DialogueManager {
 				Magic.teleport(player, 2812, 3463, 0, false);
 				break;
 			case 106:
-				player.getActionSender().sendDialogue("Select an Option", DialogueType.OPTION, - 1, FacialAnimation.DEFAULT,
+				/*player.getActionSender().sendDialogue("Select an Option", DialogueType.OPTION, - 1, FacialAnimation.DEFAULT,
 						"Multi Arena (Safe)", "Singles (Safe)"
 				);
 				player.getInterfaceState().setNextDialogueId(0, 107);
-				player.getInterfaceState().setNextDialogueId(1, 108);
+				player.getInterfaceState().setNextDialogueId(1, 108);*/
+				player.getActionSender().removeAllInterfaces();
+				Magic.teleport(player, Position.create(2594, 3156, 0), false);
 				break;
 			case 107:
-				player.getActionSender().removeAllInterfaces();
-				Magic.teleport(player, 2528 + Combat.random(6), 3303 + Combat.random(5), 0, false);
+				/*player.getActionSender().removeAllInterfaces();
+				Magic.teleport(player, 2528 + Combat.random(6), 3303 + Combat.random(5), 0, false);*/
 				break;
 			case 108:
-				player.getActionSender().removeAllInterfaces();
-				Magic.teleport(player, 3290 + Combat.random(6), 3025 + Combat.random(5), 0, false);
+				/*player.getActionSender().removeAllInterfaces();
+				Magic.teleport(player, 3290 + Combat.random(6), 3025 + Combat.random(5), 0, false);*/
 				break;
 			case 109:
 

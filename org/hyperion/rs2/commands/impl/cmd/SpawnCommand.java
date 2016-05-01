@@ -27,16 +27,20 @@ public class SpawnCommand extends NewCommand {
 
     private static final Map<String, Integer> keywords = loadKeywords();
 
+    public static Map<String, Integer> getKeywords() {
+        return keywords;
+    }
+
     public SpawnCommand(String key) {
-        super(key, Rank.PLAYER, 0, new CommandInput<Integer>(ItemSpawning::canSpawn, "Integer", "Spawnable Item ID"), new CommandInput<Integer>(integer -> integer > 0, "Integer", "Item Amount"));
-        //super(key, Rank.PLAYER, Time.ONE_SECOND, new CommandInput<Integer>(integer -> ItemDefinition.forId(integer) != null, "Integer", "Item ID"), new CommandInput<Integer>(integer -> integer > 0, "Integer", "An Amount Above 0"));
+        super(key, Rank.PLAYER, 250L, new CommandInput<Integer>(ItemSpawning::canSpawn, "Integer", "Spawnable Item ID"), new CommandInput<Integer>(integer -> integer > 0, "Integer", "Item Amount"));
     }
 
     private static void spawnItem(Player player, int key, int amount) {
-        //if (keywords.get(key) != null) {
-        //    int id = keywords.get(key);
-        //    ItemSpawning.spawnItem(player, id, amount);
-        //} else {
+        ItemSpawning.spawnItem(player, key, amount);
+        /*if (keywords.get(key) != null) {
+            int id = keywords.get(key);
+            ItemSpawning.spawnItem(player, id, amount);
+        } else {
             final int id = key;
             ItemSpawning.spawnItem(player, id, amount);
             if (keywords.containsValue(id)) {
@@ -45,7 +49,7 @@ public class SpawnCommand extends NewCommand {
                     player.sendf("You could also have used the command ::item %s,%d", possible, amount);
                 }
             }
-        //}
+        }*/
     }
 
     public static void setKeyword(String keyword, int id) {

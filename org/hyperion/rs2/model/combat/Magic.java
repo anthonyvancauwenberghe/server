@@ -109,22 +109,25 @@ public class Magic {
 	public static final int SPELL_FAIL = 0,
 			SPELL_NEGATIVE = 1,
 			SPELL_SUCCESFUL = 2;
-	
-	
-	
+
+
+
 	public static int castSpell(final CombatEntity attacker, final CombatEntity opp, int spellId) {
 		if(attacker.getEntity().isDead() || opp.getEntity().isDead())
 			return SPELL_FAIL;
-		if(!Combat.canAttack(attacker, opp))
-			return SPELL_FAIL;
-        if (opp.getEntity() instanceof NPC) {
-            String FAMILIARS[] = {"wolpertinger", "steel titan", "yak", "unicorn stallion"};//temp shitfix by fuzen
-            for (String familiarName : FAMILIARS)
-                if (opp.getNPC().getDefinition().name().toLowerCase().contains(familiarName)) {
-                    ContentEntity.sendMessage((Player) attacker.getEntity(), "You cannot attack familiars.");
-                    return 0;
-                }
-        }
+		String message = Combat.canAtk(attacker, opp);
+		if(message.length() > 1) {
+			attacker.getPlayer().getActionSender().sendMessage(message);
+			return 0;
+		}
+		if (opp.getEntity() instanceof NPC) {
+			String FAMILIARS[] = {"wolpertinger", "steel titan", "yak", "unicorn stallion"};//temp shitfix by fuzen
+			for (String familiarName : FAMILIARS)
+				if (opp.getNPC().getDefinition().name().toLowerCase().contains(familiarName)) {
+					ContentEntity.sendMessage((Player) attacker.getEntity(), "You cannot attack familiars.");
+					return 0;
+				}
+		}
 		if(attacker.getPlayer().duelRule[4] && attacker.getPlayer().duelAttackable > 0) {
 			attacker.getPlayer().getActionSender().sendMessage("You cannot use magic in this duel.");
 			return 0;
@@ -181,267 +184,267 @@ public class Magic {
 			return 0;
 		}
 		for(CombatEntity opponent : getMultiPeople(spell ,attacker, opp)) {
-		/**
-		 * Determine damage + splashing.
-		 */
-		boolean splash = false;
-		if(opponent.getEntity() instanceof Player)
-            if (FightPits.isSameTeam(opponent.getPlayer(), attacker.getPlayer()))
-                splash = true;
-		int maxDamg = spell.getMaxHit();
-		int AtkBonus = CombatAssistant.calculateMageAtk(attacker.getPlayer());
-		if(attacker.getEntity() instanceof Player && CombatAssistant.fullVoidMage(attacker.getPlayer())) {
-			AtkBonus *= 1.30;
-			maxDamg *= 1.05;
-		}
-            if(attacker.getEntity() instanceof Player) {
-            if (CombatAssistant.wearingFarseer(attacker.getPlayer())) {
-                AtkBonus *= 1.13;
-                maxDamg *= 1.03;
-            }
-        }
-		int DefBonus;
-		int shieldId = - 1;
-		int necklaceId = - 1;
-		int weaponId = - 1;
-		if(attacker.getPlayer().getEquipment().get(Equipment.SLOT_AMULET) != null) {
-			necklaceId = attacker.getPlayer().getEquipment()
-					.get(Equipment.SLOT_AMULET).getId();
-
-            }
-
-		if(attacker.getPlayer().getEquipment().get(Equipment.SLOT_WEAPON) != null) {
-			weaponId = attacker.getPlayer().getEquipment().get(Equipment.SLOT_WEAPON)
-					.getId();
-		}
-		if(attacker.getEntity() instanceof Player) {
-			Player atk = attacker.getPlayer();
-			if(atk != null) {
-				int diff = atk.getSkills().getLevel(Skills.MAGIC) - atk.getSkills().getRealLevels()[Skills.MAGIC];
-				if(diff >= 1) {
-					//atk.getActionSender().sendMessage("Diff: "+diff );
-					double multiplication = 1+ ((double)diff * .02);
-					maxDamg = (int)((double)maxDamg * multiplication);
-					//atk.getActionSender().sendMessage("Damage multi: "+multiplication);
+			/**
+			 * Determine damage + splashing.
+			 */
+			boolean splash = false;
+			if(opponent.getEntity() instanceof Player)
+				if (FightPits.isSameTeam(opponent.getPlayer(), attacker.getPlayer()))
+					splash = true;
+			int maxDamg = spell.getMaxHit();
+			int AtkBonus = CombatAssistant.calculateMageAtk(attacker.getPlayer());
+			if(attacker.getEntity() instanceof Player && CombatAssistant.fullVoidMage(attacker.getPlayer())) {
+				AtkBonus *= 1.30;
+				maxDamg *= 1.05;
+			}
+			if(attacker.getEntity() instanceof Player) {
+				if (CombatAssistant.wearingFarseer(attacker.getPlayer())) {
+					AtkBonus *= 1.13;
+					maxDamg *= 1.03;
 				}
 			}
-		}
+			int DefBonus;
+			int shieldId = - 1;
+			int necklaceId = - 1;
+			int weaponId = - 1;
+			if(attacker.getPlayer().getEquipment().get(Equipment.SLOT_AMULET) != null) {
+				necklaceId = attacker.getPlayer().getEquipment()
+						.get(Equipment.SLOT_AMULET).getId();
 
-            int freeze = spell.getFreeze();
-            switch(weaponId) {
-                case 2415:
-                case 2416:
-                case 2417:
-                    if (((Player) attacker.getEntity()).hasCharge()) {
-                        if (spellId == 1190 || spellId == 1191 || spellId == 1192)
-                            maxDamg *= 1.4;
-                    }
-                    break;
-                case 13867:
-                case 17017:
-                    maxDamg *= 1.10;
-                    break;
-                case 15486:
-                    maxDamg *= 1.15;
-                    break;
-                case 18355:
-                    maxDamg *= 1.20;
-                    break;
-                case 14117:
-                    maxDamg *= 1.25;
-                    break;
-                case 19325:
-                    if(opponent.getEntity() instanceof NPC && freeze > 0)   {
-                        maxDamg *= 1.4;
-                        AtkBonus *= 1.4;
-                    } else
-                        maxDamg *= 1.24;
-                    freeze *= 1.3;
-                    break;
-                case 19323:
-                    if(opponent.getEntity() instanceof NPC && spellId == 1189) {
-                        maxDamg = 55;
-                        AtkBonus *= 1.23;
-                    } else {
-                        maxDamg *= 1.24;
-                    }
-                    break;
-                case 6603:
-                    maxDamg *= 1.15;
-                    break;
-            }
-		switch(necklaceId) {
-			case 18333:
-				maxDamg *= 1.05;
-				break;
-			case 18335:
-            case 10344:
-				maxDamg *= 1.10;
-				break;
-		}
-
-		int Damage = Misc.random(maxDamg);
-		attacker.getPlayer().debugMessage("Damage stage1: "+Damage);
-		if(opponent.getEntity() instanceof Player) {
-
-            opponent.getPlayer().getLastAttack().updateLastAttacker(attacker.getPlayer().getName());
-
-			DefBonus = CombatAssistant.calculateMageDef(opponent.getPlayer());
-			
-			attacker.getPlayer().debugMessage("Opps def: "+DefBonus);
-
-
-			if(opponent.getPlayer().getEquipment().get(Equipment.SLOT_SHIELD) != null) {
-				shieldId = opponent.getPlayer().getEquipment()
-						.get(Equipment.SLOT_SHIELD).getId();
 			}
-		} else /** NPC Part */ {
-			DefBonus = opponent.getNPC().getDefinition().getBonus()[8];
-			if(SlayerTask.getLevelById(opponent.getNPC().getDefinition().getId()) > attacker
-					.getPlayer().getSkills().getLevel(Skills.SLAYER)) {
-				splash = true;
+
+			if(attacker.getPlayer().getEquipment().get(Equipment.SLOT_WEAPON) != null) {
+				weaponId = attacker.getPlayer().getEquipment().get(Equipment.SLOT_WEAPON)
+						.getId();
 			}
-		}
+			if(attacker.getEntity() instanceof Player) {
+				Player atk = attacker.getPlayer();
+				if(atk != null) {
+					int diff = atk.getSkills().getLevel(Skills.MAGIC) - atk.getSkills().getRealLevels()[Skills.MAGIC];
+					if(diff >= 1) {
+						//atk.getActionSender().sendMessage("Diff: "+diff );
+						double multiplication = 1+ ((double)diff * .02);
+						maxDamg = (int)((double)maxDamg * multiplication);
+						//atk.getActionSender().sendMessage("Damage multi: "+multiplication);
+					}
+				}
+			}
+
+			int freeze = spell.getFreeze();
+			switch(weaponId) {
+				case 2415:
+				case 2416:
+				case 2417:
+					if (((Player) attacker.getEntity()).hasCharge()) {
+						if (spellId == 1190 || spellId == 1191 || spellId == 1192)
+							maxDamg *= 1.4;
+					}
+					break;
+				case 13867:
+				case 17017:
+					maxDamg *= 1.10;
+					break;
+				case 15486:
+					maxDamg *= 1.15;
+					break;
+				case 18355:
+					maxDamg *= 1.20;
+					break;
+				case 14117:
+					maxDamg *= 1.25;
+					break;
+				case 19325:
+					if(opponent.getEntity() instanceof NPC && freeze > 0)   {
+						maxDamg *= 1.4;
+						AtkBonus *= 1.4;
+					} else
+						maxDamg *= 1.24;
+					freeze *= 1.3;
+					break;
+				case 19323:
+					if(opponent.getEntity() instanceof NPC && spellId == 1189) {
+						maxDamg = 55;
+						AtkBonus *= 1.23;
+					} else {
+						maxDamg *= 1.24;
+					}
+					break;
+				case 6603:
+					maxDamg *= 1.15;
+					break;
+			}
+			switch(necklaceId) {
+				case 18333:
+					maxDamg *= 1.05;
+					break;
+				case 18335:
+				case 10344:
+					maxDamg *= 1.10;
+					break;
+			}
+
+			int Damage = Misc.random(maxDamg);
+			attacker.getPlayer().debugMessage("Damage stage1: "+Damage);
+			if(opponent.getEntity() instanceof Player) {
+
+				opponent.getPlayer().getLastAttack().updateLastAttacker(attacker.getPlayer().getName());
+
+				DefBonus = CombatAssistant.calculateMageDef(opponent.getPlayer());
+
+				attacker.getPlayer().debugMessage("Opps def: "+DefBonus);
+
+
+				if(opponent.getPlayer().getEquipment().get(Equipment.SLOT_SHIELD) != null) {
+					shieldId = opponent.getPlayer().getEquipment()
+							.get(Equipment.SLOT_SHIELD).getId();
+				}
+			} else /** NPC Part */ {
+				DefBonus = opponent.getNPC().getDefinition().getBonus()[8];
+				if(SlayerTask.getLevelById(opponent.getNPC().getDefinition().getId()) > attacker
+						.getPlayer().getSkills().getLevel(Skills.SLAYER)) {
+					splash = true;
+				}
+			}
 
 			if (opp.getNPC() != null)
 				opp.getNPC().lastAttacker = attacker.getPlayer().getName();
 			opp.lastHit = System.currentTimeMillis();
 			if(spell.isMulti())
-                AtkBonus *= 0.9;
-		int deltaBonus = AtkBonus - DefBonus;
-		int toAdd = Misc.random(deltaBonus / 3);
-        if(spellId != 12445)
-		    Damage += toAdd;
-            attacker.getPlayer().debugMessage("Damage stage 2:"+Damage);
-            if(Damage > maxDamg)
-                Damage = maxDamg;
-            if(attacker.getPlayer().getPrayers().isEnabled(27))
-                Damage *= 1.08;
-            if(attacker.getPlayer().getEquipment().getItemId(Equipment.SLOT_RING) == 15707)
-                Damage = (int)attacker.getPlayer().getDungeoneering().perks.boost(Constants.MAGE, false, Damage);
+				AtkBonus *= 0.9;
+			int deltaBonus = AtkBonus - DefBonus;
+			int toAdd = Misc.random(deltaBonus / 3);
+			if(spellId != 12445)
+				Damage += toAdd;
+			attacker.getPlayer().debugMessage("Damage stage 2:"+Damage);
+			if(Damage > maxDamg)
+				Damage = maxDamg;
+			if(attacker.getPlayer().getPrayers().isEnabled(27))
+				Damage *= 1.08;
+			if(attacker.getPlayer().getEquipment().getItemId(Equipment.SLOT_RING) == 15707)
+				Damage = (int)attacker.getPlayer().getDungeoneering().perks.boost(Constants.MAGE, false, Damage);
 
-            if(opponent.getEntity() instanceof NPC && attacker.getPlayer().getSlayer().isTask(opponent.getNPC().getDefinition().getId())) {
-                if(SlayerShop.hasHex(attacker.getPlayer()))
-                    Damage *= 1.15;
-            }
-
-            Damage = SpiritShields.applyEffects(opponent, Damage);
-		/**
-		 * Checks if using Prayers
-		 */
-		if(opponent.getEntity() instanceof Player) {
-			Damage = opponent.getPlayer().getInflictDamage(Damage,attacker.getEntity(), false, Constants.MAGE);
-			if(spell.getSpellId() == 12445 && opponent.getPlayer().isTeleBlocked()) {
-				attacker.getPlayer().getActionSender()
-						.sendMessage("This player is already teleblocked.");
-				return 0;
+			if(opponent.getEntity() instanceof NPC && attacker.getPlayer().getSlayer().isTask(opponent.getNPC().getDefinition().getId())) {
+				if(SlayerShop.hasHex(attacker.getPlayer()))
+					Damage *= 1.15;
 			}
 
-		}
+			Damage = SpiritShields.applyEffects(opponent, Damage);
+			/**
+			 * Checks if using Prayers
+			 */
+			if(opponent.getEntity() instanceof Player) {
+				Damage = opponent.getPlayer().getInflictDamage(Damage,attacker.getEntity(), false, Constants.MAGE);
+				if(spell.getSpellId() == 12445 && opponent.getPlayer().isTeleBlocked()) {
+					attacker.getPlayer().getActionSender()
+							.sendMessage("This player is already teleblocked.");
+					return 0;
+				}
 
-        double reduction = Damage <= 0 ? 1.1 : 1.3;
-        if(Misc.random(AtkBonus) < Misc.random((int)(CombatAssistant.calculateMageSplashDef(opponent.getEntity())/reduction)))
-            splash = true;
+			}
+
+			double reduction = Damage <= 0 ? 1.1 : 1.3;
+			if(Misc.random(AtkBonus) < Misc.random((int)(CombatAssistant.calculateMageSplashDef(opponent.getEntity())/reduction)))
+				splash = true;
 		/*if(spell.getMaxHit() > 0 && Damage <= 0) {
 			splash = true;
 			Damage = 0;
 		}   */
-		if(splash || Damage <= 0) {
-			Damage = 0;
-		}
+			if(splash || Damage <= 0) {
+				Damage = 0;
+			}
 
-		
-		attacker.getPlayer().debugMessage("Damage stage 3:"+Damage);
 
-		
-		/**
-		 * Add Experience
-		 */
-		int xpMulti = (attacker.getEntity() instanceof Player && attacker.getPlayer().getPosition().inPvPArea()) ? 2 : (EXPMULTIPLIER * 10);
-		ContentEntity.addSkillXP(attacker.getPlayer(), (spell.getExp()) + (Damage * xpMulti), 6);
-		ContentEntity.addSkillXP(attacker.getPlayer(), 0.33 * (Damage * xpMulti), 3);
-		/**
-		 * Determine whether damage is critical
-		 */
-		final boolean critical = Damage > 0.9 * maxDamg ? true : false;
+			attacker.getPlayer().debugMessage("Damage stage 3:"+Damage);
 
-		if(attacker.getPlayer().getPrayers().isEnabled(48))
-			Prayer.soulSplit(attacker.getPlayer(), opponent, Damage);
 
-		attacker.predictedAtk = (System.currentTimeMillis() + 2400);
+			/**
+			 * Add Experience
+			 */
+			int xpMulti = (attacker.getEntity() instanceof Player && attacker.getPlayer().getPosition().inPvPArea()) ? 2 : (EXPMULTIPLIER * 10);
+			ContentEntity.addSkillXP(attacker.getPlayer(), (spell.getExp()) + (Damage * xpMulti), 6);
+			ContentEntity.addSkillXP(attacker.getPlayer(), 0.33 * (Damage * xpMulti), 3);
+			/**
+			 * Determine whether damage is critical
+			 */
+			final boolean critical = Damage > 0.9 * maxDamg ? true : false;
 
-		/**
-		 * Freezing.
-		 */
-		if(freeze > 0 && opponent.canMove() && ! splash && opponent.canBeFrozen()) {
-			opponent.setFreezeTimer(freeze * 1000);
-			if(opponent.getEntity() instanceof Player)
-				opponent.getPlayer().getActionSender()
-						.sendMessage("You have been frozen.");
-			opponent.getEntity().getWalkingQueue().reset();
-		}
-		/**
-		 * Do Projectile + Anim + Gfx.
-		 */
-		attacker.doAnim(spell.getCastAnim());
-		attacker.doGfx(spell.getStartGfx());
-		// offset values for the projectile
-		int offsetY = (attacker.getAbsX() - opponent.getAbsX()) * - 1;
-		int offsetX = (attacker.getAbsY() - opponent.getAbsY()) * - 1;
-		// find our lockon target
-		int hitId = attacker.getSlotId(attacker.getEntity());
-		// extra proj values - not to be released
-		int speed = 105;
-		int distance = attacker.getEntity().getPosition()
-				.distance(opponent.getEntity().getPosition());
-		int min = 40;
-		min -= (distance - 1) * 8;
-		speed -= min;
-		int slope = 12 + distance;
+			if(attacker.getPlayer().getPrayers().isEnabled(48))
+				Prayer.soulSplit(attacker.getPlayer(), opponent, Damage);
 
-		long timer = 1600 + (distance * 200);
-		attacker.getPlayer().getActionSender()
-				.createGlobalProjectile(attacker.getAbsY(), attacker.getAbsX(), offsetY,
-						offsetX, 50, speed, spell.getMoveGfx(), 43, 35, hitId,
-						slope);
-		attacker.face(opponent.getAbsX(), opponent.getAbsY());
-		Combat.processCombat(attacker);
+			attacker.predictedAtk = (System.currentTimeMillis() + 2400);
+
+			/**
+			 * Freezing.
+			 */
+			if(freeze > 0 && opponent.canMove() && ! splash && opponent.canBeFrozen()) {
+				opponent.setFreezeTimer(freeze * 1000);
+				if(opponent.getEntity() instanceof Player)
+					opponent.getPlayer().getActionSender()
+							.sendMessage("You have been frozen.");
+				opponent.getEntity().getWalkingQueue().reset();
+			}
+			/**
+			 * Do Projectile + Anim + Gfx.
+			 */
+			attacker.doAnim(spell.getCastAnim());
+			attacker.doGfx(spell.getStartGfx());
+			// offset values for the projectile
+			int offsetY = (attacker.getAbsX() - opponent.getAbsX()) * - 1;
+			int offsetX = (attacker.getAbsY() - opponent.getAbsY()) * - 1;
+			// find our lockon target
+			int hitId = attacker.getSlotId(attacker.getEntity());
+			// extra proj values - not to be released
+			int speed = 105;
+			int distance = attacker.getEntity().getPosition()
+					.distance(opponent.getEntity().getPosition());
+			int min = 40;
+			min -= (distance - 1) * 8;
+			speed -= min;
+			int slope = 12 + distance;
+
+			long timer = 1600 + (distance * 200);
+			attacker.getPlayer().getActionSender()
+					.createGlobalProjectile(attacker.getAbsY(), attacker.getAbsX(), offsetY,
+							offsetX, 50, speed, spell.getMoveGfx(), 43, 35, hitId,
+							slope);
+			attacker.face(opponent.getAbsX(), opponent.getAbsY());
+			Combat.processCombat(attacker);
 		/*if(spell.getMoveGfx() == - 1)//dunno why this exists
 			timer = 2300;*/
-		final int submitDamage = Damage;
-		final boolean submitSplash = splash;
-		final CombatEntity opp2 = opponent;
-		World.submit(new Task(timer,"magic6") {
-			@Override
-			public void execute() {
-				boolean hitSomething = false;
-				if(spell.isMulti()) {
-					if(Combat.isInMulti(attacker)) {
+			final int submitDamage = Damage;
+			final boolean submitSplash = splash;
+			final CombatEntity opp2 = opponent;
+			World.submit(new Task(timer,"magic6") {
+				@Override
+				public void execute() {
+					boolean hitSomething = false;
+					if(spell.isMulti()) {
+						if(Combat.isInMulti(attacker)) {
 							finishMagic(attacker, opp2, submitDamage, spell,
 									opp2 == opp, submitSplash,
 									critical);
 							hitSomething = true;
+						}
 					}
+					if(! hitSomething)
+						finishMagic(attacker, opp2, submitDamage, spell, true, submitSplash,
+								critical);
+					// delete runes
+					if(opp2.getCurrentAtker() == null || opp2.getCurrentAtker() == attacker) {
+						opp2.face(attacker.getAbsX(), attacker.getAbsY());
+						opp2.doDefEmote();
+					}
+					this.stop();
 				}
-				if(! hitSomething)
-					finishMagic(attacker, opp2, submitDamage, spell, true, submitSplash,
-							critical);
-				// delete runes
-				if(opp2.getCurrentAtker() == null || opp2.getCurrentAtker() == attacker) {
-					opp2.face(attacker.getAbsX(), attacker.getAbsY());
-					opp2.doDefEmote();
-				}
-				this.stop();
-			}
 
-		});
+			});
 		}
 		deleteRunes(attacker, spell);
 		return 2;
 	}
 
 	public static void vengeance(Player player, final CombatEntity victim,
-	                             int hit) {
+								 int hit) {
 		if(player.duelRule[4] && player.duelAttackable > 0) {
 			return;
 		}
@@ -449,13 +452,13 @@ public class Magic {
 			return;
 		if(player.vengeance && hit >= 2) {
 			player.forceMessage("Taste vengeance!");
-            World.submit(new Task(600,"magic2") {
-                @Override
-                public void execute() {
-                    victim.hit((int) (hit * 0.75), player.isDead() ? null : player, false, 2);
-                    this.stop();
-                }
-            });
+			World.submit(new Task(600,"magic2") {
+				@Override
+				public void execute() {
+					victim.hit((int) (hit * 0.75), player.isDead() ? null : player, false, 2);
+					this.stop();
+				}
+			});
 			player.vengeance = false;
 		}
 	}
@@ -474,39 +477,39 @@ public class Magic {
 			}
 		}
 	}
-    /** Basic charge spell.*/
-    public static void preformCharge(Player player) {
-        if((ContentEntity.getItemAmount(player, 554) < 3
-                || ContentEntity.getItemAmount(player, 556) < 3
-                || ContentEntity.getItemAmount(player, 565) < 3)) {
-            ContentEntity.sendMessage(player,
-                    "You need more runes to cast the charge.");
-            return;
-        }
-        if (player.hasCharge()) {
-            player.sendMessage("Charge is already casted, and currently active.");
-            return;
-        }
+	/** Basic charge spell.*/
+	public static void preformCharge(Player player) {
+		if((ContentEntity.getItemAmount(player, 554) < 3
+				|| ContentEntity.getItemAmount(player, 556) < 3
+				|| ContentEntity.getItemAmount(player, 565) < 3)) {
+			ContentEntity.sendMessage(player,
+					"You need more runes to cast the charge.");
+			return;
+		}
+		if (player.hasCharge()) {
+			player.sendMessage("Charge is already casted, and currently active.");
+			return;
+		}
 
-        if(player.getSkills().getLevel(6) < 80) {
-            ContentEntity.sendMessage(player,
-                    "You need a magic level of 80 to activate this spell.");
-            return;
-        }
-        if(player.duelRule[4] && player.duelAttackable > 0) {
-            player.getActionSender().sendMessage(
-                    "You cannot use magic in this duel.");
-            return;
-             }
-        ContentEntity.deleteItemA(player, 554, 3);
-        ContentEntity.deleteItemA(player, 556, 3);
-        ContentEntity.deleteItemA(player, 565, 3);
-            player.addCharge(420); //seconds
-            ContentEntity.playerGfx(player, 301);
-            ContentEntity.startAnimation(player, 811);
-            player.sendMessage("You feel charged with magic power.");
-            ContentEntity.addSkillXP(player, 255, 6);
-    }
+		if(player.getSkills().getLevel(6) < 80) {
+			ContentEntity.sendMessage(player,
+					"You need a magic level of 80 to activate this spell.");
+			return;
+		}
+		if(player.duelRule[4] && player.duelAttackable > 0) {
+			player.getActionSender().sendMessage(
+					"You cannot use magic in this duel.");
+			return;
+		}
+		ContentEntity.deleteItemA(player, 554, 3);
+		ContentEntity.deleteItemA(player, 556, 3);
+		ContentEntity.deleteItemA(player, 565, 3);
+		player.addCharge(420); //seconds
+		ContentEntity.playerGfx(player, 301);
+		ContentEntity.startAnimation(player, 811);
+		player.sendMessage("You feel charged with magic power.");
+		ContentEntity.addSkillXP(player, 255, 6);
+	}
 	public static void clickVengeance(Player player) {
 		if(player.duelRule[4] && player.duelAttackable > 0) {
 			player.getActionSender().sendMessage(
@@ -535,8 +538,8 @@ public class Magic {
 					"You already have Vengeance casted!.");
 			return;
 		}
-        final long vengTimer = BountyPerkHandler.getVengTimer(player);
-        final long nextVeng = vengTimer - (System.currentTimeMillis() - player.lastVeng);
+		final long vengTimer = BountyPerkHandler.getVengTimer(player);
+		final long nextVeng = vengTimer - (System.currentTimeMillis() - player.lastVeng);
 		if(nextVeng > 0) {
 			player.getActionSender().sendMessage(
 					"You can only cast Vengeance every" + (vengTimer/1000)+" seconds ("+ nextVeng +"ms remaining)");
@@ -555,7 +558,7 @@ public class Magic {
 	public static void clickVenganceOther(Player caster, Player player2) {
 		if(caster.getSkills().getLevel(6) < 93) {
 			ContentEntity.sendMessage(caster,
-                    "You need 93 magic to cast Vengeance Other.");
+					"You need 93 magic to cast Vengeance Other.");
 			return;
 		}
 		if(ContentEntity.getItemAmount(caster, 9075) < 3
@@ -565,7 +568,7 @@ public class Magic {
 					"You need more runes to cast Vengeance Other.");
 			return;
 		}
-		if(!Combat.canAttack(caster.cE, player2.cE))
+		if(Combat.canAtk(caster.cE, player2.cE).length() > 1)
 			return;
 		if(! player2.vengeance) {
 			if(System.currentTimeMillis() > player2.lastVeng + 30000) {
@@ -585,15 +588,15 @@ public class Magic {
 	}
 
 	public static void finishMagic(final CombatEntity c,
-	                               final CombatEntity p, final int Damage, final Spell spell,
-	                               boolean castedOn, boolean splash, boolean critical) {
+								   final CombatEntity p, final int Damage, final Spell spell,
+								   boolean castedOn, boolean splash, boolean critical) {
 		if(p.getEntity() instanceof Player) {
 			if(spell.getSpellId() == 12445 && c.getPlayer().getSpellBook().isRegular() && !splash) {
 				if(!(p.getPlayer().getPrayers().isEnabled(Prayers.CURSE_DEFLECT_MAGIC) || p.getPlayer().getPrayers().isEnabled(Prayers.PRAYER_PROTECT_FROM_MAGE)))
-                    p.getPlayer().setTeleBlock(
-						System.currentTimeMillis() + 300000);
-                else
-                    p.getPlayer().setTeleBlock(System.currentTimeMillis() + 120000);
+					p.getPlayer().setTeleBlock(
+							System.currentTimeMillis() + 300000);
+				else
+					p.getPlayer().setTeleBlock(System.currentTimeMillis() + 120000);
 				p.getPlayer().getActionSender()
 						.sendMessage("You are now teleblocked");
 				p.getEntity().playGraphics(Graphic.create(1843));
@@ -615,12 +618,12 @@ public class Magic {
 		else {
 			int addCritical = critical ? 5 : 0;
 
-            p.hit(Damage, c.getEntity(), false, Constants.MAGE + addCritical);
-            if(p.getEntity() instanceof Player) {
+			p.hit(Damage, c.getEntity(), false, Constants.MAGE + addCritical);
+			if(p.getEntity() instanceof Player) {
 				vengeance(p.getPlayer(), c, Damage);
 			}
 		}
-       		p.lastHit = System.currentTimeMillis();
+		p.lastHit = System.currentTimeMillis();
 		World.submit(new Task(1000, "finishmagic") {
 			@Override
 			public void execute() {
@@ -664,13 +667,20 @@ public class Magic {
 	}
 
 	public static List<CombatEntity> getMultiPeople(Spell spell, CombatEntity caster,
-	                                                CombatEntity hit) {
+													CombatEntity hit) {
 		List<CombatEntity> k = new LinkedList<CombatEntity>();
 		if(!Combat.isInMulti(caster) || !spell.isMulti()) {
 			k.add(hit);
 			return k;
 		}
-		k.addAll(hit.getEntity().getRegion().getPlayers().stream().filter(p -> caster != p.cE && Combat.canAttack(caster, p.cE) && hit.getEntity().getPosition().isWithinDistance(p.getPosition(), 1)).map(p -> p.cE).collect(Collectors.toList()));
+		for(Player p : hit.getEntity().getRegion().getPlayers()) {
+			if(caster != p.cE
+					&& Combat.canAtk(caster, p.cE).length() <= 1
+					&& hit.getEntity().getPosition()
+					.isWithinDistance(p.getPosition(), 1)) {
+				k.add(p.cE);
+			}
+		}
 		for(NPC n : hit.getEntity().getRegion().getNpcs()) {
 			if(hit.getEntity().getPosition()
 					.isWithinDistance(n.getPosition(), 1)
@@ -713,11 +723,11 @@ public class Magic {
 	}
 
 	public static int hasRunes(CombatEntity c, Spell spell) {
-        if(c.getEntity() instanceof Player) {
-           Player player = (Player)c.getEntity();
-           if(Rank.hasAbility(player, Rank.ADMINISTRATOR))
-               return -1;
-        }
+		if(c.getEntity() instanceof Player) {
+			Player player = (Player)c.getEntity();
+			if(Rank.hasAbility(player, Rank.ADMINISTRATOR))
+				return -1;
+		}
 		if(spell.getFirstRune() > 0 && spell.getFirstAmount() > 0)
 			if(! hasStaff(c, spell.getFirstRune())
 					&& (c.getPlayer().getInventory().getById(spell.getFirstRune()) == null || c
@@ -765,41 +775,41 @@ public class Magic {
 								new Item(spell.getFirstRune(), spell.getFirstAmount()));
 			}
 		if(! hasStaff(c, spell.getSecondRune()))
-            if(c.getPlayer().getRunePouch().getById(spell.getSecondRune()) == null || c.getPlayer().getRunePouch().getById(spell.getSecondRune()).getCount() < spell.getSecondAmount()) {
-                c.getPlayer()
-                        .getInventory()
-                        .remove(- 1,
-                                new Item(spell.getSecondRune(), spell.getSecondAmount()));
-            } else {
-                c.getPlayer()
-                        .getRunePouch()
-                        .remove(-1,
-                                new Item(spell.getSecondRune(), spell.getSecondAmount()));
-            }
+			if(c.getPlayer().getRunePouch().getById(spell.getSecondRune()) == null || c.getPlayer().getRunePouch().getById(spell.getSecondRune()).getCount() < spell.getSecondAmount()) {
+				c.getPlayer()
+						.getInventory()
+						.remove(- 1,
+								new Item(spell.getSecondRune(), spell.getSecondAmount()));
+			} else {
+				c.getPlayer()
+						.getRunePouch()
+						.remove(-1,
+								new Item(spell.getSecondRune(), spell.getSecondAmount()));
+			}
 		if(! hasStaff(c, spell.getThirdRune()))
-            if(c.getPlayer().getRunePouch().getById(spell.getThirdRune()) == null || c.getPlayer().getRunePouch().getById(spell.getThirdRune()).getCount() < spell.getThirdAmount()) {
-                c.getPlayer()
-                        .getInventory()
-                        .remove(- 1,
-                                new Item(spell.getThirdRune(), spell.getThirdAmount()));
-            } else {
-                c.getPlayer()
-                        .getRunePouch()
-                        .remove(-1,
-                                new Item(spell.getThirdRune(), spell.getThirdAmount()));
-            }
+			if(c.getPlayer().getRunePouch().getById(spell.getThirdRune()) == null || c.getPlayer().getRunePouch().getById(spell.getThirdRune()).getCount() < spell.getThirdAmount()) {
+				c.getPlayer()
+						.getInventory()
+						.remove(- 1,
+								new Item(spell.getThirdRune(), spell.getThirdAmount()));
+			} else {
+				c.getPlayer()
+						.getRunePouch()
+						.remove(-1,
+								new Item(spell.getThirdRune(), spell.getThirdAmount()));
+			}
 		if(! hasStaff(c, spell.getFourthRune()))
-            if(c.getPlayer().getRunePouch().getById(spell.getFourthRune()) == null || c.getPlayer().getRunePouch().getById(spell.getFourthRune()).getCount() < spell.getFourthAmount()) {
-                c.getPlayer()
-                        .getInventory()
-                        .remove(-1,
-                                new Item(spell.getFourthRune(), spell.getFourthAmount()));
-            } else {
-                c.getPlayer()
-                        .getRunePouch()
-                        .remove(-1,
-                                new Item(spell.getFourthRune(), spell.getFourthAmount()));
-            }
+			if(c.getPlayer().getRunePouch().getById(spell.getFourthRune()) == null || c.getPlayer().getRunePouch().getById(spell.getFourthRune()).getCount() < spell.getFourthAmount()) {
+				c.getPlayer()
+						.getInventory()
+						.remove(-1,
+								new Item(spell.getFourthRune(), spell.getFourthAmount()));
+			} else {
+				c.getPlayer()
+						.getRunePouch()
+						.remove(-1,
+								new Item(spell.getFourthRune(), spell.getFourthAmount()));
+			}
 		return true;
 	}
 
@@ -1162,14 +1172,14 @@ public class Magic {
 					return;
 				}
 				if(index >= 17) {
-                    if(player.getDungeoneering().inDungeon()) {
-                        final Room room = player.getDungeoneering().getCurrentDungeon().getStartRoom();
-                        player.setTeleportTarget(room.getSpawnLocation());
-                        player.getDungeoneering().setCurrentRoom(room);
-                    } else {
-                        player.setTeleportTarget(Position.create(x, y, 0));
-                    }
-                    this.stop();
+					if(player.getDungeoneering().inDungeon()) {
+						final Room room = player.getDungeoneering().getCurrentDungeon().getStartRoom();
+						player.setTeleportTarget(room.getSpawnLocation());
+						player.getDungeoneering().setCurrentRoom(room);
+					} else {
+						player.setTeleportTarget(Position.create(x, y, 0));
+					}
+					this.stop();
 					player.inAction = false;
 					return;
 				}
@@ -1184,31 +1194,31 @@ public class Magic {
 	public static void teleport(Player player, Position loc, boolean force) {
 		teleport(player, loc.getX(), loc.getY(), loc.getZ(), force, true);
 	}
-	
+
 	public static void teleport(Player player, Position loc, boolean force, boolean random) {
 		teleport(player, loc.getX(), loc.getY(), loc.getZ(), force, random);
 	}
-	
+
 	public static void teleport(final Player player, int x, int y, int z,
-            boolean force) {
+								boolean force) {
 		teleport(player, x, y, z, force, true);
 	}
 
 	public static void teleport(final Player player, int x, int y, int z,
-	                            boolean force, boolean random) {
+								boolean force, boolean random) {
 		if(! force) {
 			if(player.getAgility().isBusy())
 				return;
 
 			if(DangerousPK.inDangerousPK(player)) {
-                if(player.getPoints().getPkPoints() > 75) {
-                    player.sendMessage("You lose 75 PKT upon teleporting!");
-                    player.getPoints().setPkPoints(player.getPoints().getPkPoints() - 75);
-                } else {
-                    player.sendMessage("You need 75 PKT to teleport!");
-                    return;
-                }
-            }
+				if(player.getPoints().getPkPoints() > 75) {
+					player.sendMessage("You lose 75 PKT upon teleporting!");
+					player.getPoints().setPkPoints(player.getPoints().getPkPoints() - 75);
+				} else {
+					player.sendMessage("You need 75 PKT to teleport!");
+					return;
+				}
+			}
 			if(random) {
 				x += Combat.random(2);
 				y += Combat.random(2);
@@ -1236,9 +1246,9 @@ public class Magic {
 			player.updateTeleportTimer();
 		}
 
-        Duel.declineTrade(player);
+		Duel.declineTrade(player);
 
-        final int x1 = x;
+		final int x1 = x;
 		final int y1 = y;
 		final int z1 = z;
 		int delay = 1400;
@@ -1265,8 +1275,8 @@ public class Magic {
 					player.playAnimation(Animation.create(8941, 0));
 				else
 					player.playAnimation(Animation.create(- 1, 0));
-                if(player.getDungeoneering().inDungeon())
-                    player.getDungeoneering().getCurrentDungeon().remove(player, false);
+				if(player.getDungeoneering().inDungeon())
+					player.getDungeoneering().getCurrentDungeon().remove(player, false);
 				this.stop();
 			}
 		});
@@ -1274,8 +1284,8 @@ public class Magic {
 		// anim 715
 		// 1400 timer
 	}
-	
-	
+
+
 	private static boolean canGoTo13s(final Player player) {
 		final Item shield = player.getEquipment().get(Equipment.SLOT_SHIELD);
 		if(shield != null && (shield.getId() == 13740 || shield.getId() == 13744))
@@ -1287,7 +1297,7 @@ public class Magic {
 		}
 		return player.getSpellBook().isAncient();
 	}
-	
+
 	public static void goTo13s(final Player player) {
 		if(canGoTo13s(player)) {
 			SpecialAreaHolder.get("hybrid").ifPresent(area -> area.enter(player));
@@ -1296,8 +1306,8 @@ public class Magic {
 			player.sendImportantMessage("You cannot bring Divine or Elysian Spirit Shields with you here");
 		}
 	}
-	
-	
+
+
 
 	public static void swapSpellbook(Player p) {
 		if(p.getSkills().getLevel(6) < 96) {
@@ -1323,8 +1333,8 @@ public class Magic {
 
 	}
 
-    public static final boolean in13sArea(int x, int y) {
-        return x <= 2983 && y <= 3615 && y >= 3605 && x >= 2970;
-    }
+	public static final boolean in13sArea(int x, int y) {
+		return x <= 2983 && y <= 3615 && y >= 3605 && x >= 2970;
+	}
 
 }

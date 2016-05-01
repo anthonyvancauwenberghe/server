@@ -1,10 +1,15 @@
 package org.hyperion.rs2.model.content.misc2;
 
+import com.google.common.collect.Maps;
+import org.hyperion.rs2.model.Item;
 import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.content.ContentEntity;
 import org.hyperion.rs2.model.content.ContentTemplate;
 
 import java.io.FileNotFoundException;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 
 public class CombineItems implements ContentTemplate {
 
@@ -25,70 +30,70 @@ public class CombineItems implements ContentTemplate {
 	@Override
 	public boolean clickObject(Player player, final int type, final int id, final int slot, final int itemId2, final int itemSlot2) {
 		if(type == 13) {
-			int index = - 1;
-			for(int i = 0; i < combineItems.length; i++) {
-				if((id == combineItems[i][0] && itemId2 == combineItems[i][1]) || (id == combineItems[i][1] && itemId2 == combineItems[i][0])) {
-					index = i;
+			int index = -1;
+			for(int array = 0; array < combineItems.length; array++) {
+				if((id == combineItems[array][0] && itemId2 == combineItems[array][1]) || (id == combineItems[array][1] && itemId2 == combineItems[array][0])) {
+					index = array;
 					break;
 				}
 			}
 			if(index != - 1) {
                 if (!player.getInventory().contains(id))
 	                return false;
-                ContentEntity.deleteItem(player, id, slot, 1);
-				ContentEntity.deleteItem(player, itemId2, itemSlot2, 1);
-				ContentEntity.addItem(player, combineItems[index][2]);
+				final Item primary = Item.create(id);
+				final Item secondary = Item.create(itemId2);
+				final Item product = Item.create(combineItems[index][2]);
+				player.getInventory().remove(primary);
+				player.getInventory().remove(secondary);
+				player.getInventory().add(product);
 				return true;
 			}
 			return false;
-
 		}
 		if(type == 22) {
-			if(System.currentTimeMillis() - player.splitDelay < 2000) {
-				player.getActionSender().sendMessage("You can't split that fast!");
+			if(ContentEntity.freeSlots(player) < 2) {
+				ContentEntity.sendMessage(player, "You need at least 2 free Inventory spaces for this.");
                 return false;
 			}
-			if(ContentEntity.freeSlots(player) < 1) {
-				ContentEntity.sendMessage(player, "You don't have enough space for this");
-                return false;
-			}
-			for(int i = 0; i < combineItems.length; i++) {
-				if(id == combineItems[i][2] && player.getInventory().getCount(id) > 0) {
-					player.splitDelay = System.currentTimeMillis();
-                    ContentEntity.deleteItem(player, id, slot, 1);
-					ContentEntity.addItem(player, combineItems[i][0]);
-					ContentEntity.addItem(player, combineItems[i][1]);
-					return true;
+			for (int[] array : combineItems) {
+				if (id == array[2]) {
+					final Item product = Item.create(id);
+					final Item primary = Item.create(array[0]);
+					final Item secondary = Item.create(array[1]);
+					if (player.getInventory().hasItem(product)) {
+						player.getInventory().remove(product);
+						player.getInventory().add(primary);
+						player.getInventory().add(secondary);
+					}
 				}
 			}
+			return false;
 		}
 		return false;
 	}
 
 	@Override
 	public void init() throws FileNotFoundException {
-
 	}
 
 	@Override
 	public int[] getValues(int type) {
 		if(type == 13) {
-			int[] j = new int[combineItems.length * 2];
-			int i2 = 0;
+			int[] array = new int[combineItems.length * 2];
+			int index = 0;
 			for(int i = 0; i < combineItems.length; i++) {
-				j[i2++] = combineItems[i][0];
-				j[i2++] = combineItems[i][1];
+				array[index++] = combineItems[i][0];
+				array[index++] = combineItems[i][1];
 			}
-			return j;
+			return array;
 		}
-
 		if(type == 22) {
-			int[] j = new int[combineItems.length];
-			int i2 = 0;
+			int[] array = new int[combineItems.length];
+			int index = 0;
 			for(int i = 0; i < combineItems.length; i++) {
-				j[i2++] = combineItems[i][2];
+				array[index++] = combineItems[i][2];
 			}
-			return j;
+			return array;
 		}
 		return null;
 	}

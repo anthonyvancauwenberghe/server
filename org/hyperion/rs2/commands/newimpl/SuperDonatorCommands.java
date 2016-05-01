@@ -2,6 +2,7 @@ package org.hyperion.rs2.commands.newimpl;
 //<editor-fold defaultstate="collapsed" desc="Imports">
 import org.hyperion.rs2.commands.NewCommand;
 import org.hyperion.rs2.commands.NewCommandExtension;
+import org.hyperion.rs2.commands.util.CommandInput;
 import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.Rank;
 import org.hyperion.rs2.model.SpellBook;
@@ -16,25 +17,36 @@ import java.util.List;
  * Created by DrHales on 2/29/2016.
  */
 public class SuperDonatorCommands implements NewCommandExtension {
+
+    private abstract class Command extends NewCommand {
+        public Command(String key, long delay, CommandInput... input) {
+            super(key, Rank.SUPER_DONATOR, delay, input);
+        }
+
+        public Command(String key, CommandInput... input) {
+            super(key, Rank.SUPER_DONATOR, input);
+        }
+    }
+
     //<editor-fold defaultstate="collapsed" desc="Commands List">
     @Override
     public List<NewCommand> init() {
         return Arrays.asList(
-                new NewCommand("openge", Rank.SUPER_DONATOR, Time.FIVE_SECONDS) {
+                new Command("openge", Time.FIVE_SECONDS) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         player.getGrandExchangeTracker().openInterface();
                         return true;
                     }
                 },
-                new NewCommand("bank", Rank.SUPER_DONATOR, Time.FIVE_SECONDS) {
+                new Command("bank", Time.FIVE_SECONDS) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         Bank.open(player, false);
                         return true;
                     }
                 },
-                new NewCommand("switchprayers", Rank.SUPER_DONATOR, Time.FIFTEEN_SECONDS) {
+                new Command("switchprayers", Time.FIFTEEN_SECONDS) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         if (player.getPosition().inPvPArea() && player.isInCombat()) {
@@ -45,7 +57,7 @@ public class SuperDonatorCommands implements NewCommandExtension {
                         return true;
                     }
                 },
-                new NewCommand("lunars", Rank.SUPER_DONATOR, Time.FIFTEEN_SECONDS) {
+                new Command("lunars", Time.FIFTEEN_SECONDS) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         if (player.getPosition().inPvPArea() && player.isInCombat()) {
@@ -57,7 +69,7 @@ public class SuperDonatorCommands implements NewCommandExtension {
                         return true;
                     }
                 },
-                new NewCommand("ancnients", Rank.SUPER_DONATOR, Time.FIFTEEN_SECONDS) {
+                new Command("ancients", Time.FIFTEEN_SECONDS) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         if (player.getPosition().inPvPArea() && player.isInCombat()) {
@@ -69,7 +81,7 @@ public class SuperDonatorCommands implements NewCommandExtension {
                         return true;
                     }
                 },
-                new NewCommand("moderns", Rank.SUPER_DONATOR, Time.FIFTEEN_SECONDS) {
+                new Command("moderns", Time.FIFTEEN_SECONDS) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         if (player.getPosition().inPvPArea() && player.isInCombat()) {

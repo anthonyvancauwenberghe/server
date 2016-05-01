@@ -46,20 +46,20 @@ public class Clan {
 	}
 
 	public String getName() {
-		return clanName.toUpperCase();
+		return TextUtils.titleCase(clanName);
 	}
 
 	public void setName(String newName) {
 		this.clanName = newName;
-		for(Player p : players) {
-			p.getActionSender().sendString(18139, "Talking in: " + newName.toUpperCase());
-		}
+		players.stream().forEach(member -> member.getActionSender().sendString(18139, String.format("Talking in: %s", TextUtils.titleCase(newName))));
 	}
 
     public void listBans(Player player) {
-        for(final String s : peopleKicked) {
-            player.sendMessage(s);
-        }
+		if (peopleKicked.isEmpty()) {
+			player.sendf("No Banned Players in Clan '%s'.", getName());
+			return;
+		}
+		peopleKicked.stream().filter(value -> value != null).forEach(player::sendMessage);
     }
 
 	public String getOwner() {
@@ -68,8 +68,7 @@ public class Clan {
 
 	public void setOwner(String owner) {
 		this.owner = owner;
-		for(Player p : players)
-			p.getActionSender().sendString(18140, "Owner: " + owner.toUpperCase());
+		players.stream().forEach(member -> member.getActionSender().sendString(18140, String.format("Owner: %s", TextUtils.titleCase(owner))));
 	}
 
 	public Clan(String owner, String name) {
@@ -87,17 +86,18 @@ public class Clan {
     }
 
 	public boolean kick(String name, boolean ip) {
-		for(Player p : players) {
-			if(p.getName().equalsIgnoreCase(name)) {
-				p.sendClanMessage("You have been kicked.");
-				ClanManager.leaveChat(p, true, false);
-				peopleKicked.add(p.getName());
-                if(ip)
-                    peopleKicked.add(p.getShortIP());
-				return true;
-			}
+		final Player player = World.getPlayerByName(name);
+		if (player == null) {
+			player.sendf("No Player '%s' found.", TextUtils.titleCase(name));
+			return false;
 		}
-		return false;
+		ClanManager.leaveChat(player, true, false);
+		peopleKicked.add(player.getName());
+		player.sendClanMessage("You have been kicked from the Clan Chat.");
+		if (ip) {
+			peopleKicked.add(player.getShortIP());
+		}
+		return true;
 	}
 
 	public boolean isKicked(String name) {

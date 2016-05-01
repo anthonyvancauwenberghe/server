@@ -20,18 +20,29 @@ import java.util.List;
  * Created by DrHales on 2/29/2016.
  */
 public class CommunityManagerCommands implements NewCommandExtension {
+
+    private abstract class Command extends NewCommand {
+        public Command(String key, long delay, CommandInput... requiredInput) {
+            super(key, delay, requiredInput);
+        }
+
+        public Command(String key, CommandInput... requiredInput) {
+            super(key, requiredInput);
+        }
+    }
+
     //<editor-fold defaultstate="collapsed" desc="Commands List">
     @Override
     public List<NewCommand> init() {
         return Arrays.asList(
-                new NewCommand("startminigame", Rank.COMMUNITY_MANAGER, new CommandInput<Integer>(integer -> integer > 0, "Integer", "Integer greater than 0")) {
+                new Command("startminigame", new CommandInput<Integer>(integer -> integer > 0, "Integer", "Integer greater than 0")) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         World.submit(new EventCountdownTask(ServerEventTask.builders[Integer.parseInt(input[0])]));
                         return true;
                     }
                 },
-                new NewCommand("createtrivia", Rank.COMMUNITY_MANAGER, new CommandInput<String>(string -> string != null, "String", "Trivia Question"), new CommandInput<String>(string -> string != null, "String", "Trivia Answer"), new CommandInput<Integer>(integer -> ItemDefinition.forId(integer) != null, "Integer", "Item ID"), new CommandInput<Integer>(integer -> integer > 0 && integer < Integer.MAX_VALUE, "Integer", "Item Amount")) {
+                new Command("createtrivia", new CommandInput<String>(string -> string != null, "String", "Trivia Question"), new CommandInput<String>(string -> string != null, "String", "Trivia Answer"), new CommandInput<Integer>(integer -> ItemDefinition.forId(integer) != null, "Integer", "Item ID"), new CommandInput<Integer>(integer -> integer > 0 && integer < Integer.MAX_VALUE, "Integer", "Item Amount")) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         final String question = input[0].trim();
@@ -54,7 +65,7 @@ public class CommunityManagerCommands implements NewCommandExtension {
                         return true;
                     }
                 },
-                new NewCommand("createchallenge", Rank.COMMUNITY_MANAGER, new CommandInput<Integer>(integer -> integer > 0, "Length", "Challenge Length")) {
+                new Command("createchallenge", new CommandInput<Integer>(integer -> integer > 0, "Length", "Challenge Length")) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         final int length = Integer.parseInt(input[0].trim());

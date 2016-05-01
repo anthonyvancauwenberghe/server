@@ -30,7 +30,7 @@ public class TeleportCommand extends NewCommand {
     }
 
     public boolean execute(final Player player, final String[] input) {
-        Magic.teleport(player, location, force);
+        Magic.teleport(player, location, force, false);
         return true;
     }
 

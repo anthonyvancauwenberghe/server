@@ -1,19 +1,30 @@
 package org.hyperion.rs2.commands.newimpl;
-//<editor-fold defaultstate="collapsed" desc="Imports">
+
 import org.hyperion.rs2.commands.NewCommand;
 import org.hyperion.rs2.commands.NewCommandExtension;
+import org.hyperion.rs2.commands.util.CommandInput;
+import org.hyperion.rs2.model.Rank;
 
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
-//</editor-fold>
 /**
- * Created by DrHales on 2/29/2016.
+ * @author DrHales
+ * 2/29/2016
  */
 public class HeroCommands implements NewCommandExtension {
-    //<editor-fold defaultstate="collapsed" desc="Commands List">
+
+    public abstract class Command extends NewCommand {
+        public Command(String key, long delay, CommandInput... requiredInput) {
+            super(key, Rank.HERO, delay, requiredInput);
+        }
+
+        public Command(String key, CommandInput... requiredInput) {
+            super(key, Rank.HERO, requiredInput);
+        }
+    }
+
     @Override
     public List<NewCommand> init() {
-        return Arrays.asList();
+        return Collections.emptyList();
     }
-    //</editor-fold>
 }

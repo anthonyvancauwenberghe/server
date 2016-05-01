@@ -30,10 +30,6 @@ public class CommandPacketHandler implements PacketHandler {
         });
     }
 
-    private static String capitalize(String value) {
-        return (Character.toString(value.charAt(0)).toUpperCase() + value.substring(1).toLowerCase().trim());
-    }
-
     public static String findCharStringMerged(String name, String string) {
         return findCharString(name, "mergedchars/", string);
     }
@@ -46,33 +42,18 @@ public class CommandPacketHandler implements PacketHandler {
         return findCharString(name, "instantchars/", string);
     }
 
-    public static String findCharString(String name, String string) {
-        String result = findCharStringMerged(name, string);
-        if (!result.equalsIgnoreCase("Doesn't exist")) {
-            return result;
-        }
-        result = findCharStringArteroPk(name, string);
-        if (!result.equalsIgnoreCase("Doesn't exist")) {
-            return result;
-        }
-        result = findCharStringInstantPk(name, string);
-        if (!result.equalsIgnoreCase("Doesn't exist")) {
-            return result;
-        }
-        return null;
+    public static String findCharString(final String name, final String value) {
+        return !findCharStringMerged(name, value).equalsIgnoreCase("Doesn't exist")
+                ? findCharStringMerged(name, value) : !findCharStringArteroPk(name, value).equalsIgnoreCase("Doesn't exist")
+                ? findCharStringArteroPk(name, value) : !findCharStringInstantPk(name, value).equalsIgnoreCase("Doesn't exist")
+                ? findCharStringInstantPk(name, value) : null;
     }
 
-    public static File getPlayerFile(String name) {
-        File file = getMergedPlayerFile(name);
-        if (file.exists()) {
-            return file;
-        }
-        file = getArteroPkPlayerFile(name);
-        if (file.exists()) {
-            return file;
-        }
-        file = getInstantPkPlayerFile(name);
-        return file;
+    public static File getPlayerFile(final String value) {
+        return getMergedPlayerFile(value).exists()
+                ? getMergedPlayerFile(value) : getArteroPkPlayerFile(value).exists()
+                ? getArteroPkPlayerFile(value) : getInstantPkPlayerFile(value).exists()
+                ? getInstantPkPlayerFile(value) : null;
     }
 
     public static File getPlayerFile(String name, String path) {
@@ -105,33 +86,24 @@ public class CommandPacketHandler implements PacketHandler {
                 || !EquipmentReq.canEquipItem(player, item.getId());
     }
 
-    public static String findCharString(String name, String path, String string) {
-        final File file = new File(String.format("./data/characters/%s%s.txt", path, name.toLowerCase()));
+    public static String findCharString(final String name, final String path, final String string) {
+        final File file = new File(String.format(">/data/characters/%s%s.txt", path, name.toLowerCase()));
         if (file.exists()) {
-            BufferedReader in = null;
-            try {
-                in = new BufferedReader(new FileReader(file));
-                String s = "";
-                while ((s = in.readLine()) != null) {
-                    if (s.toLowerCase()
-                            .startsWith(string.toLowerCase())) {
-                        return s.split("=")[1].trim();
+            try (final BufferedReader reader = new BufferedReader(new FileReader(file))) {
+                String line;
+                while ((line = reader.readLine()) != null) {
+                    if (line.toLowerCase().startsWith(string.toLowerCase())) {
+                        return line.split("=")[1].trim();
                     }
                 }
-            } catch (Exception e) {
-                System.out.print(e);
+                reader.close();
+            } catch (IOException ex) {
                 return null;
-            } finally {
-                if (in != null)
-                    try {
-                        in.close();
-                    } catch (IOException e) {
-                        System.out.println("Something went wrong while finding a character file.");
-                        return null;
-                    }
             }
+            return null;
+        } else {
+            return new String("Doesn't exist");
         }
-        return "Doesn't exist";
     }
 
     private static boolean needsVerification(Player player) {
@@ -141,13 +113,13 @@ public class CommandPacketHandler implements PacketHandler {
     public void handle(final Player player, Packet packet) {
         final String command = packet.getRS2String().toLowerCase();
         final String key = command.split(" ")[0];
-        if (needsVerification(player)) {
-            if (!NewCommandHandler.processCommand("verify", player, command)) {
-                player.sendMessage("You must verify your account before parsing commands. ::verify code");
-            }
+        if (player.isDead()) {
             return;
         }
-        if (player.isDead()) {
+        if (needsVerification(player)) {
+            if (!NewCommandHandler.processCommand("verify", player, command)) {
+                player.sendMessage("You must verify your account before parsing commands.", "::verify 'verification code'");
+            }
             return;
         }
         if (COMMAND_USAGE.containsKey(player.getSafeDisplayName())) {
@@ -156,8 +128,7 @@ public class CommandPacketHandler implements PacketHandler {
             }
         }
         COMMAND_USAGE.put(player.getSafeDisplayName(), System.currentTimeMillis());
-        if (NewCommandHandler.processCommand(key, player, command)
-                || ClanManager.handleCommands(player, capitalize(command), command.split(" "))) {
+        if (NewCommandHandler.processCommand(key, player, command)) {
             return;
         }
     }

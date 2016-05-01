@@ -12,8 +12,11 @@ import org.hyperion.util.Misc;
 public class DragonfireShield {
 	public static void handleSpecial(Player player, CombatEntity opp) {
 		if(player != null && opp != null) {
-            if(!Combat.canAttack(player.cE, opp))
+            String canAtk = Combat.canAtk(player.cE, opp);
+            if(canAtk.length() > 1) {
+                player.getActionSender().sendMessage(canAtk);
                 return;
+            }
             if (player.canDFS() && Rank.hasAbility(player, Rank.DONATOR)) {
                 try {
                 	int damage = Misc.random(20) + 5;

@@ -258,8 +258,8 @@ public final class World {
             return op.isPresent() ? op.get() : null;
     }
 
-    public static boolean playerIsOnline(String name) {
-        Optional<Player> op = players.search(p -> p != null && p.getName().toLowerCase().equals(name.toLowerCase().replaceAll("_", " ")));
+    public static boolean playerIsOnline(final String name) {
+        Optional<Player> op = players.search(p -> p != null && p.getName().toLowerCase().equals(name.toLowerCase().replace("_", " ")));
         return op.isPresent();
     }
 

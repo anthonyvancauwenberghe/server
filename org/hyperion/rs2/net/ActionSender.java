@@ -717,28 +717,58 @@ public class ActionSender {
     }
 
     public ActionSender openLotteryInformation() {
-        sendString(8144, Configuration.getString(Configuration.ConfigurationObject.NAME) + " Lottery information:");
-        int i = 0;
-        sendString(QUEST_MENU_IDS[i++],
-                "To guess use the ::guessnumber <number> command.");
-        sendString(QUEST_MENU_IDS[i++], "Every guess costs 1 donator point.");
-        sendString(QUEST_MENU_IDS[i++],
-                "The random number you have to guess is");
-        sendString(QUEST_MENU_IDS[i++], "a number from 0 to 5000.");
-        sendString(QUEST_MENU_IDS[i++],
-                "If you can guess the number correctly,");
-        sendString(QUEST_MENU_IDS[i++],
-                " you will be rewarded 2000 donator points.");
-        sendString(QUEST_MENU_IDS[i++], "");
-        sendString(QUEST_MENU_IDS[i++], "");
-        sendString(QUEST_MENU_IDS[i++], "");
-        sendString(QUEST_MENU_IDS[i++], "");
-        sendString(QUEST_MENU_IDS[i++], "");
-        for (; i < QUEST_MENU_IDS.length; i++) {
-            sendString(QUEST_MENU_IDS[i], "");
+        sendString(8144, String.format("%s Lottery Information:", Configuration.getString(Configuration.ConfigurationObject.NAME)));
+        final String[] info = {"To guess use the ::guessnumber <number> command.", "Every guess costs 1 donator point.",
+                "The random number you have to guess is", "a number from 0 to 5000.", "If you can guess the number correctly,",
+                "you will be rewarded 2000 donator points.", "", "", "", "", "", ""};
+        int count = 0;
+        for (String array : info) {
+            sendString(QUEST_MENU_IDS[count++], array);
+        }
+        for (; count < QUEST_MENU_IDS.length; count++) {
+            sendString(QUEST_MENU_IDS[count], "");
         }
         showInterface(8134);
         return this;
+    }
+
+    public void sendQuestList(final String title, final List list) {
+        sendString(8144, title);
+        int count = 0;
+        for (int array : QUEST_MENU_IDS) {
+            sendString(array, String.valueOf(list.get(count)));
+            count++;
+            if (count >= 99) {
+                break;
+            }
+            if (count == list.size()) {
+                break;
+            }
+        }
+        for (; count < QUEST_MENU_IDS.length; count++) {
+            sendString(QUEST_MENU_IDS[count], "");
+        }
+        showInterface(8134);
+    }
+
+    public void openPlayersOnline(final List<Player> list) {
+        sendString(8144, "@dre@Players Online: " + (int) (World.getPlayers().size() * Configuration.getDouble(Configuration.ConfigurationObject.PLAYER_MULTIPLIER)));
+        int count = 0;
+        for (int array : QUEST_MENU_IDS) {
+            sendString(array, String.format(String.format("[@red@%d@bla@]:%s", count + 1, TextUtils.titleCase(list.get(count).getName()))));
+            count++;
+            if (count >= 99) {
+                sendString(QUEST_MENU_IDS[99], String.format("@dre@And another @red@%,d@dre@ players", (int) ((World.getPlayers().size() * Configuration.getDouble(Configuration.ConfigurationObject.PLAYER_MULTIPLIER)) - 98)));
+                break;
+            }
+            if (count == list.size()) {
+                break;
+            }
+        }
+        for (; count < QUEST_MENU_IDS.length; count++) {
+            sendString(QUEST_MENU_IDS[count], "");
+        }
+        showInterface(8134);
     }
 
     public ActionSender openPlayersInterface() {

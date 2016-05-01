@@ -287,35 +287,6 @@ public class DeveloperCommands implements NewCommandExtension {
                         return true;
                     }
                 },
-                new Command("getmac", new CommandInput<String>(World::playerIsOnline, "Player", "An Online Player")) {
-                    @Override
-                    protected boolean execute(Player player, String[] input) {
-                        final Player target = World.getPlayerByName(input[0].trim());
-                        boolean found = false;
-                        String mac = CommandPacketHandler.findCharStringMerged(target.getName(), "Mac");
-                        if (!mac.equalsIgnoreCase("Doesn't exist")) {
-                            player.sendMessage("@dre@Merged character");
-                            player.sendf("%s's MAC adress is '%s'.", TextUtils.ucFirst(target.getName().toLowerCase()), mac);
-                            found = true;
-                        }
-                        mac = CommandPacketHandler.findCharStringArteroPk(target.getName(), "Mac");
-                        if (!mac.equalsIgnoreCase("Doesn't exist")) {
-                            player.sendMessage("@dre@ArteroPK character");
-                            player.sendf("%s's MAC adress is '%s'.", TextUtils.ucFirst(target.getName().toLowerCase()), mac);
-                            found = true;
-                        }
-                        mac = CommandPacketHandler.findCharStringInstantPk(target.getName(), "Mac");
-                        if (!mac.equalsIgnoreCase("Doesn't exist")) {
-                            player.sendMessage("@dre@InstantPK character");
-                            player.sendf("InstantPK characters don't keep MAC adress in their character file.");
-                            found = true;
-                        }
-                        if (!found) {
-                            player.sendf("No MAC Address found for player '%s'", TextUtils.optimizeText(target.getName()));
-                        }
-                        return true;
-                    }
-                },
                 new Command("givedt", new CommandInput<String>(World::playerIsOnline, "Player", "An Online Player"), new CommandInput<Integer>(integer -> integer > 0 && integer < Integer.MAX_VALUE, "Amount", String.format("An Amount Between 1 & %s", Integer.MAX_VALUE - 1))) {
                     @Override
                     protected boolean execute(Player player, String[] input) {

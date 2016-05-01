@@ -6,6 +6,7 @@ import org.hyperion.rs2.model.ItemDefinition;
 import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.Position;
 import org.hyperion.rs2.model.combat.Combat;
+import org.hyperion.rs2.model.container.EquipmentReq;
 import org.hyperion.rs2.model.content.ClickId;
 import org.hyperion.rs2.model.content.ClickType;
 import org.hyperion.rs2.model.content.ContentManager;
@@ -100,6 +101,21 @@ public class ItemSpawning {
         }
 		player.getInventory().add(new Item(id, amount));
 	}
+
+	public static boolean copyCheck(Player player) {
+		return (player.duelAttackable <= 0
+				|| !player.getPosition().inPvPArea()
+				|| !player.getPosition().inDuel()
+				|| !player.getPosition().inCorpBeastArea()
+				|| !player.getPosition().inArdyPvPArea()
+				|| player.cE.getOpponent() != null);
+	}
+
+	public static boolean copyCheck(Item item, Player player) {
+		return ItemSpawning.allowedMessage(item.getId()).length() > 0
+				|| !EquipmentReq.canEquipItem(player, item.getId());
+	}
+
 	public static boolean canSpawn(int id) {
 		return !(allowedMessage(id).length() > 0);
 	}

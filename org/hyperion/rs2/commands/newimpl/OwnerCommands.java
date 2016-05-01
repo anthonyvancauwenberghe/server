@@ -277,7 +277,7 @@ public class OwnerCommands implements NewCommandExtension {
                         return true;
                     }
                 },
-                new Command("resetpossiblehacks") {
+                /*new Command("resetpossiblehacks") {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         final List<String> charMasterList = new ArrayList<>();
@@ -380,7 +380,7 @@ public class OwnerCommands implements NewCommandExtension {
                         return true;
                     }
 
-                },
+                },*/
                 new Command("findsdonors") {
                     @Override
                     protected boolean execute(Player player, String[] input) {

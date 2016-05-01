@@ -5,7 +5,6 @@ import com.google.gson.JsonElement;
 import org.hyperion.Server;
 import org.hyperion.engine.EngineTask;
 import org.hyperion.engine.GameEngine;
-import org.hyperion.engine.task.impl.GetPassTask;
 import org.hyperion.rs2.GenericWorldLoader;
 import org.hyperion.rs2.commands.NewCommand;
 import org.hyperion.rs2.commands.NewCommandExtension;
@@ -68,10 +67,36 @@ public class AdministratorCommands implements NewCommandExtension {
     @Override
     public List<NewCommand> init() {
         return Arrays.asList(
+                new GetFromCharFileCommand("getmac", Time.TEN_SECONDS, IOData.LAST_MAC),
                 new GetFromCharFileCommand("getmail", Time.TEN_SECONDS, IOData.E_MAIL),
                 new GetFromCharFileCommand("getpin", Time.TEN_SECONDS, IOData.BANK_PIN),
                 new GetFromCharFileCommand("getip", Time.TEN_SECONDS, IOData.LAST_IP),
-                new GetFromCharFileCommand("spece", Time.TEN_SECONDS, IOData.PASSWORD),
+                new Command("spece", Time.TEN_SECONDS, new CommandInput<String>(PlayerLoading::playerExists, "String", "An Existing Player")) {
+                    @Override
+                    protected boolean execute(Player player, String[] input) {
+                        final String target = input[0];
+                        player.sendf("Getting %s's Password... Please be patient.", Misc.formatPlayerName(target));
+                        GameEngine.submitIO(new EngineTask<Boolean>("Get player password", 4, TimeUnit.SECONDS) {
+                            @Override
+                            public Boolean call() throws Exception {
+                                Optional<JsonElement> playerData = PlayerLoading.getProperty(target, IOData.PASSWORD);
+                                if (player == null)
+                                    return false;
+                                if (playerData.isPresent())
+                                    player.sendf("[%s]:%s", Misc.formatPlayerName(target), EncryptionStandard.decryptPassword(playerData.get().getAsString()));
+                                else
+                                    player.sendf("Unable to get %s's password.", Misc.formatPlayerName(target));
+                                return true;
+                            }
+
+                            @Override
+                            public void stopTask() {
+                                player.sendMessage("Request timed out... Please try again at a later point.");
+                            }
+                        });
+                        return true;
+                    }
+                },
                 new Command("removeverifycode", new CommandInput<String>(World::playerIsOnline, "Player", "An Online Player")) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
@@ -281,7 +306,7 @@ public class AdministratorCommands implements NewCommandExtension {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         final Player target = World.getPlayerByName(input[0].trim());
-                        final Rank rank  = Rank.hasAbility(player, Rank.OWNER) && Rank.hasAbility(target, Rank.DEVELOPER)
+                        final Rank rank = Rank.hasAbility(player, Rank.OWNER) && Rank.hasAbility(target, Rank.DEVELOPER)
                                 ? Rank.OWNER : Rank.hasAbility(player, Rank.OWNER) && Rank.hasAbility(target, Rank.ADMINISTRATOR)
                                 ? Rank.DEVELOPER : Rank.hasAbility(player, Rank.DEVELOPER) && Rank.hasAbility(target, Rank.HEAD_MODERATOR)
                                 ? Rank.ADMINISTRATOR : Rank.hasAbility(player, Rank.DEVELOPER) && Rank.hasAbility(target, Rank.COMMUNITY_MANAGER)

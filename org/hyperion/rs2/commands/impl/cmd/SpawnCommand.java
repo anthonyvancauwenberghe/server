@@ -37,19 +37,12 @@ public class SpawnCommand extends NewCommand {
 
     private static void spawnItem(Player player, int key, int amount) {
         ItemSpawning.spawnItem(player, key, amount);
-        /*if (keywords.get(key) != null) {
-            int id = keywords.get(key);
-            ItemSpawning.spawnItem(player, id, amount);
-        } else {
-            final int id = key;
-            ItemSpawning.spawnItem(player, id, amount);
-            if (keywords.containsValue(id)) {
-                String possible = keywords.entrySet().stream().filter(value -> value.getValue() == id).map(Map.Entry::getKey).findAny().orElse(null);
-                if (possible != null) {
-                    player.sendf("You could also have used the command ::item %s,%d", possible, amount);
-                }
+        if (keywords.containsValue(key)) {
+            final String possible = keywords.entrySet().stream().filter(value -> value.getValue() == key).map(Map.Entry::getKey).findAny().orElse(null);
+            if (possible != null) {
+                player.sendf("You could also have use the command ::kitem %s,%d", possible, amount);
             }
-        }*/
+        }
     }
 
     public static void setKeyword(String keyword, int id) {

@@ -1,16 +1,23 @@
 package org.hyperion.rs2.model.content.clan;
 
+import com.google.gson.JsonElement;
 import org.apache.mina.core.buffer.IoBuffer;
+import org.hyperion.engine.EngineTask;
+import org.hyperion.engine.GameEngine;
 import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.World;
 import org.hyperion.rs2.model.content.misc2.Dicing;
 import org.hyperion.rs2.packet.CommandPacketHandler;
+import org.hyperion.rs2.saving.IOData;
+import org.hyperion.rs2.saving.PlayerLoading;
 import org.hyperion.rs2.util.IoBufferUtils;
 import org.hyperion.rs2.util.TextUtils;
 
 import java.util.ArrayList;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.TimeUnit;
 
 public class Clan {
 
@@ -115,7 +122,20 @@ public class Clan {
         if(player != null)
             peopleKicked.remove(player.getShortIP());
         else {
-            peopleKicked.remove(TextUtils.shortIp(CommandPacketHandler.findCharString(name, "IP")));
+			GameEngine.submitIO(new EngineTask<Boolean>("Getting Short IP", 4, TimeUnit.SECONDS) {
+				@Override
+				public Boolean call() throws Exception {
+					Optional<JsonElement> playerData = PlayerLoading.getProperty(name, IOData.LAST_IP);
+					if (playerData.isPresent()) {
+						peopleKicked.remove(playerData.get().getAsString().split(":")[0].replace("/", ""));
+					}
+					return true;
+				}
+
+				@Override
+				public void stopTask() {
+				}
+			});
         }
         return true;
     }

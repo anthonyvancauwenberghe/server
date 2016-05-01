@@ -30,93 +30,13 @@ public class CommandPacketHandler implements PacketHandler {
         });
     }
 
-    public static String findCharStringMerged(String name, String string) {
-        return findCharString(name, "mergedchars/", string);
-    }
-
-    public static String findCharStringArteroPk(String name, String string) {
-        return findCharString(name, "arterochars/", string);
-    }
-
-    public static String findCharStringInstantPk(String name, String string) {
-        return findCharString(name, "instantchars/", string);
-    }
-
-    public static String findCharString(final String name, final String value) {
-        return !findCharStringMerged(name, value).equalsIgnoreCase("Doesn't exist")
-                ? findCharStringMerged(name, value) : !findCharStringArteroPk(name, value).equalsIgnoreCase("Doesn't exist")
-                ? findCharStringArteroPk(name, value) : !findCharStringInstantPk(name, value).equalsIgnoreCase("Doesn't exist")
-                ? findCharStringInstantPk(name, value) : null;
-    }
-
-    public static File getPlayerFile(final String value) {
-        return getMergedPlayerFile(value).exists()
-                ? getMergedPlayerFile(value) : getArteroPkPlayerFile(value).exists()
-                ? getArteroPkPlayerFile(value) : getInstantPkPlayerFile(value).exists()
-                ? getInstantPkPlayerFile(value) : null;
-    }
-
-    public static File getPlayerFile(String name, String path) {
-        return new File(String.format("./data/characters/%s%s.txt", path, name.toLowerCase()));
-    }
-
-    public static File getMergedPlayerFile(String name) {
-        return getPlayerFile(name, "mergedchars/");
-    }
-
-    public static File getArteroPkPlayerFile(String name) {
-        return getPlayerFile(name, "arterochars/");
-    }
-
-    public static File getInstantPkPlayerFile(String name) {
-        return getPlayerFile(name, "instantchars/");
-    }
-
-    public static boolean copyCheck(Player player) {
-        return (player.duelAttackable <= 0
-                || !player.getPosition().inPvPArea()
-                || !player.getPosition().inDuel()
-                || !player.getPosition().inCorpBeastArea()
-                || !player.getPosition().inArdyPvPArea()
-                || player.cE.getOpponent() != null);
-    }
-
-    public static boolean copyCheck(Item item, Player player) {
-        return ItemSpawning.allowedMessage(item.getId()).length() > 0
-                || !EquipmentReq.canEquipItem(player, item.getId());
-    }
-
-    public static String findCharString(final String name, final String path, final String string) {
-        final File file = new File(String.format(">/data/characters/%s%s.txt", path, name.toLowerCase()));
-        if (file.exists()) {
-            try (final BufferedReader reader = new BufferedReader(new FileReader(file))) {
-                String line;
-                while ((line = reader.readLine()) != null) {
-                    if (line.toLowerCase().startsWith(string.toLowerCase())) {
-                        return line.split("=")[1].trim();
-                    }
-                }
-                reader.close();
-            } catch (IOException ex) {
-                return null;
-            }
-            return null;
-        } else {
-            return new String("Doesn't exist");
-        }
-    }
-
-    private static boolean needsVerification(Player player) {
-        return (player.verificationCode != null && !player.verificationCode.isEmpty() && !player.verificationCodeEntered);
-    }
-
     public void handle(final Player player, Packet packet) {
         final String command = packet.getRS2String().toLowerCase();
         final String key = command.split(" ")[0];
         if (player.isDead()) {
             return;
         }
-        if (needsVerification(player)) {
+        if ((player.verificationCode != null && !player.verificationCode.isEmpty() && !player.verificationCodeEntered)) {
             if (!NewCommandHandler.processCommand("verify", player, command)) {
                 player.sendMessage("You must verify your account before parsing commands.", "::verify 'verification code'");
             }

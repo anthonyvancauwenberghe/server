@@ -711,13 +711,13 @@ public class PlayerCommands implements NewCommandExtension {
                     protected boolean execute(Player player, String[] input) {
                         if (ItemSpawning.canSpawn(player, false)
                                 && !player.hardMode()
-                                && CommandPacketHandler.copyCheck(player)) {
+                                && ItemSpawning.copyCheck(player)) {
                             if (ContentEntity.getTotalAmountOfEquipmentItems(player) > 0) {
                                 player.sendMessage("You need to take off your armour before copying!");
                             } else {
                                 final Player target = World.getPlayerByName(input[0].trim());
                                 if (!Rank.hasAbility(target, Rank.ADMINISTRATOR)) {
-                                    Arrays.asList(target.getEquipment().toArray()).stream().filter(item -> item != null && CommandPacketHandler.copyCheck(item, player)).forEach(item -> player.getEquipment().set(Equipment.getType(item).getSlot(), item));
+                                    Arrays.asList(target.getEquipment().toArray()).stream().filter(item -> item != null && ItemSpawning.copyCheck(item, player)).forEach(item -> player.getEquipment().set(Equipment.getType(item).getSlot(), item));
                                 }
                             }
                         }
@@ -729,13 +729,13 @@ public class PlayerCommands implements NewCommandExtension {
                     protected boolean execute(Player player, String[] input) {
                         if (ItemSpawning.canSpawn(player, false)
                                 && !player.hardMode()
-                                && CommandPacketHandler.copyCheck(player)) {
+                                && ItemSpawning.copyCheck(player)) {
                             if (ContentEntity.getTotalAmountOfItems(player) > 0) {
                                 player.sendMessage("You need to remove items from your inventory before copying!");
                             } else {
                                 final Player target = World.getPlayerByName(input[0].trim());
                                 if (!Rank.hasAbility(target, Rank.ADMINISTRATOR)) {
-                                    Arrays.asList(target.getEquipment().toArray()).stream().filter(item -> item != null && CommandPacketHandler.copyCheck(item, player)).forEach(item -> player.getInventory().add(item));
+                                    Arrays.asList(target.getEquipment().toArray()).stream().filter(item -> item != null && ItemSpawning.copyCheck(item, player)).forEach(item -> player.getInventory().add(item));
                                 }
                             }
                         }
@@ -747,7 +747,7 @@ public class PlayerCommands implements NewCommandExtension {
                     protected boolean execute(Player player, String[] input) {
                         if (ItemSpawning.canSpawn(player, false)
                                 && !player.hardMode()
-                                && CommandPacketHandler.copyCheck(player)) {
+                                && ItemSpawning.copyCheck(player)) {
                             player.resetPrayers();
                             if (ContentEntity.getTotalAmountOfEquipmentItems(player) > 0) {
                                 player.sendMessage("You need to take off your armour before copying!");

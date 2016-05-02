@@ -1,271 +1,144 @@
 package org.hyperion.rs2.model.content.skill;
 
 import org.hyperion.engine.task.Task;
+import org.hyperion.engine.task.TaskManager;
 import org.hyperion.rs2.model.*;
 import org.hyperion.rs2.model.container.Equipment;
 import org.hyperion.rs2.model.content.ContentEntity;
 import org.hyperion.rs2.model.content.ContentTemplate;
+import org.hyperion.util.ArrayUtils;
 
 import java.io.FileNotFoundException;
+import java.util.Arrays;
+import java.util.List;
 
 
 /**
- * @author Vegas/Linus/Flux/Jolt/KFC/Tinderbox/Jack Daniels <- Same Person
+ * @author DrHales
  */
 public class Hunter implements ContentTemplate {
 
-	public static final int[] IMP_IDS = {1028, 6055, 1029, 6056, 1030, 6057,
-			1031, 6058, 1032, 6059, 1033, 6060, 1034, 6061, 1035, 6062, 6063,
-			7845, 7846, 6064, 7903, 7906};
+    public static final List<Integer> IMP_IDS = Arrays.asList(1028, 6055, 1029, 6056, 1030, 6057, 1031, 6058, 1032, 6059, 1033, 6060, 1034, 6061, 1035, 6062, 6053, 6063, 7845, 7846, 6054, 6064, 7903, 7906);
 
+    private Impling getImpling(final int value) {
+        return Impling.BABY.getImps().stream().anyMatch((array) -> array == value)
+                ? Impling.BABY : Impling.YOUNG.getImps().stream().anyMatch((array) -> array.equals(value))
+                ? Impling.YOUNG : Impling.GOURMET.getImps().stream().anyMatch((array) -> array.equals(value))
+                ? Impling.GOURMET : Impling.EARTH.getImps().stream().anyMatch((array) -> array.equals(value))
+                ? Impling.EARTH : Impling.ESSENCE.getImps().stream().anyMatch((array) -> array.equals(value))
+                ? Impling.ESSENCE : Impling.ELECTRIC.getImps().stream().anyMatch((array) -> array.equals(value))
+                ? Impling.ELECTRIC : Impling.NATURE.getImps().stream().anyMatch((array) -> array.equals(value))
+                ? Impling.NATURE : Impling.MAGPIE.getImps().stream().anyMatch((array) -> array.equals(value))
+                ? Impling.MAGPIE : Impling.NINJA.getImps().stream().anyMatch((array) -> array.equals(value))
+                ? Impling.NINJA : Impling.PIRATE.getImps().stream().anyMatch((array) -> array.equals(value))
+                ? Impling.PIRATE : Impling.DRAGON.getImps().stream().anyMatch((array) -> array.equals(value))
+                ? Impling.DRAGON : Impling.KINGLY.getImps().stream().anyMatch((array) -> array.equals(value))
+                ? Impling.KINGLY : null;
+    }
 
-	public static void addExp(Player p, int NpcId) {
-		switch(NpcId) {
-			case 1028:// baby impling
-			case 6055:// Baby impling
-				p.getSkills().addExperience(Skills.HUNTER, 1000);
-				break;
-			case 1029:// Young impling
-			case 6056:// Young impling
-				p.getSkills().addExperience(22, 1500);
-				break;
-			case 1030:// Gourmet impling
-			case 6057:// Gourmet impling
-				p.getSkills().addExperience(22, 2100);
-				break;
-			case 1031:// Earth impling
-			case 6058:// Earth impling
-				p.getSkills().addExperience(22, 2500);
-				break;
-			case 1032:// Essence impling
-			case 6059:// Essence impling
-				p.getSkills().addExperience(22, 3600);
-				break;
-			case 1033:// Eclectic impling
-			case 6060:// Eclectic impling
-				p.getSkills().addExperience(22, 7503);
-				break;
-			case 1034:// Nature impling
-			case 6061:// Nature impling
-				p.getSkills().addExperience(22, 15500);
-				break;
-			case 1035:// Magpie impling
-			case 6062:// Magpie impling
-				p.getSkills().addExperience(22, 26000);
-				break;
-			case 6063:// Ninja impling
-				p.getSkills().addExperience(22, 56000);
-				break;
-			case 7845:// Pirate impling
-			case 7846:// Pirate impling
-				p.getSkills().addExperience(22, 61000);
-				break;
-			case 6064:// Dragon impling
-				p.getSkills().addExperience(22, 85400);
-				break;
-			case 7903:// Kingly Imp
-			case 7906:
-				p.getSkills().addExperience(22, 104000);
-				break;
+    private boolean hasEquipment(final Player player) {
+        return ((player.getEquipment().get(Equipment.SLOT_WEAPON) != null && (player.getEquipment().get(Equipment.SLOT_WEAPON).getId() == 11259
+                || player.getEquipment().get(Equipment.SLOT_WEAPON).getId() == 10010)));
+    }
 
-		}
-	}
+    private void process(final Player player, final int id, final int x, final int y) {
+        if ((System.currentTimeMillis() - player.contentTimer) > 1499) {
+            final Impling npc = getImpling(id);
+            if (npc != null) {
+                if (player.getSkills().getLevel(Skills.HUNTER) < npc.getLevel()) {
+                    player.sendf("You need a hunter level of %d to catch this impling.", npc.getLevel());
+                    return;
+                }
+                if (!hasEquipment(player) && player.getSkills().getLevel(Skills.HUNTER) < (npc.getLevel() + 10)) {
+                    player.sendMessage("You need a net to catch this imp!");
+                    return;
+                }
+                if (player.getInventory().freeSlots() < 1) {
+                    player.sendMessage("You need some free inventory slots to catch imps!");
+                    return;
+                }
+                player.contentTimer = System.currentTimeMillis();
+                ContentEntity.startAnimation(player, 5209);
+                player.cE.face(x, y);
+                TaskManager.submit(new Task(500L, "Impling Catching Task") {
+                    @Override
+                    public void execute() {
+                        if (HunterNpcs.remove(id, x, y)) {
+                            final int count = player.getExtraData().getInt("impscaught") + 1;
+                            player.getExtraData().put("impscaught", count);
+                            player.getInventory().add(Item.create(npc.getItem()));
+                            player.sendMessage("You catch the impling!");
+                            player.getAchievementTracker().itemSkilled(Skills.HUNTER, npc.getItem(), 1);
+                            player.getSkills().addExperience(Skills.HUNTER, npc.getExperience());
+                            player.sendf("You have now caught @red@%,d@bla@ impling%s.", count, count > 1 ? "s" : "");
+                            HunterNpcs.spawn();
+                        }
+                        stop();
+                    }
+                });
+            }
+        }
+    }
 
-	public static void addItem(Player p, int NpcId) {
-		switch(NpcId) {
-			case 1028:// baby impling
-			case 6055:// Baby impling
-				p.getInventory().add(new Item(11238));
-				p.getAchievementTracker().itemSkilled(Skills.HUNTER, 11238, 1);
-				break;
-			case 1029:// Young impling
-			case 6056:// Young impling
-				p.getInventory().add(new Item(11240));
-				p.getAchievementTracker().itemSkilled(Skills.HUNTER, 11240, 1);
-				break;
-			case 1030:// Gourmet impling
-			case 6057:// Gourmet impling
-				p.getInventory().add(new Item(11242));
-				p.getAchievementTracker().itemSkilled(Skills.HUNTER, 11242, 1);
-				break;
-			case 1031:// Earth impling
-			case 6058:// Earth impling
-				p.getInventory().add(new Item(11244));
-				p.getAchievementTracker().itemSkilled(Skills.HUNTER, 11244, 1);
-				break;
-			case 1032:// Essence impling
-			case 6059:// Essence impling
-				p.getInventory().add(new Item(11246));
-				p.getAchievementTracker().itemSkilled(Skills.HUNTER, 11246, 1);
-				break;
-			case 1033:// Eclectic impling
-			case 6060:// Eclectic impling
-				p.getInventory().add(new Item(11248));
-				p.getAchievementTracker().itemSkilled(Skills.HUNTER, 11248, 1);
-				break;
-			case 1034:// Nature impling
-			case 6061:// Nature impling
-				p.getInventory().add(new Item(11250));
-				p.getAchievementTracker().itemSkilled(Skills.HUNTER, 11250, 1);
-				break;
-			case 1035:// Magpie impling
-			case 6062:// Magpie impling
-				p.getInventory().add(new Item(11252));
-				p.getAchievementTracker().itemSkilled(Skills.HUNTER, 11252, 1);
-				break;
-			case 6063:// Ninja impling
-				p.getInventory().add(new Item(11254));
-				p.getAchievementTracker().itemSkilled(Skills.HUNTER, 11254, 1);
-				break;
-			case 7845:// Pirate impling
-			case 7846:// Pirate impling
-				p.getInventory().add(new Item(13337));
-				p.getAchievementTracker().itemSkilled(Skills.HUNTER, 13337, 1);
-				break;
-			case 6064:// Dragon impling
-				p.getInventory().add(new Item(11256));
-				p.getAchievementTracker().itemSkilled(Skills.HUNTER, 11256, 1);
-				break;
-			case 7903:// Kingly Imp
-			case 7906:
-				p.getInventory().add(new Item(15517));
-				p.getAchievementTracker().itemSkilled(Skills.HUNTER, 15517, 1);
-				break;
-		}
-	}
+    @Override
+    public boolean clickObject(final Player player, final int type, final int id, final int x, final int y, int d) {
+        if (type == 10) {
+            process(player, id, x, y);
+        }
+        return false;
+    }
 
-	public static int getReq(int NpcId) {
-		switch(NpcId) {
-			case 1029:// Young impling
-			case 6056:// Young impling
-				return 22;
-			case 1030:// Gourmet impling
-			case 6057:// Gourmet impling
-				return 28;
-			case 1031:// Earth impling
-			case 6058:// Earth impling
-				return 36;
-			case 1032:// Essence impling
-			case 6059:// Essence impling
-				return 42;
-			case 1033:// Eclectic impling
-			case 6060:// Eclectic impling
-				return 50;
-			case 1034:// Nature impling
-			case 6061:// Nature impling
-				return 58;
-			case 1035:// Magpie impling
-			case 6062:// Magpie impling
-				return 65;
-			case 6063:// Ninja impling
-				return 74;
-			case 7845:// Pirate impling
-			case 7846:// Pirate impling
-				return 76;
-			case 6064:// Dragon impling
-				return 83;
-			case 7903://Kingly Imp
-			case 7906:
-				return 91;
-		}
-		return 0;
-	}
+    @Override
+    public void init() throws FileNotFoundException {
+        HunterNpcs.startup();
+    }
 
-	public void catchImp(final Player p, final int NpcId, final int xcoord, final int ycoord) {
+    @Override
+    public int[] getValues(final int value) {
+        return value != 10 ? null : ArrayUtils.fromList(IMP_IDS);
+    }
 
-		if(System.currentTimeMillis() - p.contentTimer < 1500) {
-			return;
-		}
-		p.contentTimer = System.currentTimeMillis();
-		if(p.getEquipment().get(Equipment.SLOT_WEAPON) == null || (p.getEquipment().get(Equipment.SLOT_WEAPON).getId() != 11259
-				&& p.getEquipment().get(Equipment.SLOT_WEAPON).getId() != 10010)) {
-			p.getActionSender().sendMessage("You need a net to catch imps!");
-			return;
-		}
-		if(p.getInventory().freeSlots() == 0) {
-			p.getActionSender().sendMessage("You need some free inventory slots to catch imps!");
-			return;
-		}
-		switch(NpcId) {
-			case 1028:// baby impling
-			case 6055:// Baby impling
+    private enum Impling {
+        BABY(Arrays.asList(1028, 6055), 1, 11238, 1000),
+        YOUNG(Arrays.asList(1029, 6056), 22, 11240, 1500),
+        GOURMET(Arrays.asList(1030, 6057), 28, 11242, 2100),
+        EARTH(Arrays.asList(1031, 6058), 36, 11244, 2500),
+        ESSENCE(Arrays.asList(1032, 6059), 42, 11246, 3600),
+        ELECTRIC(Arrays.asList(1033, 6060), 50, 11248, 7503),
+        NATURE(Arrays.asList(1034, 6061), 58, 11250, 15500),
+        MAGPIE(Arrays.asList(1035, 6062), 65, 11252, 26000),
+        NINJA(Arrays.asList(6053, 6063), 74, 11254, 56000),
+        PIRATE(Arrays.asList(7845, 7846), 76, 13337, 61000),
+        DRAGON(Arrays.asList(6054, 6064), 83, 11256, 85400),
+        KINGLY(Arrays.asList(7903, 7906), 91, 15517, 104000);
 
-			case 1029:// Young impling
-			case 6056:// Young impling
+        private final List<Integer> imps;
+        private final int level;
+        private final int item;
+        private final int experience;
 
-			case 1030:// Gourmet impling
-			case 6057:// Gourmet impling
+        Impling(List<Integer> imps, int level, int item, int experience) {
+            this.imps = imps;
+            this.level = level;
+            this.item = item;
+            this.experience = experience;
+        }
 
-			case 1031:// Earth impling
-			case 6058:// Earth impling
+        public List<Integer> getImps() {
+            return imps;
+        }
 
-			case 1032:// Essence impling
-			case 6059:// Essence impling
+        public int getLevel() {
+            return level;
+        }
 
-			case 1033:// Eclectic impling
-			case 6060:// Eclectic impling
+        public int getItem() {
+            return item;
+        }
 
-			case 1034:// Nature impling
-			case 6061:// Nature impling
-
-			case 1035:// Magpie impling
-			case 6062:// Magpie impling
-
-			case 6063:// Ninja impling
-
-			case 7845:// Pirate impling
-			case 7846:// Pirate impling
-
-			case 6064:// Dragon impling
-
-			case 7903://Kingly Imp
-			case 7906:
-				if(p.getSkills().getLevel(22) < getReq(NpcId)) {
-					p.getActionSender().sendMessage("You need a hunter level of " + getReq(NpcId) + " to catch this impling.");
-					return;
-				}
-				ContentEntity.startAnimation(p, 5209);
-				p.cE.face(xcoord, ycoord);
-				World.submit(new Task(500L,"hunter1") {
-					public void execute() {
-						boolean success = HunterNpcs.removeImp(NpcId, xcoord, ycoord);
-						if(success) {
-							p.getActionSender().sendMessage(
-									"You catch the impling!");
-							int caught = p.getExtraData().getInt("impscaught");
-							caught++;
-							p.getExtraData().put("impscaught", caught);
-							p.getActionSender().sendMessage("You have now caught " + caught + " implings!");
-							addItem(p, NpcId);
-							addExp(p, NpcId);
-						}
-						this.stop();
-					}
-				});
-
-		}
-	}
-
-	@Override
-	public boolean clickObject(Player player, int type, int npcId, int xcoord, int ycoord,
-	                           int d) {
-		if(type == 10) {
-			//catchImp(player, npcId, xcoord, ycoord);
-			return false;
-		}
-		return false;
-	}
-
-	@Override
-	public void init() throws FileNotFoundException {
-		//HunterNpcs.hunterStartup();
-	}
-
-	@Override
-	public int[] getValues(int type) {
-		//if(type == 10)
-			//return IMP_IDS;
-		return null;
-	}
+        public int getExperience() {
+            return experience;
+        }
+    }
 
 }

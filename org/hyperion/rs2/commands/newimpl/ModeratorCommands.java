@@ -485,10 +485,9 @@ public class ModeratorCommands implements NewCommandExtension {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         final List<String> list = new ArrayList<>();
-                        World.getPlayers().forEach(value -> {
-                            list.add(String.format("[%s]:%d,%d,%d,%d,%d", TextUtils.titleCase(value.getName()), Rank.getPrimaryRank(value).ordinal(), value.getSkills().getCombatLevel(), value.getPosition().getX(), value.getPosition().getY(), value.getPosition().getZ()));
-                        });
-                        player.getActionSender().sendQuestList(String.format("@dre@Players Online: @red@%,d", list.size()), list);
+                        World.getPlayers().forEach(value -> list.add(String.format("%s:%d,%d,%d,%d,%d", TextUtils.titleCase(value.getName()), Rank.getPrimaryRank(value).ordinal(), value.getSkills().getCombatLevel(), value.getPosition().getX(), value.getPosition().getY(), value.getPosition().getZ())));
+                        Collections.sort(list, (one, two) -> new String(one.split(":")[0]).compareTo(two.split(":")[0]));
+                        list.forEach(player::sendMessage);
                         return true;
                     }
                 }

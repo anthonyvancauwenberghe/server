@@ -1,6 +1,5 @@
 package org.hyperion.rs2.model;
 
-import org.hyperion.rs2.model.combat.Combat;
 import org.hyperion.rs2.model.content.skill.Hunter;
 import org.hyperion.util.Misc;
 
@@ -13,84 +12,39 @@ import java.util.List;
 
 public class HunterNpcs {
 
-	public static final int MIN_X = 2943;
-	public static final int MAX_Y = 3518;
-	public static final int MAX_X = 3279;
-	public static final int MIN_Y = 3156;
+    private static final int MIN_X = 2943, MAX_Y = 3518, MAX_X = 3279, MIN_Y = 3156;
 
-	public static final int MAX_IMPS = 250;
+    private static final List<NPC> imps = new LinkedList<>();
 
-	public static List<NPC> imps = new LinkedList<NPC>();
+    private static int getRandomImp() {
+        final int value = Hunter.IMP_IDS.size() - 1;
+        return Hunter.IMP_IDS.get(Math.min(Misc.random(value), Misc.random(value)));
+    }
 
-	public static int getRandomImp() {
-		int max = Hunter.IMP_IDS.length - 1;
-		int r1 = Misc.random(max);
-		int r2 = Misc.random(max);
-		int min = Math.min(r1, r2);
-		return Hunter.IMP_IDS[min];
-	}
+    public static void startup() {
+        for (int array = 0; array < 250; array++) {
+            spawn();
+        }
+    }
 
-	public static void hunterStartup() {
-		for(int i = 0; i < MAX_IMPS; i++) {
-			spawnImp();
-		}
-	}
+    public static void spawn() {
+        imps.add(NPCManager.addNPC(Position.create(MIN_X + Misc.random(MAX_X - MIN_X), MIN_Y + Misc.random(MAX_Y - MIN_Y), 0), getRandomImp(), -1));
+    }
 
-	public static void spawnNewImp() {
-		spawnImp();
-	}
-
-	public static void spawnImp() {
-		int x = MIN_X + Misc.random(MAX_X - MIN_X);
-		int y = MIN_Y + Misc.random(MAX_Y - MIN_Y);
-		int impId = getRandomImp();
-		NPC imp = NPCManager
-				.addNPC(Position.create(x, y, 0), impId, - 1);
-		synchronized(imps) {
-			imps.add(imp);
-		}
-	}
-
-	public static boolean removeImp(int NpcId, int x, int y) {
-		NPC caughtImp = null;
-		synchronized(imps) {
-			for(NPC imp : imps) {
-				if(imp.getDefinition().getId() == NpcId) {
-					if(imp.getPosition().equals(Position.create(x, y, 0))) {
-						caughtImp = imp;
-						break;
-					}
-				}
-			}
-		}
-		if(caughtImp != null) {
-			synchronized(imps) {
-				imps.remove(caughtImp);
-			}
-			caughtImp.setDead(true);
-			caughtImp.isHidden(true);
-			caughtImp.destroy();
-			return true;
-		}
-		return false;
-	}
-
-	public static void randomWalk(NPC npc) {
-		int walkToX;
-		int walkToY;
-		do {
-			walkToX = npc.getPosition().getX()
-					+ (Combat.random(1) == 0 ? Misc.random(50) : Misc
-					.random(- 50));
-		} while(walkToX > MAX_X || walkToX < MIN_X);
-		do {
-			walkToY = npc.getPosition().getY()
-					+ (Combat.random(1) == 0 ? Misc.random(50) : Misc
-					.random(- 50));
-		} while(walkToY > MAX_Y || walkToY < MIN_Y);
-		npc.getWalkingQueue().reset();
-		npc.getWalkingQueue().addStep(walkToX, walkToY);
-		npc.getWalkingQueue().finish();
-	}
+    public static boolean remove(final int id, final int x, final int y) {
+        for (NPC value : imps) {
+            if (value.getDefinition().getId() == id && value.getPosition().equals(Position.create(x, y, 0))) {
+                final NPC npc = value;
+                if (npc != null) {
+                    imps.remove(npc);
+                    npc.setDead(true);
+                    npc.isHidden(true);
+                    npc.destroy();
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
 
 }

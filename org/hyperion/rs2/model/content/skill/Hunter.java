@@ -21,7 +21,7 @@ public class Hunter implements ContentTemplate {
     public static final List<Integer> IMP_IDS = Arrays.asList(1028, 6055, 1029, 6056, 1030, 6057, 1031, 6058, 1032, 6059, 1033, 6060, 1034, 6061, 1035, 6062, 6053, 6063, 7845, 7846, 6054, 6064, 7903, 7906);
 
     private Impling getImpling(final int value) {
-        return Impling.BABY.getImps().stream().anyMatch((array) -> array == value)
+        return Impling.BABY.getImps().stream().anyMatch((array) -> array.equals(value))
                 ? Impling.BABY : Impling.YOUNG.getImps().stream().anyMatch((array) -> array.equals(value))
                 ? Impling.YOUNG : Impling.GOURMET.getImps().stream().anyMatch((array) -> array.equals(value))
                 ? Impling.GOURMET : Impling.EARTH.getImps().stream().anyMatch((array) -> array.equals(value))

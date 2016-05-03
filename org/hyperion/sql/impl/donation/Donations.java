@@ -1,5 +1,6 @@
 package org.hyperion.sql.impl.donation;
 
+import org.hyperion.rs2.model.Player;
 import org.hyperion.sql.DbHub;
 import org.hyperion.sql.dao.SqlDaoManager;
 import org.hyperion.sql.db.Db;
@@ -12,9 +13,9 @@ public class Donations extends SqlDaoManager<DonationDao> {
         super(db, DonationDao.class);
     }
 
-    public List<Donation> getActive() {
+    public List<Donation> getActiveForPlayer(Player player) {
         try{
-            return dao.getActive();
+            return dao.getActiveForPlayer(player.getName());
         } catch(Exception ex){
             if(DbHub.isConsoleDebug())
                 ex.printStackTrace();

@@ -5,6 +5,7 @@ import org.hyperion.rs2.model.Item;
 import org.hyperion.rs2.model.ItemDefinition;
 import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.container.bank.BankItem;
+import org.hyperion.sql.DbHub;
 import org.hyperion.sql.impl.vote.WaitingVote;
 import org.hyperion.util.Misc;
 
@@ -34,31 +35,51 @@ public class HandleWaitingVoteTask extends Task {
      */
     private final List<WaitingVote> votes;
 
-    /**
-     * A boolean to say whether a player voted for this site or not.
-     */
-    private final boolean runelocus, topg, rspslist;
-
-    /**
-     * The amount of votes for each site.
-     */
-    private final int runelocusVotes, topgVotes, rspslistVotes;
-
-    public HandleWaitingVoteTask(Player player, long delay, List<WaitingVote> votes, boolean runelocus, boolean topg, boolean rspslist, int runelocusVotes, int topgVotes, int rspslistVotes) {
-        super(delay);
+    public HandleWaitingVoteTask(Player player, List<WaitingVote> votes) {
+        super(600);
         this.player = player;
         this.votes = votes;
-        this.runelocus = runelocus;
-        this.topg = topg;
-        this.rspslist = rspslist;
-        this.runelocusVotes = runelocusVotes;
-        this.topgVotes = topgVotes;
-        this.rspslistVotes = rspslistVotes;
     }
 
     @Override
     protected void execute() {
         stop();
+        if (votes == null || votes.isEmpty())
+            return;
+        if (votes.stream().filter(vote -> !vote.processed()).count() < 1)
+            return;
+        boolean runelocus = false;
+        boolean rspslist = false;
+        boolean topg = false;
+        int runelocusVotes = 0;
+        int rspslistVotes = 0;
+        int topgVotes = 0;
+
+        /**
+         * First we'll gather for all votes if they're processed or not.
+         */
+        for (WaitingVote vote : votes) {
+            if (!vote.processed() && DbHub.getDonationsDb().votes().process(vote)) {
+                if (vote.runelocus() && !vote.runelocusProcessed()) {
+                    if (DbHub.getDonationsDb().votes().processRunelocus(vote))
+                        runelocusVotes++;
+                }
+                if (vote.topg() && !vote.topgProcessed()) {
+                    if (DbHub.getDonationsDb().votes().processTopg(vote))
+                        topgVotes++;
+                }
+                if (vote.rspslist() && !vote.rspslistProcessed()) {
+                    if (DbHub.getDonationsDb().votes().processRspslist(vote))
+                        rspslistVotes++;
+                }
+            }
+            if (vote.runelocus())
+                runelocus = true;
+            if (vote.rspslist())
+                rspslist = true;
+            if (vote.topg())
+                topg = true;
+        }
         LocalDate lastVoteDate = LocalDateTime.ofInstant(Instant.ofEpochMilli(player.getLastVoteStreakIncrease()), ZoneId.systemDefault()).toLocalDate();
 
         if (!lastVoteDate.equals(LocalDate.now())) {

@@ -1,16 +1,19 @@
 package org.hyperion.sql.db;
 
 import org.hyperion.Configuration;
+import org.hyperion.engine.task.TaskManager;
 import org.hyperion.rs2.commands.NewCommand;
 import org.hyperion.rs2.commands.NewCommandHandler;
 import org.hyperion.rs2.model.Player;
-import org.hyperion.rs2.model.Rank;
-import org.hyperion.rs2.model.World;
+import org.hyperion.sql.impl.donation.Donation;
 import org.hyperion.sql.impl.donation.Donations;
-import org.hyperion.sql.impl.donation.work.CheckPendingDonationsTask;
+import org.hyperion.sql.impl.donation.work.HandlePendingDonationsTask;
 import org.hyperion.sql.impl.vote.Votes;
-import org.hyperion.sql.impl.vote.work.CheckWaitingVotesTask;
+import org.hyperion.sql.impl.vote.WaitingVote;
+import org.hyperion.sql.impl.vote.work.HandleWaitingVoteTask;
 import org.hyperion.util.Time;
+
+import java.util.List;
 
 import static org.hyperion.Configuration.ConfigurationObject.*;
 
@@ -52,36 +55,28 @@ public class DonationsDb extends Db {
         donations = new Donations(this);
         votes = new Votes(this);
 
-        World.submit(new CheckPendingDonationsTask());
-        World.submit(new CheckWaitingVotesTask());
         NewCommandHandler.submit(
                 new NewCommand("voted", Time.TEN_SECONDS) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
-                        player.sendMessage("Voting has been automated. Votes will be processed in " + CheckWaitingVotesTask.getSecondLeft() + " seconds.");
+                        List<WaitingVote> voteList = votes.getWaiting(player);
+                        if(voteList.isEmpty()) {
+                            player.sendMessage("You do not have any waiting votes.");
+                            return true;
+                        }
+                        TaskManager.submit(new HandleWaitingVoteTask(player, voteList));
                         return true;
                     }
                 },
                 new NewCommand("donated", Time.TEN_SECONDS) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
-                        player.sendMessage("Donating has been automated. Donations will be processed in " + CheckPendingDonationsTask.getSecondLeft() + " seconds.");
-                        return true;
-                    }
-                },
-                new NewCommand("togglevoting", Rank.DEVELOPER) {
-                    @Override
-                    protected boolean execute(Player player, String[] input) {
-                        CheckWaitingVotesTask.toggleEnabled();
-                        player.sendMessage("Voting has been toggled " + (CheckWaitingVotesTask.isEnabled() ? "on" : "off") + ".");
-                        return true;
-                    }
-                },
-                new NewCommand("toggledonating", Rank.DEVELOPER) {
-                    @Override
-                    protected boolean execute(Player player, String[] input) {
-                        CheckPendingDonationsTask.toggleEnabled();
-                        player.sendMessage("Donating has been toggled " + (CheckPendingDonationsTask.isEnabled() ? "on" : "off") + ".");
+                        List<Donation> donationList = donations.getActiveForPlayer(player);
+                        if(donationList.isEmpty()) {
+                            player.sendMessage("You do not have any pending donations.");
+                            return true;
+                        }
+                        TaskManager.submit(new HandlePendingDonationsTask(player, donationList));
                         return true;
                     }
                 }

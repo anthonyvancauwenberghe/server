@@ -13,9 +13,9 @@ public class Votes extends SqlDaoManager<VoteDao> {
         super(db, VoteDao.class);
     }
 
-    public List<WaitingVote> getWaiting() {
+    public List<WaitingVote> getWaiting(Player player) {
         try{
-            return dao.getWaiting();
+            return dao.getWaiting(player.getName());
         }catch(Exception ex){
             if(DbHub.isConsoleDebug())
                 ex.printStackTrace();

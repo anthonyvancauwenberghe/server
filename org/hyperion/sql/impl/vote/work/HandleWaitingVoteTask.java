@@ -1,5 +1,7 @@
 package org.hyperion.sql.impl.vote.work;
 
+import org.hyperion.engine.EngineTask;
+import org.hyperion.engine.GameEngine;
 import org.hyperion.engine.task.Task;
 import org.hyperion.rs2.model.Item;
 import org.hyperion.rs2.model.ItemDefinition;
@@ -14,6 +16,8 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 /**
  * Created by Gilles on 24/02/2016.
@@ -143,6 +147,18 @@ public class HandleWaitingVoteTask extends Task {
             player.getBank().add(new BankItem(0, 3062, votingPoints));
             player.sendMessage((votingPoints == 1 ? "A" : votingPoints) + " Strange Box" + (votingPoints == 1 ? " has" : "es have") + " been added to your bank.");
         }
-        CheckWaitingVotesTask.archiveVotes(player, runelocus && topg && rspslist, votes, runelocusVotes, rspslistVotes, topgVotes);
+        archiveVotes(player, runelocus && topg && rspslist, votes, runelocusVotes, rspslistVotes, topgVotes);
+    }
+
+    public static void archiveVotes(Player player, boolean deleteAllProcessed, List<WaitingVote> votes, int runelocusVotes, int rspslistVotes, int topgVotes) {
+        GameEngine.submitSql(new EngineTask<Boolean>("Waitingvotes query", 5, TimeUnit.SECONDS) {
+            @Override
+            public Boolean call() throws Exception {
+                List<WaitingVote> processedVotes = votes.stream().filter(vote -> vote.processed() && (deleteAllProcessed || !vote.date().toLocalDate().equals(LocalDate.now()))).collect(Collectors.toList());
+                processedVotes.forEach(vote -> DbHub.getDonationsDb().votes().delete(vote));
+                DbHub.getDonationsDb().votes().insertVote(player, runelocusVotes, rspslistVotes, topgVotes);
+                return true;
+            }
+        });
     }
 }

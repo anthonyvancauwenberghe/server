@@ -2,9 +2,6 @@ package org.hyperion.rs2.packet;
 
 
 import org.hyperion.engine.task.Task;
-import org.hyperion.rs2.action.impl.MiningAction;
-import org.hyperion.rs2.action.impl.MiningAction.Node;
-import org.hyperion.rs2.action.impl.ProspectingAction;
 import org.hyperion.rs2.action.impl.WoodcuttingAction;
 import org.hyperion.rs2.action.impl.WoodcuttingAction.Tree;
 import org.hyperion.rs2.model.*;
@@ -58,11 +55,6 @@ public class ObjectClickHandler {
         Tree tree = Tree.forId(id);
         if (tree != null && player.getPosition().isWithinInteractionDistance(loc)) {
             player.getActionQueue().addAction(new WoodcuttingAction(player, loc, tree));
-        }
-        // mining
-        Node node = Node.forId(id);
-        if (node != null && player.getPosition().isWithinInteractionDistance(loc)) {
-            player.getActionQueue().addAction(new MiningAction(player, loc, node));
         }
         switch (id) {
             case 2471:
@@ -246,11 +238,6 @@ public class ObjectClickHandler {
 
     public static void objectClickTwo(Player player, int id, int x, int y) {
         Position loc = Position.create(x, y, player.getPosition().getZ());
-        Node node = Node.forId(id);
-        if (node != null && player.getPosition().isWithinInteractionDistance(loc)) {
-            player.getActionQueue().addAction(new ProspectingAction(player, loc, node));
-            return;
-        }
         switch (id) {
             case 2213:
             case 2214:

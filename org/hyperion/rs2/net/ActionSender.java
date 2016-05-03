@@ -772,37 +772,10 @@ public class ActionSender {
     }
 
     public ActionSender openPlayersInterface() {
-        sendString(8144, "@dre@Players Online: " + (int) (World.getPlayers().size() * Configuration.getDouble(Configuration.ConfigurationObject.PLAYER_MULTIPLIER)));
-        int i = 0;
-        int r = 0;
-        Player p3;
-
-        for (int QUEST_MENU_ID : QUEST_MENU_IDS) {
-            sendString(QUEST_MENU_ID, "");
-        }
-        List<Player> players = World.getPlayers().stream().collect(Collectors.toList());
-        Collections.shuffle(players);
-        for (; (i + 1) < World.getPlayers().size(); i++) {
-            if (i >= 99) {
-                sendString(QUEST_MENU_IDS[99], "@dre@And another " + (int) ((World.getPlayers().size() * Configuration.getDouble(Configuration.ConfigurationObject.PLAYER_MULTIPLIER)) - 98) + " players");
-                break;
-            }
-            if (World.getPlayers().get((i + 1)) != null) {
-                p3 = players.get((i + 1));
-                if (p3.isHidden())
-                    continue;
-                String s = p3.getSafeDisplayName();
-
-                if (s.isEmpty())
-                    continue;
-
-                String s1 = "@dre@" + (r + 1) + ". @bla@" + s;
-
-                sendString(QUEST_MENU_IDS[r], s1);
-                r++;
-            }
-        }
-        showInterface(8134);
+        final List<Player> list = World.getPlayers().stream().filter(other -> !other.isHidden()).collect(Collectors.toList());
+        player.sendf("There is currently '%,d' player%s playing ArteroPk.", list.size(), list.size() != 1 ? "s" : "");
+        Collections.sort(list, (one, two) -> new String(one.getName()).compareTo(two.getName()));
+        openPlayersOnline(list);
         return this;
     }
 

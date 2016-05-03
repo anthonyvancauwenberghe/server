@@ -87,11 +87,10 @@ public class ObjectManager {
         addObject(new GameObject(GameObjectDefinition.forId(2213), create(3275, 2784, 0), 10, 1));
 
         addObject(new GameObject(GameObjectDefinition.forId(7353), create(3203, 3422, 0), 10, 0));//slayer portal
-        addObject(new GameObject(GameObjectDefinition.forId(61), create(3098, 3506, 0), 10, 2));//chaos altar
-        addObject(new GameObject(GameObjectDefinition.forId(409), create(3094, 3506, 0), 10, 2));//Normal altar
-        addObject(new GameObject(GameObjectDefinition.forId(6552), create(3096, 3500, 0), 10, 0));//ancient altar
-
-        addObject(new GameObject(GameObjectDefinition.forId(410), create(3106, 3507, 0), 10, 0));//guthix (curses) altar
+        //addObject(new GameObject(GameObjectDefinition.forId(61), create(3098, 3506, 0), 10, 2));//chaos altar
+        //addObject(new GameObject(GameObjectDefinition.forId(409), create(3094, 3506, 0), 10, 2));//Normal altar
+        //addObject(new GameObject(GameObjectDefinition.forId(6552), create(3096, 3500, 0), 10, 0));//ancient altar
+        //addObject(new GameObject(GameObjectDefinition.forId(410), create(3106, 3507, 0), 10, 0));//guthix (curses) altar
 
         addObject(new GameObject(GameObjectDefinition.forId(13192), create(2617, 3306, 0), 10, 2));
         //RFD Stuff.

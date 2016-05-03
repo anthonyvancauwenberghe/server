@@ -876,11 +876,7 @@ public class PlayerCommands implements NewCommandExtension {
                 new Command("players", Time.FIFTEEN_SECONDS) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
-                        final List<Player> list = World.getPlayers().stream().filter(other -> !other.isHidden()).collect(Collectors.toList());
-                        player.sendf("There are currently '%,d' players playing %s.", list.size(), null);
-                        player.sendServerMessage(String.format("There are currently %,d players online.", list.size()));
-                        Collections.sort(list, (one, two) -> new String(one.getName()).compareTo(two.getName()));
-                        player.getActionSender().openPlayersOnline(list);
+                        player.getActionSender().openPlayersInterface();
                         return true;
                     }
                 },

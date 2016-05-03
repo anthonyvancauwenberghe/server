@@ -35,15 +35,31 @@ public class Misc {
 		return Math.pow((x - x2), 2) + Math.pow((y - y2), 2) <= Math.pow(r, 2);
 	}
 
-	/**
-	 * @param needle
-	 * @param haystack
-	 * @return if needle is in haystack return true , else false ( case non sensitive)
-	 */
+	public static int inclusiveRandom(int min, int max) {
+		if (max < min) {
+			max = min + 1;
+		}
+		return exclusiveRandom((max - min) + 1) + min;
+	}
+
+	public static int inclusiveRandom(int range) {
+		return inclusiveRandom(0, range);
+	}
+
+	public static int exclusiveRandom(int min, int max) {
+		if (max <= min) {
+			max = min + 1;
+		}
+		return RANDOM.nextInt((max - min)) + min;
+	}
+
+	public static int exclusiveRandom(int range) {
+		return exclusiveRandom(0, range);
+	}
+
 	public static boolean contains(char needle, char[] haystack) {
 		for(int i = 0; i < haystack.length; i++) {
 			if(needle == Character.toLowerCase(haystack[i]) || needle == Character.toUpperCase(haystack[i])) {
-				//System.out.println(needle + "");
 				return true;
 			}
 		}

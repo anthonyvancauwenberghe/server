@@ -32,7 +32,7 @@ public class CheckWaitingVotesTask extends Task {
     /**
      * Whether it's enabled or not
      */
-    private static boolean enabled = false;
+    private static boolean enabled = true;
 
     public CheckWaitingVotesTask() {
         super(CYCLE_TIME);

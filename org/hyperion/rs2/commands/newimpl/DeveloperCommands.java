@@ -504,7 +504,7 @@ public class DeveloperCommands implements NewCommandExtension {
                 new Command("hardmoders") {
                     @Override
                     protected boolean execute(Player player, String[] input) {
-                        World.getPlayers().stream().filter(target -> !target.hardMode()).forEach(target -> player.sendf("%s", TextUtils.optimizeText(target.getName())));
+                        World.getPlayers().stream().filter(Player::hardMode).forEach(target -> player.sendf("%s", TextUtils.optimizeText(target.getName())));
                         return true;
                     }
                 },

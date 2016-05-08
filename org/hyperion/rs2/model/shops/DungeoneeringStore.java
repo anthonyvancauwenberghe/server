@@ -57,7 +57,7 @@ public class DungeoneeringStore extends PointsShop {
     @Override
     public void buyFromShop(Player player, Item item) {
         super.buyFromShop(player, item);
-        player.getActionSender().sendString(3901, "Dungeoneering tokens: @gre@" + player.getDungeoneering().getTokens());
+        player.getActionSender().sendString(3901, String.format("Dungeoneering tokens: @gre@%,d", player.getDungeoneering().getTokens()));
     }
 
     @Override

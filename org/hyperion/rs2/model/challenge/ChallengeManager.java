@@ -34,8 +34,7 @@ public final class ChallengeManager {
             player.sendf("There are currently no challenges at this time!");
             return;
         }
-        for(final Challenge c : challenges)
-            c.send(player, alert);
+        challenges.stream().forEach(value -> value.send(player, alert));
     }
 
     public static void send(final Player player){

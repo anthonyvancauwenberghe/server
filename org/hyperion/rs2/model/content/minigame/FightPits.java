@@ -1,5 +1,6 @@
 package org.hyperion.rs2.model.content.minigame;
 
+import org.hyperion.Server;
 import org.hyperion.engine.task.Task;
 import org.hyperion.engine.task.impl.OverloadStatsTask;
 import org.hyperion.rs2.Constants;
@@ -204,7 +205,8 @@ public class FightPits implements ContentTemplate {
 	}
 	
 	public static void fightPitsCheck(Player player) {
-		if(!FightPits.inPitsFightArea(player.getPosition().getX(), player.getPosition().getY()) && inGame(player) && !waitingRoom.contains(player) && !player.joiningPits) {
+		if(!FightPits.inPitsFightArea(player.getPosition().getX(), player.getPosition().getY()) && inGame(player) && !waitingRoom.contains(player) && !player.joiningPits
+				|| Server.isUpdating()) {
 			removePlayerFromGame(player, true);
 		}
 		if(player.joiningPits)
@@ -512,9 +514,7 @@ public class FightPits implements ContentTemplate {
 			else
 				assignBlue(waitingRoom.get(index));
 		}
-		
-		for(Player player : waitingRoom)
-			player.getActionSender().sendString(2806, getFoesRemaining(player));
+		waitingRoom.stream().filter(target -> target != null).forEach(target -> target.getActionSender().sendString(2806, getFoesRemaining(target)));
 	}
 	
 	private void process() {
@@ -558,7 +558,7 @@ public class FightPits implements ContentTemplate {
 		}
 		if(--timeLeft == -1) {
 			for(Player player : waitingRoom) {
-				player.getActionSender().sendMessage("You need 3 players to start a game!");
+				player.getActionSender().sendMessage("You need 2 players to start a game!");
 			}
 			timeLeft = 15 + World.getPlayers().size()/3;
 		}
@@ -572,6 +572,10 @@ public class FightPits implements ContentTemplate {
 	}
 
 	private void firstDoor(Player player) {
+		if (Server.isUpdating()) {
+			player.sendMessage("You cannot do this at this time.");
+			return;
+		}
 		if(waitingRoom.contains(player)) {
 			player.getWalkingQueue().reset();
 			player.getWalkingQueue().addStep(2399, 5177);
@@ -587,8 +591,8 @@ public class FightPits implements ContentTemplate {
 				player.getActionSender().sendMessage("Please bank all of your items before joining!");
 				return;
 			}
-			if(waitingRoom.stream().anyMatch(p -> p.getUID() == player.getUID())){
-				player.sendf("You can only have one account in here at a time");
+			if (waitingRoom.stream().filter(target -> target != null).anyMatch(target -> (target.getUID() == player.getUID()) || (target.getShortIP() == player.getShortIP()))) {
+				player.sendf("You can only have one account in here at a time!");
 				return;
 			}
 			player.SummoningCounter = 0;

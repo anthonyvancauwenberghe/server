@@ -1,7 +1,6 @@
 package org.hyperion.rs2.commands.newimpl;
 //<editor-fold defaultstate="collapsed" desc="Imports">
 
-import org.hyperion.Configuration;
 import org.hyperion.rs2.commands.NewCommand;
 import org.hyperion.rs2.commands.NewCommandExtension;
 import org.hyperion.rs2.commands.NewCommandHandler;
@@ -28,8 +27,6 @@ import org.hyperion.rs2.model.content.misc.*;
 import org.hyperion.rs2.model.content.misc2.NewGameMode;
 import org.hyperion.rs2.model.content.skill.HunterLooting;
 import org.hyperion.rs2.model.content.skill.dungoneering.DungeoneeringManager;
-import org.hyperion.rs2.model.content.specialareas.SpecialArea;
-import org.hyperion.rs2.model.content.specialareas.SpecialAreaHolder;
 import org.hyperion.rs2.model.customtrivia.CustomTriviaManager;
 import org.hyperion.rs2.model.itf.Interface;
 import org.hyperion.rs2.model.itf.InterfaceManager;
@@ -40,7 +37,6 @@ import org.hyperion.rs2.model.punishment.Target;
 import org.hyperion.rs2.model.punishment.Type;
 import org.hyperion.rs2.model.punishment.manager.PunishmentManager;
 import org.hyperion.rs2.net.security.EncryptionStandard;
-import org.hyperion.rs2.packet.CommandPacketHandler;
 import org.hyperion.rs2.saving.PlayerLoading;
 import org.hyperion.rs2.util.PlayerFiles;
 import org.hyperion.rs2.util.PushMessage;
@@ -50,7 +46,6 @@ import org.hyperion.util.Time;
 
 import java.util.*;
 import java.util.concurrent.TimeUnit;
-import java.util.stream.Collectors;
 //</editor-fold>
 
 /**
@@ -281,7 +276,7 @@ public class PlayerCommands implements NewCommandExtension {
                         return true;
                     }
                 },
-                new Command("answertrivia", Time.FIVE_SECONDS, new CommandInput<String>(string -> string != null, "String", "Custom Trivia Answer")) {
+                new Command("answertrivia", Time.FIVE_SECONDS, new CommandInput<Object>(object -> object != null && (String.valueOf(object) != null || Integer.parseInt(String.valueOf(object)) > Integer.MIN_VALUE && Integer.parseInt(String.valueOf(object)) < Integer.MAX_VALUE), "String", "Custom Trivia Answer")) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         CustomTriviaManager.processAnswer(player, input[0].trim());
@@ -428,12 +423,12 @@ public class PlayerCommands implements NewCommandExtension {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         int id = Integer.parseInt(input[0].trim());
-                        player.sendf("Price of %s costs %,df coins, it sells for %,d coins.", ItemDefinition.forId(id).getName(), NewGameMode.getUnitPrice(id), (int) NewGameMode.getUnitPrice(id) * NewGameMode.SELL_REDUCTION);
+                        player.sendf("Price of %s costs %,d coins, it sells for %,d coins.", ItemDefinition.forId(id).getName(), (int) NewGameMode.getUnitPrice(id), (int)(NewGameMode.getUnitPrice(id) * NewGameMode.SELL_REDUCTION));
                         player.sendMessage("Incorrect? Please contact an admin.");
                         return true;
                     }
                 },
-                new Command("sellitem", Time.FIVE_SECONDS, new CommandInput<Integer>(integer -> ItemDefinition.forId(integer) != null, "", ""), new CommandInput<Integer>(integer -> integer > 0 && integer < 1000, "Integer", "An amount between 0 & 1,000")) {
+                new Command("sellitem", Time.FIVE_SECONDS, new CommandInput<Integer>(integer -> ItemDefinition.forId(integer) != null, "Integer", "Item ID"), new CommandInput<Integer>(integer -> integer > 0 && integer < 1000, "Integer", "An amount between 0 & 1,000")) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         int id = Integer.parseInt(input[0].trim());
@@ -516,7 +511,7 @@ public class PlayerCommands implements NewCommandExtension {
                         return true;
                     }
                 },
-                new Command("challenge", Time.TEN_SECONDS, new CommandInput<String>(string -> string != null, "String", "Challenge Answer")) {
+                new Command("challenge", Time.TEN_SECONDS, new CommandInput<Object>(object -> object != null && (String.valueOf(object) != null || Integer.parseInt(String.valueOf(object)) > Integer.MIN_VALUE && Integer.parseInt(String.valueOf(object)) < Integer.MAX_VALUE), "Object", "Challenge Answer")) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         final String value = input[0].trim();
@@ -527,9 +522,8 @@ public class PlayerCommands implements NewCommandExtension {
                         }
                         ChallengeManager.remove(challenge);
                         player.getBank().add(challenge.getPrize());
-                        player.sendImportantMessage("%s x%,d has been added to your bank!", challenge.getPrize().getDefinition().getName(), challenge.getPrize().getCount());
-                        final String message = String.format("@blu@[Challenge] %s has beaten %s's challenge for %s x%,d!", player.getSafeDisplayName(), challenge.getName(), challenge.getPrize().getDefinition().getName(), challenge.getPrize().getCount());
-                        World.getPlayers().stream().filter(target -> target != null).forEach(target -> target.sendMessage(message));
+                        player.sendImportantMessage(String.format("%s x%,d has been added to your bank!", challenge.getPrize().getDefinition().getName(), challenge.getPrize().getCount()));
+                        World.getPlayers().stream().filter(target -> target != null).forEach(target -> target.sendMessage(String.format("@blu@[Challenge] %s has beaten %s's challenge for %s x%,d!", player.getSafeDisplayName(), challenge.getName(), challenge.getPrize().getDefinition().getName(), challenge.getPrize().getCount())));
                         return true;
                     }
                 },

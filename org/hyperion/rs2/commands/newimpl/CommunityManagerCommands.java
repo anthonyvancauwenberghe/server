@@ -42,13 +42,17 @@ public class CommunityManagerCommands implements NewCommandExtension {
                         return true;
                     }
                 },
-                new Command("createtrivia", new CommandInput<String>(string -> string != null, "String", "Trivia Question"), new CommandInput<String>(string -> string != null, "String", "Trivia Answer"), new CommandInput<Integer>(integer -> ItemDefinition.forId(integer) != null, "Integer", "Item ID"), new CommandInput<Integer>(integer -> integer > 0 && integer < Integer.MAX_VALUE, "Integer", "Item Amount")) {
+                new Command("createtrivia", new CommandInput<Object>(object -> object != null && (String.valueOf(object) != null || Integer.parseInt(String.valueOf(object)) > Integer.MIN_VALUE && Integer.parseInt(String.valueOf(object)) < Integer.MAX_VALUE), "Object", "Trivia Question"), new CommandInput<Object>(object -> object != null && (String.valueOf(object) != null || Integer.parseInt(String.valueOf(object)) > Integer.MIN_VALUE && Integer.parseInt(String.valueOf(object)) < Integer.MAX_VALUE), "Object", "Trivia Answer"), new CommandInput<Integer>(integer -> ItemDefinition.forId(integer) != null, "Integer", "Item ID"), new CommandInput<Integer>(integer -> integer > 0 && integer < Integer.MAX_VALUE, "Integer", "Item Amount")) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         final String question = input[0].trim();
                         final String answer = input[1].trim();
                         final int id = Integer.parseInt(input[2].trim());
                         int amount = Integer.parseInt(input[3].trim());
+                        if (ItemSpawning.canSpawn(id)) {
+                            player.sendMessage("Cannot do this with spawnables.");
+                            return true;
+                        }
                         if (!player.getInventory().contains(id)) {
                             player.sendf("Your inventory does not contain item '%s'.", TextUtils.optimizeText(ItemDefinition.forId(id).getName()));
                             return true;
@@ -65,7 +69,7 @@ public class CommunityManagerCommands implements NewCommandExtension {
                         return true;
                     }
                 },
-                new Command("createchallenge", new CommandInput<Integer>(integer -> integer > 0, "Length", "Challenge Length")) {
+                new Command("createchallenge", new CommandInput<Integer>(integer -> integer > 0, "Length", "Challenge Length"), new CommandInput<Integer>(integer -> ItemDefinition.forId(integer) != null, "Integer", "Item ID"), new CommandInput<Integer>(integer -> integer > 0 && integer < Integer.MAX_VALUE, "Integer", "Item Amount")) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         final int length = Integer.parseInt(input[0].trim());

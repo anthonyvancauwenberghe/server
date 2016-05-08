@@ -76,6 +76,7 @@ public class DeviousHonorShop extends PointsShop {
 			player.getActionSender().sendMessage("You need a PvP rating of at least " + requiredElo + " to buy this item.");
 		} else {
 			super.buyFromShop(player, item);
+			player.getActionSender().sendString(3901, String.format("Honor points: @gre@%,d", player.getPoints().getHonorPoints()));
 		}
 	}
 

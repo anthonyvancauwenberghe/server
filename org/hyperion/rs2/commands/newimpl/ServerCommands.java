@@ -1,26 +1,29 @@
 package org.hyperion.rs2.commands.newimpl;
 //<editor-fold defaultstate="collapsed" desc="Imports">
+
 import org.hyperion.rs2.commands.NewCommand;
 import org.hyperion.rs2.commands.NewCommandExtension;
 import org.hyperion.rs2.commands.impl.cmd.*;
-import org.hyperion.rs2.commands.util.CommandInput;
-import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.Position;
 import org.hyperion.rs2.model.Rank;
-import org.hyperion.rs2.model.content.misc.ItemSpawning;
 import org.hyperion.rs2.model.content.misc2.Afk;
 import org.hyperion.rs2.model.content.misc2.Edgeville;
 import org.hyperion.rs2.model.content.skill.agility.courses.GnomeStronghold;
+import org.hyperion.rs2.model.punishment.Target;
+import org.hyperion.rs2.model.punishment.Type;
 import org.hyperion.rs2.model.punishment.cmd.CheckPunishmentCommand;
+import org.hyperion.rs2.model.punishment.cmd.PunishCommand;
+import org.hyperion.rs2.model.punishment.cmd.UnPunishCommand;
 import org.hyperion.util.Misc;
 import org.hyperion.util.Time;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 //</editor-fold>
+
 /**
- * Created by DrHales on 3/4/2016.
+ * @author DrHales
+ *         3/4/2016
  */
 public class ServerCommands implements NewCommandExtension {
 
@@ -71,7 +74,47 @@ public class ServerCommands implements NewCommandExtension {
                 new TeleportCommand("funpk", Rank.PLAYER, Time.FIFTEEN_SECONDS, Position.create(2594, 3156, 0), false),
                 new TeleportCommand("train1", Rank.PLAYER, Time.FIFTEEN_SECONDS, Position.create(2709, 3718, 0), false),
                 new TeleportCommand("train2", Rank.PLAYER, Time.FIFTEEN_SECONDS, Position.create(3566 - Misc.random(1), 9952 - Misc.random(1), 0), false),
-                new TeleportCommand("dv", Rank.PLAYER, Time.FIFTEEN_SECONDS, Position.create(3342, 3242, 0), false)
+                new TeleportCommand("dv", Rank.PLAYER, Time.FIFTEEN_SECONDS, Position.create(3342, 3242, 0), false),
+                new PunishCommand("jail", Rank.HELPER, Target.ACCOUNT, Type.JAIL),
+                new PunishCommand("ipjail", Rank.HELPER, Target.IP, Type.JAIL),
+                new PunishCommand("macjail", Rank.MODERATOR, Target.MAC, Type.JAIL),
+                new PunishCommand("suidjail", Rank.DEVELOPER, Target.SPECIAL, Type.JAIL),
+                new PunishCommand("yellmute", Rank.HELPER, Target.ACCOUNT, Type.YELL_MUTE),
+                new PunishCommand("ipyellmute", Rank.MODERATOR, Target.IP, Type.YELL_MUTE),
+                new PunishCommand("macyellmute", Rank.MODERATOR, Target.MAC, Type.YELL_MUTE),
+                new PunishCommand("suidyellmute", Rank.DEVELOPER, Target.SPECIAL, Type.YELL_MUTE),
+                new PunishCommand("mute", Rank.MODERATOR, Target.ACCOUNT, Type.MUTE),
+                new PunishCommand("ipmute", Rank.MODERATOR, Target.IP, Type.MUTE),
+                new PunishCommand("macmute", Rank.MODERATOR, Target.MAC, Type.MUTE),
+                new PunishCommand("suidmute", Rank.DEVELOPER, Target.SPECIAL, Type.MUTE),
+                new PunishCommand("ban", Rank.MODERATOR, Target.ACCOUNT, Type.BAN),
+                new PunishCommand("ipban", Rank.MODERATOR, Target.IP, Type.BAN),
+                new PunishCommand("macban", Rank.MODERATOR, Target.MAC, Type.BAN),
+                new PunishCommand("suidban", Rank.ADMINISTRATOR, Target.SPECIAL, Type.BAN),
+                new PunishCommand("wildyforbid", Rank.DEVELOPER, Target.ACCOUNT, Type.WILDY_FORBID),
+                new PunishCommand("ipwildyforbid", Rank.DEVELOPER, Target.IP, Type.WILDY_FORBID),
+                new PunishCommand("macwildyforbid", Rank.DEVELOPER, Target.MAC, Type.WILDY_FORBID),
+                new PunishCommand("suidwildyforbid", Rank.DEVELOPER, Target.SPECIAL, Type.WILDY_FORBID),
+                new UnPunishCommand("unjail", Rank.HELPER, Target.ACCOUNT, Type.JAIL),
+                new UnPunishCommand("unipjail", Rank.HELPER, Target.IP, Type.JAIL),
+                new UnPunishCommand("unmacjail", Rank.MODERATOR, Target.MAC, Type.JAIL),
+                new UnPunishCommand("unsuidjail", Rank.DEVELOPER, Target.SPECIAL, Type.JAIL),
+                new UnPunishCommand("unyellmute", Rank.HELPER, Target.ACCOUNT, Type.YELL_MUTE),
+                new UnPunishCommand("unipyellmute", Rank.MODERATOR, Target.IP, Type.YELL_MUTE),
+                new UnPunishCommand("unmacyellmute", Rank.MODERATOR, Target.MAC, Type.YELL_MUTE),
+                new UnPunishCommand("unsuidyellmute", Rank.DEVELOPER, Target.SPECIAL, Type.YELL_MUTE),
+                new UnPunishCommand("unmute", Rank.MODERATOR, Target.ACCOUNT, Type.MUTE),
+                new UnPunishCommand("unipmute", Rank.MODERATOR, Target.IP, Type.MUTE),
+                new UnPunishCommand("unmacmute", Rank.MODERATOR, Target.MAC, Type.MUTE),
+                new UnPunishCommand("unsuidmute", Rank.DEVELOPER, Target.SPECIAL, Type.MUTE),
+                new UnPunishCommand("unban", Rank.MODERATOR, Target.ACCOUNT, Type.BAN),
+                new UnPunishCommand("unipban", Rank.MODERATOR, Target.IP, Type.BAN),
+                new UnPunishCommand("unmacban", Rank.MODERATOR, Target.MAC, Type.BAN),
+                new UnPunishCommand("unsuidban", Rank.ADMINISTRATOR, Target.SPECIAL, Type.BAN),
+                new UnPunishCommand("unwildyforbid", Rank.DEVELOPER, Target.ACCOUNT, Type.WILDY_FORBID),
+                new UnPunishCommand("unipwildyforbid", Rank.DEVELOPER, Target.IP, Type.WILDY_FORBID),
+                new UnPunishCommand("unmacwildyforbid", Rank.DEVELOPER, Target.MAC, Type.WILDY_FORBID),
+                new UnPunishCommand("unsuidwildyforbid", Rank.DEVELOPER, Target.SPECIAL, Type.WILDY_FORBID)
         );
     }
     //</editor-fold>

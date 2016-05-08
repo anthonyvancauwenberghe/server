@@ -149,7 +149,7 @@ public final class NewCommandHandler {
         List<NewCommand> fittingCommands;
         String[] parts = {};
         if (!key.equals(input)) {
-            parts = input.replace(key + " ", "").toLowerCase().split(SPLITTER);
+            parts = input.replace(key + " ", "").split(SPLITTER);
             //We allow a maximum of 5 parts to prevent abuse.
             if (parts.length > MAXIMUM_PARTS)
                 return false;

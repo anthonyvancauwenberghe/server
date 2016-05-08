@@ -31,7 +31,7 @@ public class CheckPunishmentCommand extends NewCommand {
         final List<Punishment> punishments = new ArrayList<>();
 
         player.sendMessage("Loading punishments, please be patient...");
-        GameEngine.submitLogic(new EngineTask<Boolean>("Load punishment", 8, TimeUnit.SECONDS) {
+        GameEngine.submitIO(new EngineTask<Boolean>("Load punishment", 8, TimeUnit.SECONDS) {
             @Override
             public Boolean call() throws Exception {
                 Optional<JsonElement> playerIp = PlayerLoading.getProperty(input[0], IOData.LAST_IP);

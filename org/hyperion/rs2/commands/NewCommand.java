@@ -76,7 +76,7 @@ public abstract class NewCommand {
                 //Over here we need to test what the argument is.
                 //It gives warnings, but it's nothing unwanted, we're careful with the exception and simply can't test any more.
                 if (StringUtil.isNumeric(input[i])) {
-                    if (Pattern.matches("([0-9]*)\\.([0-9]*)", input[i]) && !getRequiredInput()[i].testInput(player, Double.parseDouble(input[i]))) {
+                    if (Pattern.matches("-?([0-9]*)\\.([0-9]*)", input[i]) && !getRequiredInput()[i].testInput(player, Double.parseDouble(input[i]))) {
                         return GOT_ERROR_MESSAGE;
                     } else if (!getRequiredInput()[i].testInput(player, Integer.parseInt(input[i]))) {
                         return GOT_ERROR_MESSAGE;
@@ -88,7 +88,7 @@ public abstract class NewCommand {
                 }
             }
         } catch (Exception e) {
-            Server.getLogger().log(Level.WARNING, null, e);
+            Server.getLogger().log(Level.WARNING, String.format("Error Testing Command:%s", key), e);
             return NEED_ERROR_MESSAGE;
         }
         //If we get here it means that it did pass the tests.
@@ -105,6 +105,6 @@ public abstract class NewCommand {
     }
 
     public final String filterInput(String input) {
-        return input.replace(key + " ", "").toLowerCase();
+        return input.replace(key + " ", "");
     }
 }

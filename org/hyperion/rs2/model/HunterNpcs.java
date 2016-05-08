@@ -28,6 +28,7 @@ public class HunterNpcs {
     }
 
     public static void spawn() {
+
         imps.add(NPCManager.addNPC(Position.create(MIN_X + Misc.random(MAX_X - MIN_X), MIN_Y + Misc.random(MAX_Y - MIN_Y), 0), getRandomImp(), -1));
     }
 

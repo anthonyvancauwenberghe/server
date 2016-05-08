@@ -1,10 +1,12 @@
+
 package org.hyperion.rs2.model.punishment.cmd;
 
 import org.hyperion.engine.EngineTask;
 import org.hyperion.engine.GameEngine;
 import org.hyperion.engine.task.Task;
 import org.hyperion.engine.task.TaskManager;
-import org.hyperion.rs2.commands.Command;
+import org.hyperion.rs2.commands.NewCommand;
+import org.hyperion.rs2.commands.util.CommandInput;
 import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.Rank;
 import org.hyperion.rs2.model.World;
@@ -13,127 +15,74 @@ import org.hyperion.rs2.model.punishment.holder.PunishmentHolder;
 import org.hyperion.rs2.model.punishment.manager.PunishmentManager;
 import org.hyperion.rs2.saving.IOData;
 import org.hyperion.rs2.saving.PlayerLoading;
-import org.hyperion.util.Misc;
+import org.hyperion.rs2.util.TextUtils;
 
 import java.util.concurrent.TimeUnit;
 
-public class PunishCommand extends Command {
-
+public class PunishCommand extends NewCommand {
+    
+    private final Target target;
+    private final Type type;
     private final Combination combination;
 
-    public PunishCommand(final String name, final Combination combination, final Rank rank) {
-        super(name, rank);
-        this.combination = combination;
+    public PunishCommand(String key, Rank rank, Target target, Type type) {
+        super(key, rank, new CommandInput<>(PlayerLoading::playerExists, "Player", "An Existing Player"), new CommandInput<String>(string -> string != null && Integer.parseInt(string.split(" ")[0].trim()) > 0 && Unit.getUnit(string.split(" ")[1]) != null, "String", "Duration & Unit"), new CommandInput<String>(string -> string != null, "String", "Punishment Reason"));
+        this.target = target;
+        this.type = type;
+        this.combination = Combination.of(target, type);
     }
 
-    public PunishCommand(final String name, final Target target, final Type type, final Rank rank) {
-        this(name, Combination.of(target, type), rank);
-    }
-
-    public boolean execute(final Player player, final String input) {
-        final String[] parts = filterInput(input).split(",");
-        if (parts.length != 3) {
-            player.sendf("Incorrect syntax. Usage: ::%s NAME,DURATION [minutes|hours|days],REASON", getKey());
-            return false;
+    @Override
+    public boolean execute(final Player player, final String[] input) {
+        final String victim = input[0].trim();
+        final Player other = World.getPlayerByName(victim);
+        final Unit unit = Unit.getUnit(input[1].split(" ")[1].trim());
+        assert unit != null;
+        final long duration = unit.getDuration(Integer.parseInt(input[1].split(" ")[0].trim()));
+        final String reason = input[2].trim();
+        if (other != null && Rank.isStaffMember(other) && !Rank.hasAbility(player, Rank.DEVELOPER)) {
+            player.sendMessage("You cannot punish other staff members.");
+            return true;
         }
-        final String victimName = parts[0].trim();
-        final Player victim = World.getPlayerByName(victimName);
-        if (victimName.isEmpty()) {
-            player.sendf("Unable to find player %s", Misc.ucFirst(victimName.toLowerCase()));
-            return false;
-        }
-        if (victim != null && Rank.isStaffMember(victim) && !Rank.hasAbility(player, Rank.DEVELOPER)) {
-            player.sendMessage("You cannot punish other staff members");
-            return false;
-        }
-        player.sendMessage("Loading victim information and punishing, please wait...");
-        GameEngine.submitLogic(new EngineTask<Boolean>("punishment command", 8, TimeUnit.SECONDS) {
+        player.sendMessage("Loading Target information; Please wait...");
+        GameEngine.submitIO(new EngineTask<Boolean>("Punishment Command", 8, TimeUnit.SECONDS) {
             @Override
             public Boolean call() throws Exception {
-                String ip = victim != null ? victim.getShortIP() : PlayerLoading.getProperty(victimName, IOData.LAST_IP).get().getAsString();
-                if (ip.contains("="))//
-                    ip = ip.substring(ip.indexOf('/') + 1, ip.indexOf(':'));
-
-                String macStr = victim != null ? Integer.toString(victim.getUID()) : Integer.toString(PlayerLoading.getProperty(victimName, IOData.LAST_MAC).get().getAsInt());
-                int mac;
-                try {
-                    mac = Integer.parseInt(macStr);
-                } catch (Exception ex) {
-                    player.sendf("Unable to punish %s: No MAC address found", Misc.ucFirst(victimName.toLowerCase()));
-                    return false;
+                String protocol = other != null ? other.getShortIP() : PlayerLoading.getProperty(victim, IOData.LAST_IP).get().getAsString();
+                if (protocol.contains("=")) {
+                    protocol = protocol.substring(protocol.indexOf('/') + 1, protocol.indexOf(':'));
                 }
-                final int[] specialUid = victim != null ? victim.specialUid : new int[20];
-                final String[] durationParts = parts[1].split(" +");
-
-                TimeUnit unit = TimeUnit.HOURS;
-                long duration;
-                try {
-                    duration = Long.parseLong(durationParts[0].trim());
-                    if (durationParts.length == 2) {
-                        final String unitStr = durationParts[1].trim();
-                        if (unitStr.contains("second"))
-                            unit = TimeUnit.SECONDS;
-                        else if (unitStr.contains("minute"))
-                            unit = TimeUnit.MINUTES;
-                        else if (unitStr.contains("hour"))
-                            unit = TimeUnit.HOURS;
-                        else if (unitStr.contains("day"))
-                            unit = TimeUnit.DAYS;
-                        else if (unitStr.contains("week")) {
-                            unit = TimeUnit.DAYS;
-                            duration *= 7;
-                        } else if (unitStr.contains("month")) {
-                            unit = TimeUnit.DAYS;
-                            duration *= 30;
-                        } else if (unitStr.contains("year")) {
-                            unit = TimeUnit.DAYS;
-                            duration *= 365;
-                        } else if (unitStr.contains("decade")) {
-                            unit = TimeUnit.DAYS;
-                            duration *= 3652;
-                        } else if (unitStr.contains("century")) {
-                            unit = TimeUnit.DAYS;
-                            duration *= 36524;
-                        }
-                    }
-                } catch (Exception ex) {
-                    player.sendf("Error parsing duration. Syntax: duration [minute(s)|hour(s)|day(s)]");
-                    return false;
-                }
-
-                final Time time = Time.create(duration, unit);
-                final String reason = parts[2].trim();
-                if (reason.isEmpty()) {
-                    player.sendf("Supply a reason for your doing");
-                    return false;
-                }
-                final PunishmentHolder holder = PunishmentManager.getInstance().get(victimName);
-                final Punishment old = holder == null ? null : holder.get(combination);
-                final String ipAddress = ip;
-
-                TaskManager.submit(new Task(200, "Punishment finishing up") {
+                final int mac = other != null ? other.getUID() : PlayerLoading.getProperty(victim, IOData.LAST_MAC).get().getAsInt();
+                final int[] uid = other != null ? other.specialUid : new int[20];
+                final Time time = Time.create(duration, unit.getUnit());
+                final PunishmentHolder holder = PunishmentManager.getInstance().get(victim);
+                final Punishment old = holder != null ? holder.get(combination) : null;
+                final String ip = protocol;
+                TaskManager.submit(new Task(200L, "Finishing Punishment") {
                     @Override
-                    protected void execute() {
+                    public void execute() {
                         stop();
                         if (holder != null && old != null) {
                             old.setIssuer(player);
                             old.getTime().setStartTime(System.currentTimeMillis());
                             old.getTime().set(time);
                             old.setReason(reason);
-                            if (victim != null)
-                                old.send(victim, true);
+                            if (other != null) {
+                                old.send(other, true);
+                            }
                             old.send(player, true);
                             old.update();
                         } else {
-                            final Punishment punishment = Punishment.create(player, victimName, ipAddress, mac, specialUid, combination, time, reason);
-                            if (victim != null)
-                                punishment.send(victim, true);
+                            final Punishment punishment = Punishment.create(player, victim, ip, mac, uid, combination, time, reason);
+                            if (other != null) {
+                                punishment.send(other, true);
+                            }
                             punishment.send(player, true);
                             punishment.apply();
                             PunishmentManager.getInstance().add(punishment);
                             punishment.insert();
                         }
-                        player.sendMessage("Successfully punished player " + Misc.formatPlayerName(victimName) + ".");
+                        player.sendf("[Punished]:%s,%s,%s,%s,%s", TextUtils.titleCase(victim), capitalize(unit), reason, capitalize(target), capitalize(type));
                     }
                 });
                 return true;
@@ -141,9 +90,95 @@ public class PunishCommand extends Command {
 
             @Override
             public void stopTask() {
-                player.sendMessage("Task timed out... Please try again at a later time.");
+                player.sendf("Task Timed out punished player %s. Please try again later...", TextUtils.titleCase(victim));
             }
         });
         return true;
+    }
+
+    private String capitalize(final Object value) {
+        return Character.toString(String.valueOf(value).charAt(0)).toUpperCase() + String.valueOf(value).substring(1).toLowerCase();
+    }
+
+    private enum Unit {
+        SECOND(TimeUnit.SECONDS) {
+            @Override
+            public int getDuration(int value) {
+                return value;
+            }
+        },
+        MINUTE(TimeUnit.MINUTES) {
+            @Override
+            public int getDuration(int value) {
+                return value;
+            }
+        },
+        HOUR(TimeUnit.HOURS) {
+            @Override
+            public int getDuration(int value) {
+                return value;
+            }
+        },
+        DAY(TimeUnit.DAYS) {
+            @Override
+            public int getDuration(int value) {
+                return value;
+            }
+        },
+        WEEK(TimeUnit.DAYS) {
+            @Override
+            public int getDuration(int value) {
+                return value * 7;
+            }
+        },
+        MONTH(TimeUnit.DAYS) {
+            @Override
+            public int getDuration(int value) {
+                return value * 30;
+            }
+        },
+        YEAR(TimeUnit.DAYS) {
+            @Override
+            public int getDuration(int value) {
+                return value * 365;
+            }
+        },
+        DECADE(TimeUnit.DAYS) {
+            @Override
+            public int getDuration(int value) {
+                return value * 3652;
+            }
+        },
+        CENTURY(TimeUnit.DAYS) {
+            @Override
+            public int getDuration(int value) {
+                return value * 36524;
+            }
+        };
+
+        private final TimeUnit unit;
+
+        Unit(TimeUnit unit) {
+            this.unit = unit;
+        }
+
+        public TimeUnit getUnit() {
+            return unit;
+        }
+
+        public abstract int getDuration(int value);
+
+        public static Unit getUnit(final String value) {
+            return value.toLowerCase().contains(String.valueOf(SECOND).toLowerCase())
+                    ? SECOND : value.toLowerCase().contains(String.valueOf(MINUTE).toLowerCase())
+                    ? MINUTE : value.toLowerCase().contains(String.valueOf(HOUR).toLowerCase())
+                    ? HOUR : value.toLowerCase().contains(String.valueOf(DAY).toLowerCase())
+                    ? DAY : value.toLowerCase().contains(String.valueOf(WEEK).toLowerCase())
+                    ? WEEK : value.toLowerCase().contains(String.valueOf(MONTH).toLowerCase())
+                    ? MONTH : value.toLowerCase().contains(String.valueOf(YEAR).toLowerCase())
+                    ? YEAR : value.toLowerCase().contains(String.valueOf(DECADE).toLowerCase())
+                    ? DECADE : value.toLowerCase().contains(String.valueOf(CENTURY).toLowerCase())
+                    ? CENTURY : null;
+        }
     }
 }

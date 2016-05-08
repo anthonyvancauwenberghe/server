@@ -71,32 +71,6 @@ public class AdministratorCommands implements NewCommandExtension {
                 new GetFromCharFileCommand("getmail", Time.TEN_SECONDS, IOData.E_MAIL),
                 new GetFromCharFileCommand("getpin", Time.TEN_SECONDS, IOData.BANK_PIN),
                 new GetFromCharFileCommand("getip", Time.TEN_SECONDS, IOData.LAST_IP),
-                new Command("spece", Time.TEN_SECONDS, new CommandInput<String>(PlayerLoading::playerExists, "String", "An Existing Player")) {
-                    @Override
-                    protected boolean execute(Player player, String[] input) {
-                        final String target = input[0];
-                        player.sendf("Getting %s's Password... Please be patient.", Misc.formatPlayerName(target));
-                        GameEngine.submitIO(new EngineTask<Boolean>("Get player password", 4, TimeUnit.SECONDS) {
-                            @Override
-                            public Boolean call() throws Exception {
-                                Optional<JsonElement> playerData = PlayerLoading.getProperty(target, IOData.PASSWORD);
-                                if (player == null)
-                                    return false;
-                                if (playerData.isPresent())
-                                    player.sendf("[%s]:%s", Misc.formatPlayerName(target), EncryptionStandard.decryptPassword(playerData.get().getAsString()));
-                                else
-                                    player.sendf("Unable to get %s's password.", Misc.formatPlayerName(target));
-                                return true;
-                            }
-
-                            @Override
-                            public void stopTask() {
-                                player.sendMessage("Request timed out... Please try again at a later point.");
-                            }
-                        });
-                        return true;
-                    }
-                },
                 new Command("removeverifycode", new CommandInput<String>(World::playerIsOnline, "Player", "An Online Player")) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
@@ -292,11 +266,15 @@ public class AdministratorCommands implements NewCommandExtension {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         final Player target = World.getPlayerByName(input[0].trim());
+                        if (player == target) {
+                            player.sendMessage("You cannot demote yourself.");
+                            return true;
+                        }
                         if (Rank.getPrimaryRankIndex(target) > Rank.getPrimaryRankIndex(target)) {
                             player.sendf("You cannot demote player '%s'.", TextUtils.optimizeText(target.getName()));
                             return true;
                         }
-                        Arrays.asList(Rank.values()).stream().filter(rank -> rank.ordinal() > Rank.SUPER_DONATOR.ordinal()).forEach(rank -> target.setPlayerRank(Rank.removeAbility(target, rank)));
+                        Arrays.asList(Rank.values()).stream().filter(rank -> rank.ordinal() > Rank.PLAYER.ordinal()).forEach(rank -> target.setPlayerRank(Rank.removeAbility(target, rank)));
                         player.sendf("%s has been demoted. current abilities:", TextUtils.titleCase(target.getName()));
                         Arrays.asList(Rank.values()).stream().filter(rank -> Rank.hasAbility(target, rank)).forEach(rank -> player.sendf("%s%s", rank.isAbilityToggled(target, rank) ? "@gre@" : "@red@", rank));
                         return true;
@@ -368,13 +346,7 @@ public class AdministratorCommands implements NewCommandExtension {
                 new Command("reloadshops") {
                     @Override
                     protected boolean execute(Player player, String[] input) {
-                        try {
-                            ShopManager.loadShops("./data/newshops.cfg");
-                        } catch (IOException ex) {
-                            Server.getLogger().log(Level.SEVERE, "Error Reloading Shops.", ex);
-                            player.sendMessage("Failed to reload shops.");
-                            return true;
-                        }
+                        ShopManager.reloadShops();
                         player.sendMessage("Reloaded Shops.");
                         return true;
                     }
@@ -475,7 +447,7 @@ public class AdministratorCommands implements NewCommandExtension {
                         return true;
                     }
                 },
-                new Command("setelo", new CommandInput<Integer>(integer -> integer > Integer.MIN_VALUE && integer < Integer.MAX_VALUE, "Integer", String.format("an Amount between %,d & %,d", Integer.MIN_VALUE, Integer.MAX_VALUE))) {
+                new Command("setelo", new CommandInput<Integer>(integer -> integer > 1200 && integer < 2500, "Integer", String.format("an Amount between %,d & %,d", Integer.MIN_VALUE, Integer.MAX_VALUE))) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         player.getPoints().setEloRating(Integer.parseInt(input[0].trim()));
@@ -485,16 +457,7 @@ public class AdministratorCommands implements NewCommandExtension {
                 new Command("checkhax", new CommandInput<String>(string -> string != null, "String", "Player Name")) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
-                        final String name = input[1].trim();
-                        final List<PossibleHack> list = PossibleHacksHolder.getList();
-                        if (list.isEmpty()) {
-                            player.sendf("Player %s doesn't seem to have any account issues so far.", TextUtils.titleCase(player.getName()));
-                        } else {
-                            player.sendf("@dre@Hacks for player %s", name);
-                        }
-                        list.stream().forEach(hack -> {
-                            player.sendf("%s |@blu@%s@bla@| ", hack.toString(), hack.dateString());
-                        });
+                        PossibleHacksHolder.getInstance().check(player, input[0].toLowerCase().trim());
                         return true;
                     }
                 },

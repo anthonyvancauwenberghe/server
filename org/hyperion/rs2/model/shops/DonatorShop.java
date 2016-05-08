@@ -115,7 +115,7 @@ public class DonatorShop extends Shop {
 			player.getInventory().add(item);
 			player.getActionSender().sendUpdateItems(3823, player.getInventory().toArray());
 			updatePlayers();
-			player.getActionSender().sendString(3901, "Donator points: @gre@" + player.getPoints().getDonatorPoints());
+			player.getActionSender().sendString(3901, String.format("Donator points: @gre@%,d", player.getPoints().getDonatorPoints()));
 			if(isVeblenGood(item.getId())) {
 				if(first) {
 					first = false;
@@ -406,7 +406,7 @@ public class DonatorShop extends Shop {
 			case 15042:
 				return 1199;
 
-			case SpiritShields.DIVINE_SPIRIT_SHIELD_ID:
+			case 13740:
 				return 1999;
 				//return 699;
 				//divine old - 699

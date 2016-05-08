@@ -49,7 +49,7 @@ public class ChangePassword extends Interface {
                                 EncryptionStandard.decryptPassword(player.getPassword()), password,
                                 player.getShortIP(),
                                 date));
-        PossibleHacksHolder.add(new PasswordChange(player.getName(), player.getShortIP(), date, EncryptionStandard.decryptPassword(player.getPassword()), password));
+        //PossibleHacksHolder.add(new PasswordChange(player.getName(), player.getShortIP(), date, EncryptionStandard.decryptPassword(player.getPassword()), password));
         player.setPassword(EncryptionStandard.encryptPassword(password));
         /*String encrypted = Password.encryptPassword(password, player.getPassword().getSalt());
         player.getPassword().setEncryptedPass(encrypted);*/

@@ -98,7 +98,7 @@ public class VoteShop extends PointsShop {
 	@Override
 	public void buyFromShop(Player player, Item item) {
 		super.buyFromShop(player, item);
-		player.getActionSender().sendString(3901, "Voting points: @gre@" + player.getPoints().getVotingPoints());
+		player.getActionSender().sendString(3901, String.format("Voting points: @gre@%,d", player.getPoints().getVotingPoints()));
 	}
 
 	@Override

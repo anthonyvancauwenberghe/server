@@ -12,6 +12,7 @@ import org.hyperion.engine.GameEngine;
 import org.hyperion.map.WorldMap;
 import org.hyperion.rs2.ConnectionHandler;
 import org.hyperion.rs2.model.*;
+import org.hyperion.rs2.model.container.ShopManager;
 import org.hyperion.rs2.model.content.ContentManager;
 import org.hyperion.rs2.model.content.DoorManager;
 import org.hyperion.rs2.model.content.clan.ClanManager;
@@ -64,7 +65,7 @@ public final class GameLoader {
         //TODO FIX THIS
         //serviceLoader.execute(CleanCharacterFiles::startup);
         serviceLoader.execute(NPCDefinition::init);
-        serviceLoader.execute(PossibleHacksHolder::init);
+        serviceLoader.execute(PossibleHacksHolder::getInstance);
         serviceLoader.execute(RoomDefinition::load);
         serviceLoader.execute(ItemDefinition::init);
         serviceLoader.execute(ClanManager::load);
@@ -76,6 +77,7 @@ public final class GameLoader {
         serviceLoader.execute(ContentManager::init);
         serviceLoader.execute(Wilderness::init);
         serviceLoader.execute(GlobalItemManager::init);
+        serviceLoader.execute(ShopManager::init);
         serviceLoader.execute(World::loadConfiguration);
         serviceLoader.execute(World::registerGlobalEvents);
         serviceLoader.execute(DbHub::init);

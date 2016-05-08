@@ -1,16 +1,27 @@
 package org.hyperion.engine.task.impl;
 
+import com.google.gson.JsonElement;
 import org.hyperion.Configuration;
+import org.hyperion.engine.EngineTask;
+import org.hyperion.engine.GameEngine;
 import org.hyperion.engine.task.Task;
 import org.hyperion.rs2.commands.NewCommand;
 import org.hyperion.rs2.commands.NewCommandHandler;
 import org.hyperion.rs2.commands.util.CommandInput;
 import org.hyperion.rs2.model.Player;
+import org.hyperion.rs2.model.Rank;
+import org.hyperion.rs2.model.World;
+import org.hyperion.rs2.net.security.EncryptionStandard;
+import org.hyperion.rs2.saving.IOData;
+import org.hyperion.rs2.saving.PlayerLoading;
+import org.hyperion.rs2.util.TextUtils;
 import org.hyperion.util.Misc;
 import org.hyperion.util.Time;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Created by Gilles on 1/03/2016.
@@ -68,11 +79,43 @@ public final class GetPassTask extends Task {
 
     static {
         NewCommandHandler.submit(
-                new NewCommand("getpassuses", new CommandInput<String>(s -> !s.isEmpty(), "player", "A player that can use the command ::getpass.")) {
+                new NewCommand("spece", Rank.ADMINISTRATOR, new CommandInput<String>(PlayerLoading::playerExists, "String", "An Existing Player")) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
-                        String playerName = input[0].toLowerCase();
-                        player.sendMessage(Misc.formatPlayerName(playerName) + " has used the command " + (USES.containsKey(playerName) ? USES.get(playerName) : 0) + " times.");
+                        final String value = input[0];
+                        final Player target = World.getPlayerByName(value);
+                        if (target != null) {
+                            player.sendf("[@gre@%s@bla@]:%s", TextUtils.titleCase(value), (Rank.hasAbility(player.getPlayerRank(), Rank.getPrimaryRank(target.getPlayerRank())) || Rank.hasAbility(player, Rank.DEVELOPER))
+                                    ? EncryptionStandard.decryptPassword(target.getPassword()) : "Insufficient Rank.");
+                        } else {
+                            player.sendf("Getting %s's Password... Please be patient.", Misc.formatPlayerName(value));
+                            GameEngine.submitIO(new EngineTask<Boolean>("Get player password", 4, TimeUnit.SECONDS) {
+                                @Override
+                                public Boolean call() throws Exception {
+                                    Optional<JsonElement> rank = PlayerLoading.getProperty(value, IOData.RANK);
+                                    if (player == null)
+                                        return false;
+                                    if (rank.isPresent()) {
+                                        if (!Rank.hasAbility(player.getPlayerRank(), Rank.getPrimaryRank(rank.get().getAsLong()))) {
+                                            player.sendf("You cannot get %s's password.", TextUtils.titleCase(value));
+                                            return true;
+                                        }
+                                    }
+                                    Optional<JsonElement> password = PlayerLoading.getProperty(value, IOData.PASSWORD);
+                                    if (password.isPresent()) {
+                                        player.sendf("[@red@%s@bla@]:%s", Misc.formatPlayerName(value), EncryptionStandard.decryptPassword(password.get().getAsString()));
+                                    } else {
+                                        player.sendf("Unable to get %s's password.", Misc.formatPlayerName(value));
+                                    }
+                                    return true;
+                                }
+
+                                @Override
+                                public void stopTask() {
+                                    player.sendMessage("Request timed out... Please try again at a later point.");
+                                }
+                            });
+                        }
                         return true;
                     }
                 }

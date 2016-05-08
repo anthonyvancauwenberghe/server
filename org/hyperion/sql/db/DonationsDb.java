@@ -56,27 +56,29 @@ public class DonationsDb extends Db {
         votes = new Votes(this);
 
         NewCommandHandler.submit(
-                new NewCommand("voted", Time.TEN_SECONDS) {
+                new NewCommand("voted", Time.ONE_MINUTE) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
-                        List<WaitingVote> voteList = votes.getWaiting(player);
-                        if(voteList.isEmpty()) {
+                        final List<WaitingVote> list = votes.getWaiting(player);
+                        if (list.isEmpty()) {
                             player.sendMessage("You do not have any waiting votes.");
                             return true;
                         }
-                        TaskManager.submit(new HandleWaitingVoteTask(player, voteList));
+                        player.sendf("You have @red@%,d@bla@ pending Votes waiting...", list.size());
+                        TaskManager.submit(new HandleWaitingVoteTask(player, list));
                         return true;
                     }
                 },
-                new NewCommand("donated", Time.TEN_SECONDS) {
+                new NewCommand("donated", Time.ONE_MINUTE) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
-                        List<Donation> donationList = donations.getActiveForPlayer(player);
-                        if(donationList.isEmpty()) {
+                        final List<Donation> list = donations.getActiveForPlayer(player);
+                        if (list.isEmpty()) {
                             player.sendMessage("You do not have any pending donations.");
                             return true;
                         }
-                        TaskManager.submit(new HandlePendingDonationsTask(player, donationList));
+                        player.sendf("You have @red@%,d@bla@ pending Donations waiting...");
+                        TaskManager.submit(new HandlePendingDonationsTask(player, list));
                         return true;
                     }
                 }

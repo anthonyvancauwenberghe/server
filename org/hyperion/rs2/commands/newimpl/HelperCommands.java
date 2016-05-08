@@ -63,8 +63,9 @@ public class HelperCommands implements NewCommandExtension {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         final Player target = World.getPlayerByName(input[0].trim());
-                        if (Rank.isStaffMember(target)) {
-                            player.sendMessage("You cannot parse this command on staff members.");
+                        if ((target.getPosition().inPvPArea() || target.duelAttackable > 0)
+                                && !Rank.hasAbility(player, Rank.DEVELOPER)) {
+                            player.sendMessage("This player is currently unavailable for teleport.");
                             return true;
                         }
                         Magic.teleport(target, Position.create(2607, 9672, 0), false);
@@ -81,24 +82,6 @@ public class HelperCommands implements NewCommandExtension {
                         return true;
                     }
                 },
-                new Command("jail", new CommandInput<String>(World::playerIsOnline, "Player", "An Online Player")) {
-                    @Override
-                    protected boolean execute(Player player, String[] input) {
-                        final Player target = World.getPlayerByName(input[0].trim());
-                        if (target.getPosition().inPvPArea()
-                                || target.duelAttackable > 0
-                                || Rank.isStaffMember(target)
-                                || Jail.inJail(target)) {
-                            player.sendf("This player is currently %s.", target.getPosition().inPvPArea() ? "in a PVP area"
-                                    : target.duelAttackable > 0 ? "in a Duel" :
-                                    Rank.isStaffMember(target) ? "unavailable for teleport" :
-                                            Jail.inJail(target) ? "in Jail" : "unavailable");
-                            return true;
-                        }
-                        target.setTeleportTarget(Jail.POSITION);
-                        return true;
-                    }
-                },
                 new Command("tojail") {
                     @Override
                     protected boolean execute(Player player, String[] input) {
@@ -110,35 +93,11 @@ public class HelperCommands implements NewCommandExtension {
                         return true;
                     }
                 },
-                new Command("unjail", new CommandInput<String>(World::playerIsOnline, "Player", "An Online Player")) {
-                    @Override
-                    protected boolean execute(Player player, String[] input) {
-                        final Player target = World.getPlayerByName(input[0].trim());
-                        if (Rank.isStaffMember(target)
-                                || !Jail.inJail(target)) {
-                            player.sendf("Player is currently %s.", Rank.isStaffMember(target) ? "unavailable for teleport" :
-                                    !Jail.inJail(target) ? "not in jail" : "unavailable");
-                            return true;
-                        }
-                        target.setTeleportTarget(Zanaris.POSITION);
-                        return true;
-                    }
-                },
-                new Command("tounjail") {
-                    @Override
-                    protected boolean execute(Player player, String[] input) {
-                        if (player.duelAttackable > 0) {
-                            player.sendMessage("You cannot teleport away from a duel.");
-                            return false;
-                        }
-                        player.setTeleportTarget(Zanaris.POSITION);
-                        return true;
-                    }
-                },
                 new Command("authenticator", Time.FIVE_SECONDS) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
-                        PlayerAuthenticationGenerator.startAuthenticationDialogue(player);
+                        //PlayerAuthenticationGenerator.startAuthenticationDialogue(player);
+                        player.sendMessage("@red@Currently Disabled.");
                         return true;
                     }
                 },

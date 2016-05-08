@@ -16,9 +16,7 @@ public final class CustomTriviaManager{
 
     public static void addNew(final CustomTrivia trivia){
         LIST.add(trivia);
-        for(final Player p : World.getPlayers())
-            if(p != null)
-                trivia.send(p, true);
+        World.getPlayers().stream().filter(p -> p != null).forEach(p -> trivia.send(p, true));
     }
 
     public static void send(final Player player, final boolean alert){

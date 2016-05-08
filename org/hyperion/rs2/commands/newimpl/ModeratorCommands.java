@@ -93,24 +93,30 @@ public class ModeratorCommands implements NewCommandExtension {
                 new Command("altsinwildy") {
                     @Override
                     protected boolean execute(Player player, String[] input) {
-                        for (final Player primary : World.getPlayers()) {
-                            for (final Player secondary : World.getPlayers()) {
-                                if (primary.equals(secondary)
-                                        || (!primary.getPosition().inPvPArea() || !secondary.getPosition().inPvPArea())
-                                        || (!Objects.equals(primary.getShortIP(), secondary.getShortIP()) && primary.getUID() != secondary.getUID())) {
-                                    continue;
-                                }
-                                final int x = Math.abs(primary.getPosition().getX() - secondary.getPosition().getX());
-                                final int y = Math.abs(primary.getPosition().getY() - secondary.getPosition().getY());
-                                if (x > 10 && y > 10) {
-                                    continue;
-                                }
-                                player.sendf("%s (%d,%d,%d) & %s (%d,%d,%d)",
-                                        TextUtils.optimizeText(primary.getName()), TextUtils.optimizeText(secondary.getName()),
-                                        primary.getPosition().getX(), primary.getPosition().getY(), primary.getPosition().getZ(),
-                                        secondary.getPosition().getX(), secondary.getPosition().getY(), secondary.getPosition().getZ());
+                        final Map<String, List<Player>> map = new HashMap<>();
+                        World.getPlayers().stream().filter(target -> target != null &&
+                                (target.getLocation().equals(Locations.Location.WILDERNESS)
+                                || target.getLocation().equals(Locations.Location.WILDERNESS_MULTI)
+                                || target.getLocation().equals(Locations.Location.WILDERNESS_DUNGEON)
+                                || target.getLocation().equals(Locations.Location.KBD_WILDERNESS_ENTRANCE))).forEach(target -> {
+                            final String protocol = target.getShortIP();
+                            if (!map.containsKey(protocol)) {
+                                map.put(protocol, new ArrayList<>());
                             }
-                        }
+                            if (!map.get(protocol).contains(target)) {
+                                map.get(protocol).add(target);
+                            }
+                        });
+                        map.keySet().forEach(protocol -> {
+                            final List<Player> list = map.get(protocol);
+                            if (list.size() > 1) {
+                                player.sendMessage("@red@----------");
+                                list.forEach(target -> {
+                                    player.sendf("[%s]:%s, %d, %d, %d", protocol.substring(0, protocol.lastIndexOf(".")), TextUtils.titleCase(target.getName()), target.getPosition().getX(), target.getPosition().getY(), target.getPosition().getZ());
+                                });
+                                player.sendMessage("@red@----------");
+                            }
+                        });
                         return true;
                     }
                 },
@@ -216,7 +222,7 @@ public class ModeratorCommands implements NewCommandExtension {
                         return true;
                     }
                 },
-                new Command("xtele", 0, new CommandInput<Integer>(integer -> integer > 0, "Integer", "X"), new CommandInput<Integer>(integer -> integer > 0, "Integer", "Y"), new CommandInput<Integer>(integer -> integer > -1, "Integer", "Z")) {
+                new Command("tele", 0, new CommandInput<Integer>(integer -> integer > 0, "Integer", "X"), new CommandInput<Integer>(integer -> integer > 0, "Integer", "Y"), new CommandInput<Integer>(integer -> integer > -1, "Integer", "Z")) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         if (player.getPosition().inPvPArea() && !Rank.hasAbility(player, Rank.ADMINISTRATOR)
@@ -411,20 +417,6 @@ public class ModeratorCommands implements NewCommandExtension {
                         final Player target = World.getPlayerByName(input[0].trim());
                         target.setKillStreak(0);
                         player.sendf("%s KS set to 0.", TextUtils.optimizeText(target.getName()));
-                        return true;
-                    }
-                },
-                new Command("tele", new CommandInput<Integer>(integer -> integer > -1 && integer < 20001, "Integer", "X Coordinate"), new CommandInput<Integer>(integer -> integer > -1 && integer < 20001, "Integer", "Y Coordinate"), new CommandInput<Integer>(integer -> integer > -1 && integer < 1001, "Integer", "Z Coordinate")) {
-                    @Override
-                    protected boolean execute(Player player, String[] input) {
-                        if (player.duelAttackable > 0) {
-                            player.sendf("You cannot teleport out of a duel.");
-                            return true;
-                        }
-                        final int x = Integer.parseInt(input[0].trim());
-                        final int y = Integer.parseInt(input[1].trim());
-                        final int z = Integer.parseInt(input[2].trim());
-                        player.setTeleportTarget(Position.create(x, y, z));
                         return true;
                     }
                 },

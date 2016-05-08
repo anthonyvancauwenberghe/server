@@ -12,7 +12,7 @@ import java.util.List;
 public interface VoteDao extends SqlDao {
 
     @SqlQuery("SELECT * FROM waitingVotes WHERE processed = 0 AND realUsername = :username")
-    List<WaitingVote> getWaiting(@Bind(":username") final String username);
+    List<WaitingVote> getWaiting(@Bind("username") final String username);
 
     @SqlUpdate("UPDATE waitingVotes SET runelocusProcessed = 1 WHERE `index` = :index")
     int processRunelocus(@Bind("index") final int index);

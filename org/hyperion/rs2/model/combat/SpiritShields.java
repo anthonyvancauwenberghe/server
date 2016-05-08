@@ -5,39 +5,48 @@ import org.hyperion.rs2.model.Skills;
 import org.hyperion.util.Misc;
 
 /**
- * @author SaosinHax
+ * @author DrHales
  */
 public class SpiritShields {
 
-	public static final int DIVINE_SPIRIT_SHIELD_ID = 13740;
-	public static final int ELYSIAN_SPIRIT_SHIELD_ID = 13742;
-    public static final int RED_DRAGON_KITE = 18739;
+    public static int applyEffects(final CombatEntity entity, final int value) {
+        final Shields shield = Shields.getShield(CombatAssistant.getShieldId(entity.getPlayer().getEquipment()));
+        return !(entity.getEntity() instanceof Player) || System.currentTimeMillis() - entity.getPlayer().getExtraData().getLong("ovlreset1") < 15000L
+                ? value : shield != null
+                ? shield.value(entity, value) : value;
+    }
 
-	/**
-	 * Doesn't seem to work on players? I'll check into that - lower prayer for divine?
-	 */
-	public static int applyEffects(CombatEntity defender, int damg) {
-        if(defender == null) {
-            return 0;
+    private enum Shields {
+        DIVINE_SPIRIT_SHIELD {
+            @Override
+            public int value(final CombatEntity entity, final int value) {
+                if (entity.getPlayer().getSkills().getLevel(Skills.PRAYER) > 0) {
+                    entity.getPlayer().getSkills().detractLevel(Skills.PRAYER, (int) (value * 0.25));
+                    return (int) (value * 0.75);
+                }
+                return value;
+            }
+        },
+        ELYSIAN_SPIRIT_SHIELD {
+            @Override
+            public int value(final CombatEntity entity, final int value) {
+                return Misc.random(9) <= 6 ? (int) (value * 0.75) : value;
+            }
+        },
+        RED_DRAGON_KITESHIELD {
+            @Override
+            public int value(final CombatEntity entity, final int value) {
+                return (int) (value * 0.92);
+            }
+        };
+
+        public static Shields getShield(final int value) {
+            return value == 13740
+                    ? DIVINE_SPIRIT_SHIELD : value == 13742
+                    ? ELYSIAN_SPIRIT_SHIELD : value == 18739
+                    ? RED_DRAGON_KITESHIELD : null;
         }
-		if(! (defender.getEntity() instanceof Player))
-			return damg;
-        if(System.currentTimeMillis() - defender.getPlayer().getExtraData().getLong("ovlreset1") < 15000L)
-            return damg;
-		int shieldId = CombatAssistant.getShieldId(defender.getPlayer().getEquipment());
-		switch(shieldId) {
-			case DIVINE_SPIRIT_SHIELD_ID:
-				if(defender.getPlayer().getSkills().getLevel(Skills.PRAYER) > 0) {
-					defender.getPlayer().getSkills().detractLevel(Skills.PRAYER, (int) (damg * 0.25));
-					return (int) (damg * 0.75);
-				}
-			case ELYSIAN_SPIRIT_SHIELD_ID:
-				if(Misc.random(9) <= 6)
-					return (int) (damg * 0.75);
-            case RED_DRAGON_KITE:
-                return (int)(damg * 0.92);
-		}
 
-		return damg;
-	}
+        public abstract int value(CombatEntity entity, int value);
+    }
 }

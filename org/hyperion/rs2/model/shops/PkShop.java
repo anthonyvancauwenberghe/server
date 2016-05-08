@@ -69,7 +69,7 @@ public class PkShop extends PointsShop {
     @Override
     public void buyFromShop(Player player, Item item) {
         super.buyFromShop(player, item);
-        player.getActionSender().sendString(3901, "ArteroPK points: @gre@" + player.getPoints().getPkPoints());
+        player.getActionSender().sendString(3901, String.format("ArteroPK points: @gre@%,d", player.getPoints().getPkPoints()));
     }
 
     public static int getValue(int itemId) {

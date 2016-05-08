@@ -10,10 +10,17 @@ import org.hyperion.util.Misc;
 public class SpiritShields {
 
     public static int applyEffects(final CombatEntity entity, final int value) {
+        if (entity == null) {
+            return 0;
+        }
+        if (!(entity.getEntity() instanceof Player)) {
+            return value;
+        }
         final Shields shield = Shields.getShield(CombatAssistant.getShieldId(entity.getPlayer().getEquipment()));
-        return !(entity.getEntity() instanceof Player) || System.currentTimeMillis() - entity.getPlayer().getExtraData().getLong("ovlreset1") < 15000L
-                ? value : shield != null
-                ? shield.value(entity, value) : value;
+        if (shield == null) {
+            return value;
+        }
+        return shield.value(entity, value);
     }
 
     private enum Shields {

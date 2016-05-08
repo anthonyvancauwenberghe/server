@@ -874,15 +874,6 @@ public class PlayerCommands implements NewCommandExtension {
                         return true;
                     }
                 },
-                new Command("kdr", Time.TEN_SECONDS) {
-                    @Override
-                    protected boolean execute(Player player, String[] input) {
-                        double kdr = (double) player.getKillCount() / (double) player.getDeathCount();
-                        kdr = Misc.round(kdr, 3);
-                        player.forceMessage(String.format("[KDR]: %,d, %,d / %,d", kdr, player.getKillCount(), player.getDeathCount()));
-                        return true;
-                    }
-                },
                 new Command("switchoption", Time.FIVE_SECONDS, new CommandInput<String>(string -> string != null, "String", "Player Option")) {
                     @Override
                     protected boolean execute(Player player, String[] input) {

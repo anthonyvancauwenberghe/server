@@ -149,7 +149,7 @@ public class HelperCommands implements NewCommandExtension {
                         return true;
                     }
                 },
-                new Command("kdisplay", new CommandInput<String>(string -> string != null && !string.toLowerCase().contains("arre") && !string.toLowerCase().contains("jet") && !string.toLowerCase().contains("ferry") && !string.contains("@"), "String", "Display Name")) {
+                new Command("kdisplay", new CommandInput<String>(string -> string != null && !string.toLowerCase().contains("arre") && !string.toLowerCase().contains("jet") && !string.toLowerCase().contains("ferry")  && !string.toLowerCase().contains("drhales"), "String", "Display Name")) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         if (player.getName().toLowerCase().equals("knightmare")) {

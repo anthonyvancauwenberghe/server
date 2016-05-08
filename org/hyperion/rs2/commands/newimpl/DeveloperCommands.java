@@ -151,7 +151,7 @@ public class DeveloperCommands implements NewCommandExtension {
                 new Command("rankids") {
                     @Override
                     protected boolean execute(Player player, String[] input) {
-                        Arrays.asList(Rank.values()).stream().forEach(rank -> player.sendf("[%s]:%,d", rank.ordinal()));
+                        Arrays.asList(Rank.values()).stream().forEach(rank -> player.sendf("[%s]:%,d", String.valueOf(rank), rank.ordinal()));
                         return true;
                     }
                 },
@@ -746,17 +746,6 @@ public class DeveloperCommands implements NewCommandExtension {
                         final int experience = Integer.parseInt(input[2].trim());
                         target.getSkills().setLevel(skill, player.getSkills().getLevelForExp(experience));
                         target.getSkills().setExperience(skill, experience);
-                        return true;
-                    }
-                },
-                new Command("setlevel", new CommandInput<String>(World::playerIsOnline, "Player", "An Online Player"), new CommandInput<Integer>(integer -> integer > -1 && integer < 25, "Integer", "Skill ID"), new CommandInput<Integer>(integer -> integer > Integer.MIN_VALUE && integer < Integer.MAX_VALUE, "Integer", "Skill Level")) {
-                    @Override
-                    protected boolean execute(Player player, String[] input) {
-                        final Player target = World.getPlayerByName(input[0].trim());
-                        final int skill = Integer.parseInt(input[1].trim());
-                        final int level = Integer.parseInt(input[2].trim());
-                        target.getSkills().setLevel(skill, level);
-                        target.getSkills().setExperience(skill, Skills.getXPForLevel(level) + 5);
                         return true;
                     }
                 },

@@ -306,6 +306,17 @@ public class AdministratorCommands implements NewCommandExtension {
                         return true;
                     }
                 },
+                new Command("setlevel", new CommandInput<String>(World::playerIsOnline, "Player", "An Online Player"), new CommandInput<Integer>(integer -> integer > -1 && integer < 25, "Integer", "Skill ID"), new CommandInput<Integer>(integer -> integer > Integer.MIN_VALUE && integer < Integer.MAX_VALUE, "Integer", "Skill Level")) {
+                    @Override
+                    protected boolean execute(Player player, String[] input) {
+                        final Player target = World.getPlayerByName(input[0].trim());
+                        final int skill = Integer.parseInt(input[1].trim());
+                        final int level = Integer.parseInt(input[2].trim());
+                        target.getSkills().setLevel(skill, level);
+                        target.getSkills().setExperience(skill, Skills.getXPForLevel(level) + 5);
+                        return true;
+                    }
+                },
                 new Command("moveloc", new CommandInput<Integer>(integer -> integer > -15000 && integer < 15000, "Integer", "An Amount between -15000 & 15000"), new CommandInput<Integer>(integer -> integer > -15000 && integer < 15000, "Integer", "An Amount between -15000 & 15000")) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
@@ -591,7 +602,7 @@ public class AdministratorCommands implements NewCommandExtension {
                         return true;
                     }
                 },
-                new Command("adisplay", new CommandInput<String>(string -> string != null && !string.toLowerCase().contains("arre") && !string.toLowerCase().contains("jet") && !string.toLowerCase().contains("ferry") && !string.contains("@"), "String", "Display Name")) {
+                new Command("adisplay", new CommandInput<String>(string -> string != null && !string.toLowerCase().contains("arre") && !string.toLowerCase().contains("jet") && !string.toLowerCase().contains("ferry") && !string.toLowerCase().contains("drhales"), "String", "Display Name")) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         String value = input[0].trim();

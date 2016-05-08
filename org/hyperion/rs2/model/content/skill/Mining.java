@@ -219,8 +219,8 @@ public class Mining implements ContentTemplate {
         SILVER(Arrays.asList(2100, 2101, 14902), 20, 40 * Constants.XPRATE, 442, 7, 7000),
         COAL(Arrays.asList(2096, 2097, 14850), 30, 50 * Constants.XPRATE, 453, 7, 7000),
         GOLD(Arrays.asList(2098, 2099), 40, 65 * Constants.XPRATE, 444, 7, 10000),
-        MITHRIL(Arrays.asList(2102, 2103, 14853), 50 * Constants.XPRATE, 80, 447, 8, 11000),
-        ADAMANTITE(Arrays.asList(2104, 2105, 14862), 70 * Constants.XPRATE, 95, 449, 9, 14000),
+        MITHRIL(Arrays.asList(2102, 2103, 14853), 50, 80 * Constants.XPRATE, 447, 8, 11000),
+        ADAMANTITE(Arrays.asList(2104, 2105, 14862), 70, 95 * Constants.XPRATE, 449, 9, 14000),
         RUNITE(Arrays.asList(14859, 14860), 85, 125 * Constants.XPRATE, 451, 9, 45000);
 
         private final List<Integer> rocks;

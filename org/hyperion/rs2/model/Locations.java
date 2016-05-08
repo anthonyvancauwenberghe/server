@@ -601,7 +601,9 @@ public class Locations {
                 return;
             }
             //This is a temp block of code for TESTING
-            player.sendMessage("Now entering: @dre@" + Misc.ucFirst(name()));
+            if (Rank.hasAbility(player, Rank.DEVELOPER)) {
+                player.sendMessage("Now entering: @dre@" + Misc.ucFirst(name()));
+            }
             enter(player);
         }
 

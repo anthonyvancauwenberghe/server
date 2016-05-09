@@ -102,13 +102,18 @@ public class ItemSpawning {
 		player.getInventory().add(new Item(id, amount));
 	}
 
-	public static boolean copyCheck(Player player) {
-		return (player.duelAttackable <= 0
-				|| !player.getPosition().inPvPArea()
-				|| !player.getPosition().inDuel()
-				|| !player.getPosition().inCorpBeastArea()
-				|| !player.getPosition().inArdyPvPArea()
-				|| player.cE.getOpponent() != null);
+	public static boolean copyCheck(final Player player) {
+		if (player.duelAttackable > 0)
+			return false;
+		if (player.getPosition().inPvPArea())
+			return false;
+		if (player.getPosition().inDuel())
+			return false;
+		if (player.getPosition().inCorpBeastArea())
+			return false;
+		if (player.getPosition().inArdyPvPArea())
+			return false;
+		return player.cE.getOpponent() == null;
 	}
 
 	public static boolean copyCheck(Item item, Player player) {

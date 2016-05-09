@@ -1,5 +1,9 @@
 package org.hyperion.rs2.model.punishment.cmd;
 
+import org.hyperion.engine.EngineTask;
+import org.hyperion.engine.GameEngine;
+import org.hyperion.engine.task.Task;
+import org.hyperion.engine.task.TaskManager;
 import org.hyperion.rs2.commands.NewCommand;
 import org.hyperion.rs2.commands.util.CommandInput;
 import org.hyperion.rs2.model.Player;
@@ -12,6 +16,8 @@ import org.hyperion.rs2.model.punishment.holder.PunishmentHolder;
 import org.hyperion.rs2.model.punishment.manager.PunishmentManager;
 import org.hyperion.rs2.saving.PlayerLoading;
 import org.hyperion.rs2.util.TextUtils;
+
+import java.util.concurrent.TimeUnit;
 
 public class UnPunishCommand extends NewCommand {
 
@@ -35,13 +41,23 @@ public class UnPunishCommand extends NewCommand {
             player.sendf("No %s found for %s", combination, TextUtils.titleCase(victim));
             return true;
         }
-        punishment.getTime().setExpired(true);
-        if (punishment.unapply()) {
-            punishment.send(punishment.getVictim(), true);
-        }
-        punishment.send(player, true);
-        punishment.getHolder().remove(punishment);
-        punishment.setActive(false);
+        GameEngine.submitIO(new EngineTask<Boolean>("Punishment Command", 8, TimeUnit.SECONDS) {
+            @Override
+            public Boolean call() throws Exception {
+                punishment.getTime().setExpired(true);
+                if (punishment.unapply()) {
+                    punishment.send(punishment.getVictim(), true);
+                }
+                punishment.send(player, true);
+                punishment.getHolder().remove(punishment);
+                punishment.setActive(false);
+                return true;
+            }
+
+            public void stopTask() {
+                player.sendf("Task Timed out UnPunishing player %s. Please try again later...", TextUtils.titleCase(victim));
+            }
+        });
         return true;
     }
 }

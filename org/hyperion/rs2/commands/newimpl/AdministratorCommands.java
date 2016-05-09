@@ -550,19 +550,6 @@ public class AdministratorCommands implements NewCommandExtension {
                         return true;
                     }
                 },
-                new Command("summonnpc", new CommandInput<Integer>(integer -> NPCDefinition.forId(integer) != null, "Integer", "NPC ID")) {
-                    @Override
-                    protected boolean execute(Player player, String[] input) {
-                        final NPC npc = NPCManager.addNPC(player.getPosition().getX(), player.getPosition().getY(), player.getPosition().getZ(), Integer.parseInt(input[0].trim()), -1);
-                        player.SummoningCounter = 6000;
-                        npc.ownerId = player.getIndex();
-                        Combat.follow(npc.getCombat(), player.getCombat());
-                        npc.summoned = true;
-                        player.cE.summonedNpc = npc;
-                        SummoningMonsters.openSummonTab(player, npc);
-                        return true;
-                    }
-                },
                 new Command("savepricelist") {
                     @Override
                     protected boolean execute(Player player, String[] input) {

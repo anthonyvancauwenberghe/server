@@ -41,6 +41,12 @@ public final class NewCommandHandler {
         return COMMANDS_LIST;
     }
 
+    private static List<String> disabled_list = new ArrayList<>();
+
+    public static List<String> getDisabled() {
+        return disabled_list;
+    }
+
     /**
      * This map keeps what command which player used. The CommandUsage keeps the time of it's creation,
      * therefor we can keep people from using commands multiple times in a certain time frame.
@@ -138,6 +144,10 @@ public final class NewCommandHandler {
      * @return Whether the command was found or not. If not it'll continuing searching.
      */
     public static boolean processCommand(String key, Player player, String input) {
+        if (disabled_list.contains(key)) {
+            player.sendf("Command '@red@%s@bla@' is currently disabled.", key);
+            return false;
+        }
         //First we check if the map actually contains this command
         if (!COMMANDS.containsKey(key)) {
             player.sendf("Command '@red@%s@bla@' was not found.", key);

@@ -78,8 +78,7 @@ public class Locations {
 
             @Override
             public boolean onDeath(Player player) {
-                player.setDead(false);
-                player.setPosition(Position.create(3096, 3471, 0));
+                player.setTeleportTarget(Position.create(3096, 3471, 0), false);
                 return true;
             }
         },

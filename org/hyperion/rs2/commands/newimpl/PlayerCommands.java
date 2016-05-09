@@ -52,17 +52,17 @@ import java.util.concurrent.TimeUnit;
  * Created by DrHales on 2/29/2016.
  */
 public class PlayerCommands implements NewCommandExtension {
-    
+
     private abstract class Command extends NewCommand {
         public Command(String key, long delay, CommandInput... requiredInput) {
             super(key, Rank.PLAYER, delay, requiredInput);
         }
-        
+
         public Command(String key, CommandInput... requiredInput) {
             super(key, Rank.PLAYER, requiredInput);
         }
     }
-    
+
     //<editor-fold defaultstate="collapsed" desc="Commands List">
     @Override
     public List<NewCommand> init() {
@@ -423,7 +423,7 @@ public class PlayerCommands implements NewCommandExtension {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         int id = Integer.parseInt(input[0].trim());
-                        player.sendf("Price of %s costs %,d coins, it sells for %,d coins.", ItemDefinition.forId(id).getName(), (int) NewGameMode.getUnitPrice(id), (int)(NewGameMode.getUnitPrice(id) * NewGameMode.SELL_REDUCTION));
+                        player.sendf("Price of %s costs %,d coins, it sells for %,d coins.", ItemDefinition.forId(id).getName(), (int) NewGameMode.getUnitPrice(id), (int) (NewGameMode.getUnitPrice(id) * NewGameMode.SELL_REDUCTION));
                         player.sendMessage("Incorrect? Please contact an admin.");
                         return true;
                     }
@@ -703,15 +703,21 @@ public class PlayerCommands implements NewCommandExtension {
                 new Command("copy", Time.THIRTY_SECONDS, new CommandInput<String>(World::playerIsOnline, "Player", "An Online Player")) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
-                        if (ItemSpawning.canSpawn(player, false)
-                                && !player.hardMode()
-                                && ItemSpawning.copyCheck(player)) {
-                            if (ContentEntity.getTotalAmountOfEquipmentItems(player) > 0) {
-                                player.sendMessage("You need to take off your armour before copying!");
-                            } else {
-                                final Player target = World.getPlayerByName(input[0].trim());
-                                if (!Rank.hasAbility(target, Rank.ADMINISTRATOR)) {
-                                    Arrays.asList(target.getEquipment().toArray()).stream().filter(item -> item != null && ItemSpawning.copyCheck(item, player)).forEach(item -> player.getEquipment().set(Equipment.getType(item).getSlot(), item));
+                        if (!ItemSpawning.copyCheck(player)) {
+                            return true;
+                        }
+                        if (ContentEntity.getTotalAmountOfEquipmentItems(player) > 0) {
+                            player.sendMessage("You need to take off your armour before copying!");
+                            return true;
+                        }
+                        final Player target = World.getPlayerByName(input[0].trim());
+                        if (Rank.hasAbility(target, Rank.ADMINISTRATOR)) {
+                            return true;
+                        }
+                        for (Item item : target.getEquipment().toArray()) {
+                            if (item != null) {
+                                if (!ItemSpawning.copyCheck(item, player)) {
+                                    player.getEquipment().set(Equipment.getType(item).getSlot(), item);
                                 }
                             }
                         }
@@ -721,15 +727,21 @@ public class PlayerCommands implements NewCommandExtension {
                 new Command("copyinv", Time.THIRTY_SECONDS, new CommandInput<String>(World::playerIsOnline, "Player", "An Online Player")) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
-                        if (ItemSpawning.canSpawn(player, false)
-                                && !player.hardMode()
-                                && ItemSpawning.copyCheck(player)) {
-                            if (ContentEntity.getTotalAmountOfItems(player) > 0) {
-                                player.sendMessage("You need to remove items from your inventory before copying!");
-                            } else {
-                                final Player target = World.getPlayerByName(input[0].trim());
-                                if (!Rank.hasAbility(target, Rank.ADMINISTRATOR)) {
-                                    Arrays.asList(target.getEquipment().toArray()).stream().filter(item -> item != null && ItemSpawning.copyCheck(item, player)).forEach(item -> player.getInventory().add(item));
+                        if (!ItemSpawning.copyCheck(player)) {
+                            return true;
+                        }
+                        if (ContentEntity.getTotalAmountOfItems(player) > 0) {
+                            player.getActionSender().sendMessage("You need to remove items from your inventory!");
+                            return true;
+                        }
+                        final Player target = World.getPlayerByName(input[0].trim());
+                        if (Rank.hasAbility(target, Rank.ADMINISTRATOR)) {
+                            return true;
+                        }
+                        for (Item item : target.getInventory().toArray()) {
+                            if (item != null) {
+                                if (!ItemSpawning.copyCheck(item, player)) {
+                                    player.getInventory().add(item);
                                 }
                             }
                         }

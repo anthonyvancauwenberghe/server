@@ -64,6 +64,32 @@ public class DeveloperCommands implements NewCommandExtension {
     @Override
     public List<NewCommand> init() {
         return Arrays.asList(
+                new Command("enablecommand", new CommandInput<String>(string -> string != null, "String", "Command Name")) {
+                    @Override
+                    protected boolean execute(Player player, String[] input) {
+                        final String value = input[0].trim();
+                        if (!NewCommandHandler.getDisabled().contains(value)) {
+                            player.sendf("Command '@red@%s@bla@' is not disabled.", value);
+                            return true;
+                        }
+                        NewCommandHandler.getDisabled().remove(value);
+                        player.sendf("Command '@red@%s@bla@' has been enabled.", value);
+                        return true;
+                    }
+                },
+                new Command("disablecommand", new CommandInput<String>(string -> string != null, "String", "Command Name")) {
+                    @Override
+                    protected boolean execute(Player player, String[] input) {
+                        final String value = input[0].trim();
+                        if (NewCommandHandler.getDisabled().contains(value)) {
+                            player.sendf("Command '@red@%s@bla@' is already disabled.", value);
+                            return true;
+                        }
+                        NewCommandHandler.getDisabled().add(value);
+                        player.sendf("Command '@red@%s@bla@' has been disabled.", value);
+                        return true;
+                    }
+                },
                 new Command("checkinfo") {
                     @Override
                     protected boolean execute(Player player, String[] input) {
@@ -104,6 +130,19 @@ public class DeveloperCommands implements NewCommandExtension {
                     protected boolean execute(Player player, String[] input) {
                         JGrandExchange.enabled = !JGrandExchange.enabled;
                         player.sendf("Grand Exchange is now %s.", JGrandExchange.enabled ? "Enabled" : "Disabled");
+                        return true;
+                    }
+                },
+                new Command("summonnpc", new CommandInput<Integer>(integer -> NPCDefinition.forId(integer) != null, "Integer", "NPC ID")) {
+                    @Override
+                    protected boolean execute(Player player, String[] input) {
+                        final NPC npc = NPCManager.addNPC(player.getPosition().getX(), player.getPosition().getY(), player.getPosition().getZ(), Integer.parseInt(input[0].trim()), -1);
+                        player.SummoningCounter = 6000;
+                        npc.ownerId = player.getIndex();
+                        Combat.follow(npc.getCombat(), player.getCombat());
+                        npc.summoned = true;
+                        player.cE.summonedNpc = npc;
+                        SummoningMonsters.openSummonTab(player, npc);
                         return true;
                     }
                 },

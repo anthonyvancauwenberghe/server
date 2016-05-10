@@ -534,7 +534,7 @@ public class PlayerCommands implements NewCommandExtension {
                         return true;
                     }
                 },
-                new Command("zombies", Time.THIRTY_SECONDS) {
+                new Command("zombies", Time.FIFTEEN_SECONDS) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         if (!player.getExtraData().getBoolean("zombietele")) {
@@ -569,13 +569,6 @@ public class PlayerCommands implements NewCommandExtension {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         BountyHandler.listBounties(player);
-                        return true;
-                    }
-                },
-                new Command("selectitem", Time.FIFTEEN_SECONDS, new CommandInput<Integer>(integer -> ItemDefinition.forId(integer) != null, "Integer", "Item ID")) {
-                    @Override
-                    protected boolean execute(Player player, String[] input) {
-                        player.getGrandExchangeTracker().selectItem(Integer.parseInt(input[0].trim()), Entry.Type.BUYING);
                         return true;
                     }
                 },
@@ -631,13 +624,6 @@ public class PlayerCommands implements NewCommandExtension {
                         return true;
                     }
                 },
-                new Command("upcount", Time.FIFTEEN_SECONDS) {
-                    @Override
-                    protected boolean execute(Player player, String[] input) {
-                        player.sendf("[Player Count]: %,d", World.getPlayers().size());
-                        return true;
-                    }
-                },
                 new Command("13s", Time.FIFTEEN_SECONDS) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
@@ -649,14 +635,10 @@ public class PlayerCommands implements NewCommandExtension {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         int day = (Calendar.getInstance().get(Calendar.DAY_OF_YEAR) + 4);
-                        player.sendMessage("The next 5 bonus skills will be;");
+                        player.sendMessage("The next 5 bonus skills will be:");
                         for (int array = 0; array < 5; array++) {
-                            int skill = ((day + array) % (Skills.SKILL_COUNT - 8)) + 7;
-                            if (skill == 21) {
-                                player.sendMessage("Random Skill");
-                            } else {
-                                player.sendMessage(Misc.getSkillName(skill).trim());
-                            }
+                            final int skill = ((day + array) % (Skills.SKILL_COUNT - 8)) + 7;
+                            player.sendMessage(skill != 21 ? Misc.getSkillName(skill).trim() : "Random Skill");
                         }
                         return true;
                     }

@@ -31,7 +31,7 @@ public class CommandPacketHandler implements PacketHandler {
     }
 
     public void handle(final Player player, Packet packet) {
-        final String command = packet.getRS2String().toLowerCase();
+        final String command = packet.getRS2String();
         final String key = command.split(" ")[0];
         if (player.isDead()) {
             return;

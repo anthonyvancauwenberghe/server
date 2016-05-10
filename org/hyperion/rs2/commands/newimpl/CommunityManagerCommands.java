@@ -35,10 +35,10 @@ public class CommunityManagerCommands implements NewCommandExtension {
     @Override
     public List<NewCommand> init() {
         return Arrays.asList(
-                new Command("startminigame", new CommandInput<Integer>(integer -> integer > 0, "Integer", "Integer greater than 0")) {
+                new Command("startminigame", new CommandInput<Integer>(integer -> integer > -1 && integer < 8, "Integer", "Integer between -1 & 8")) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
-                        World.submit(new EventCountdownTask(ServerEventTask.builders[Integer.parseInt(input[0])]));
+                        World.submit(new EventCountdownTask(ServerEventTask.builders[Integer.parseInt(input[0].trim())]));
                         return true;
                     }
                 },
@@ -98,7 +98,6 @@ public class CommunityManagerCommands implements NewCommandExtension {
                             if (amount > max) {
                                 player.sendf("Lowered amount from %,d to %,d", amount, amount = item.getCount());
                             }
-
                         }
                         player.getInventory().remove(new Item(id, amount));
                         final Challenge challenge = Challenge.create(player, length, id, amount);

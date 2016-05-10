@@ -51,6 +51,7 @@ import org.hyperion.rs2.model.content.skill.slayer.SlayerHolder;
 import org.hyperion.rs2.model.content.ticket.TicketHolder;
 import org.hyperion.rs2.model.itf.InterfaceManager;
 import org.hyperion.rs2.model.joshyachievementsv2.tracker.AchievementTracker;
+import org.hyperion.rs2.model.punishment.Punishment;
 import org.hyperion.rs2.model.recolor.RecolorManager;
 import org.hyperion.rs2.model.region.Region;
 import org.hyperion.rs2.model.sets.CustomSetHolder;
@@ -541,27 +542,28 @@ public class Player extends Entity implements Persistable, Cloneable {
 		this.viewingDifficulty = viewingDifficulty;
 	}
 
+	private final List<Integer> requiredSkills = Arrays.asList(7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 22/*, 23*/, 24);
+
 	public boolean checkMaxCapeRequirment() {
-		for (int i = 7; i < this.getSkills().getLevels().length; i++) {
-			if (i >= 21 && i != Skills.SUMMONING && i != Skills.DUNGEONEERING)
-				continue;
-			if(this.getSkills().getLevels()[i] < 99)
+		for (int array : requiredSkills) {
+			if (getSkills().getLevels()[array] < 99) {
 				return false;
+			}
 		}
-		return this.getPoints().getEloPeak() >= 1900;
+		return getPoints().getEloPeak() >= 1900;
 	}
 
 	// private InterfaceManager itfManager;
 
 	public boolean checkCompCapeReq() {
-		for(int i = 7; i < this.getSkills().getXps().length; i++) {
-			if(i >= 21 && i != Skills.SUMMONING && i != Skills.DUNGEONEERING)
-				continue;
-			if(this.getSkills().getXps()[i] < 200000000)
+		for (int array : requiredSkills) {
+			if (getSkills().getExps()[array] < 200000000) {
 				return hasCompCape;
+			}
 		}
-		if(this.getPoints().getEloPeak() < 2200)
+		if (getPoints().getEloPeak() < 2200) {
 			return hasCompCape;
+		}
 		return true;
 	}
 
@@ -570,6 +572,10 @@ public class Player extends Entity implements Persistable, Cloneable {
 		checkContainers(12744, checkMaxCapeRequirment(), "Max cape");
 		checkContainers(18509, skills.getRealLevels()[Skills.DUNGEONEERING]== 99, "Dungeoneering cape");
 		checkContainers(19709, skills.getExperience(Skills.DUNGEONEERING) == Skills.MAXIMUM_EXP, "Dungeoneering master cape");
+	}
+
+	public void checkSacredClay() {
+		Item.SACRED_CLAY.forEach(value -> checkContainers(value, false, ItemDefinition.forId(value).getName()));
 	}
 
 	private void checkContainers(final int id, final boolean add, String name) {
@@ -1503,6 +1509,9 @@ public class Player extends Entity implements Persistable, Cloneable {
 	 * @param source The Entity dealing the blow.
 	 */
 	public void inflictDamage(Hit inc, Entity source) {
+		if (isDead()) {
+			return;
+		}
 		if(inc.getDamage() < 0)
 			return;
 		if(! getUpdateFlags().get(UpdateFlag.HIT)) {
@@ -1539,6 +1548,9 @@ public class Player extends Entity implements Persistable, Cloneable {
 	}
 
 	public void heal(int hp, int skill) {
+		if (isDead()) {
+			return;
+		}
 		int cHp = skills.getLevel(skill);
 		if(skill == 3) {
 			if((cHp + hp) > skills.calculateMaxLifePoints())
@@ -1556,6 +1568,9 @@ public class Player extends Entity implements Persistable, Cloneable {
 	}
 
 	public void heal(int hp, boolean brew) {
+		if (isDead()) {
+			return;
+		}
 		int cHp = skills.getLevel(3);
 		int j = 3;
 		int brewBonus = (int)(skills.calculateMaxLifePoints() * .15);

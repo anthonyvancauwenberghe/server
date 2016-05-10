@@ -545,9 +545,9 @@ public class Duel {
 	
 	public static void finishDuel(Player player, Player opponent, boolean won) {
 		player.setDead(false);
+		player.cE.setPoisoned(false);
 		player.cannotSwitch = false;
         player.getCombat().morrigansLeft = 0;
-
         if(won) {
             player.getActionSender().sendUpdateItems(6822, player.getDuel().toArray());
             player.getActionSender().sendString(6839, (new StringBuilder()).append("").append(player.getSkills().getCombatLevel()).toString());
@@ -562,8 +562,6 @@ public class Duel {
             Container.transfer(opponent.getDuel(), player.getInventory());
             AchievementHandler.progressAchievement(player, "Duel");
         }
-		player.cE.setPoisoned(false);
-		opponent.cE.setPoisoned(false);
         opponent.setTeleportTarget(Position.create(3360 + Combat.random(17), 3274 + Combat.random(3), 0), false);
         player.setTeleportTarget(Position.create(3360 + Combat.random(17), 3274 + Combat.random(3), 0), false);
         player.getActionSender().sendMessage("You have " + (won ? "won" : "lost") + " the duel.");
@@ -580,18 +578,15 @@ public class Duel {
             declineTrade(player);
 	}
 
-	public static void finishFullyDuel(Player player) {
-		try {
-			Player player1 = player.getTrader();
-			if(player1 != null) {
-                finishDuel(player1, player, true);
-                finishDuel(player, player1, false);
-            } else {
-            	if(player != null)
-            		player.getDuel().clear();
-            }
-		} catch(Exception e) {
-			e.printStackTrace();
+	public static void finishFullyDuel(final Player player) {
+		final Player target = player.getTrader();
+		if (target != null) {
+			finishDuel(player, target, false);
+			finishDuel(target, player, true);
+		} else {
+			if (player != null) {
+				player.getDuel().clear();
+			}
 		}
 	}
 

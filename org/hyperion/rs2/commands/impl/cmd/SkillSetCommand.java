@@ -6,6 +6,7 @@ import org.hyperion.rs2.commands.util.CommandInput;
 import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.Rank;
 import org.hyperion.rs2.model.Skills;
+import org.hyperion.rs2.model.content.ContentEntity;
 import org.hyperion.rs2.model.content.minigame.FightPits;
 import org.hyperion.rs2.model.content.misc.ItemSpawning;
 import org.hyperion.util.Time;
@@ -51,6 +52,13 @@ public class SkillSetCommand extends NewCommand {
             player.sendMessage("You cannot do this right now.");
             return true;
         }
+        if (!ItemSpawning.copyCheck(player)) {
+            return true;
+        }
+        if (ContentEntity.getTotalAmountOfEquipmentItems(player) > 0) {
+            player.sendMessage("You need to take off your armour before setting levels!");
+            return true;
+        }
         final int level = Integer.parseInt(input[0].trim());
         if (skill == 5 || skill == 1) {
             player.resetPrayers();
@@ -61,10 +69,14 @@ public class SkillSetCommand extends NewCommand {
     }
 
     public static boolean canChangeLevel(Player player) {
-        return (!player.getPosition().inPvPArea()
-                || !(player.duelAttackable > 0)
-                || !FightPits.inGame(player)
-                || !(player.getEquipment().size() > 0));
+        if (player.getPosition().inPvPArea()
+                || player.duelAttackable > 0
+                || FightPits.inGame(player)
+                || player.getEquipment().size() > 0) {
+            return false;
+        } else {
+            return true;
+        }
     }
 
 }

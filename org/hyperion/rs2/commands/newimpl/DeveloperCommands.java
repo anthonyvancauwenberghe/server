@@ -2,6 +2,8 @@ package org.hyperion.rs2.commands.newimpl;
 //<editor-fold defaultstate="collapsed" desc="Imports">
 
 import org.hyperion.Server;
+import org.hyperion.engine.EngineTask;
+import org.hyperion.engine.GameEngine;
 import org.hyperion.engine.task.Task;
 import org.hyperion.engine.task.impl.NpcDeathTask;
 import org.hyperion.engine.task.impl.WildernessBossTask;
@@ -31,7 +33,6 @@ import org.hyperion.rs2.model.iteminfo.ItemInfo;
 import org.hyperion.rs2.model.joshyachievementsv2.tracker.AchievementTracker;
 import org.hyperion.rs2.model.recolor.Recolor;
 import org.hyperion.rs2.packet.ChatPacketHandler;
-import org.hyperion.rs2.packet.CommandPacketHandler;
 import org.hyperion.rs2.saving.PlayerLoading;
 import org.hyperion.rs2.saving.PlayerSaving;
 import org.hyperion.rs2.util.TextUtils;
@@ -42,6 +43,7 @@ import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 //</editor-fold>
 
@@ -81,6 +83,11 @@ public class DeveloperCommands implements NewCommandExtension {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         final String value = input[0].trim();
+                        if (value.equalsIgnoreCase("enablecommand")
+                                || value.equalsIgnoreCase("disablecommand")) {
+                            player.sendMessage("You cannot disable this command.");
+                            return true;
+                        }
                         if (NewCommandHandler.getDisabled().contains(value)) {
                             player.sendf("Command '@red@%s@bla@' is already disabled.", value);
                             return true;
@@ -90,22 +97,37 @@ public class DeveloperCommands implements NewCommandExtension {
                         return true;
                     }
                 },
-                new Command("checkinfo") {
+                new Command("listdisabledcommands") {
                     @Override
                     protected boolean execute(Player player, String[] input) {
-                        //TODO: Display Player Information to Quest Tab.
+                        final List<String> list = NewCommandHandler.getDisabled();
+                        if (list.isEmpty()) {
+                            player.sendMessage("No Commands are disabled.");
+                            return true;
+                        }
+                        if (list.size() > 1) {
+                            Collections.sort(list, String.CASE_INSENSITIVE_ORDER);
+                        }
+                        player.sendf("@red@%,d@bla@ Disabled Commands.", list.size());
+                        list.forEach(player::sendMessage);
+                        return true;
+                    }
+                },
+                new Command("checkinfo", new CommandInput<String>(PlayerLoading::playerExists, "Player", "An Existing Player")) {
+                    @Override
+                    protected boolean execute(Player player, String[] input) {
                         return true;
                     }
                 },
                 new Command("spawnitem", new CommandInput<Integer>(integer -> integer >= 0 && integer < ItemDefinition.MAX_ID, "Item ID", "An integer between 0 and 23000"), new CommandInput<Integer>(integer -> integer >= 0 && integer <= Integer.MAX_VALUE, "Item Amount", "An integer Between 0 and MAX_VALUE")) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
-                        int id = Integer.parseInt(input[0]), amount = Integer.parseInt(input[1]);
-                        Item item = new Item(id, amount);
-                        if (player.getInventory().add(item)) {
-                            player.sendMessage(String.format("You have spawned %sx %s", id, TextUtils.titleCase(item.getDefinition().getName())));
+                        final int id = Integer.parseInt(input[0]), amount = Integer.parseInt(input[1]);
+                        final Item item = Item.create(id, amount);
+                        if (player.getInventory().hasRoomFor(item)) {
+                            player.getInventory().add(item);
                         } else {
-                            player.sendMessage("Unable to add item to inventory.");
+                            player.getBank().add(item);
                         }
                         return true;
                     }

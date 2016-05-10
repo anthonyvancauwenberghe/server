@@ -144,13 +144,13 @@ public final class NewCommandHandler {
      * @return Whether the command was found or not. If not it'll continuing searching.
      */
     public static boolean processCommand(String key, Player player, String input) {
-        if (disabled_list.contains(key)) {
-            player.sendf("Command '@red@%s@bla@' is currently disabled.", key);
-            return false;
-        }
         //First we check if the map actually contains this command
         if (!COMMANDS.containsKey(key)) {
             player.sendf("Command '@red@%s@bla@' was not found.", key);
+            return false;
+        }
+        if (disabled_list.contains(key)) {
+            player.sendf("Command '@red@%s@bla@' is currently disabled.", key);
             return false;
         }
         if (COMMANDS_USED.containsKey(player.getName()) && COMMANDS_USED.get(player.getName()).stream().filter(commandUsage -> commandUsage.equalsIgnoreCase(key)).count() > 0)

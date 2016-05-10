@@ -82,8 +82,10 @@ public class Locations {
                 return true;
             }
         },
-
+        CORPOREAL_BEAST_AREA(new int[]{2499, 2539}, new int[]{4630, 4663}, new int[]{0}, true, true, true, false, false, false, Rank.PLAYER),
         EDGEVILLE_BANK_BANKER_AREA(new int[]{3095, 3098}, new int[]{3488, 3493}, false, false, false, false, false, false, Rank.OWNER),
+        EDGEVILLE_BANK_AREA(new int[]{3091, 3094, 3095, 3098, 3090, 3090}, new int[]{3488, 3499, 3494, 3499, 3493, 3497}, false, false, false, false, true, true, Rank.PLAYER),
+        EDGEVILLE_AREA(new int[]{3067, 3101}, new int[]{3462, 3519}, new int[]{0}, false, true, true, false, true, true, Rank.PLAYER),
         AFK_AREA(new int[]{2138, 2164}, new int[]{5091, 5106}, false, true, true, true, true, true, Rank.PLAYER),
         DONATOR_PLACE_AREA(new int[]{2344, 2389}, new int[]{4938, 4987}, false, true, true, false, true, true, Rank.DONATOR),
         SUPER_DONATOR_AREA(new int[]{2028, 2045}, new int[]{4517, 4541}, false, true, true, false, true, true, Rank.SUPER_DONATOR),
@@ -470,6 +472,12 @@ public class Locations {
                     return false;
                 }
                 return true;
+            }
+
+
+            @Override
+            public void leave(Player player) {
+                //TODO: Reapply if punishment has not expired
             }
         },
         JAIL_FULL_AREA(new int[]{2065, 2111}, new int[]{4416, 4455}, false, false, false, false, true, true, Rank.HELPER) {

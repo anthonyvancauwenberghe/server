@@ -287,12 +287,12 @@ public class WalkingQueue {
                 reset();
             }
 
-            if (player.getSkills().getLevel(Skills.HITPOINTS) == 0 && !player.isDead()) {
+            /*if (player.getSkills().getLevel(Skills.HITPOINTS) == 0 && !player.isDead()) {
                 if (player.duelAttackable <= 0) {
                     World.submit(new PlayerDeathTask(player));
                 }
                 return false;
-            }
+            }*/
         }
         return true;
     }

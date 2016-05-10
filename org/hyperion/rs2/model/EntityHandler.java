@@ -248,6 +248,8 @@ public class EntityHandler {
         }
 
         player.checkCapes();
+        /*Checks if a player has (class #) Sacred Clay Items Until smuggles are fixed*/
+        player.checkSacredClay();
 
         if (Rank.isStaffMember(player))
             player.getInterfaceManager().show(PendingRequests.ID);

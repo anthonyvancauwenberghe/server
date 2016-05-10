@@ -824,6 +824,22 @@ public class ActionSender {
         return this;
     }
 
+    public void displayInformation(final String value, final List<String> list) {
+        sendString(8144, String.format("@dre@Player Information @bla@[@gre@%s@bla@]", TextUtils.titleCase(value)));
+        int count = 0;
+        for (int array : QUEST_MENU_IDS) {
+            sendString(array, list.get(count));
+            count++;
+            if (count == list.size()) {
+                break;
+            }
+        }
+        for (; count < QUEST_MENU_IDS.length; count++) {
+            sendString(QUEST_MENU_IDS[count], "");
+        }
+        showInterface(8134);
+    }
+
     public void displayCommands(final List<String> list) {
         sendString(8144, String.format("@dre@Commands List @bla@[@gre@%,d@bla@]", list.size()));
         int count = 0;

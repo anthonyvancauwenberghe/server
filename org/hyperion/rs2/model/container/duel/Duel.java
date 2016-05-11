@@ -579,14 +579,17 @@ public class Duel {
 	}
 
 	public static void finishFullyDuel(final Player player) {
-		final Player target = player.getTrader();
-		if (target != null) {
-			finishDuel(player, target, false);
-			finishDuel(target, player, true);
-		} else {
-			if (player != null) {
-				player.getDuel().clear();
+		try {
+			Player target = player.getTrader();
+			if(target != null) {
+				finishDuel(target, player, true);
+				finishDuel(player, target, false);
+			} else {
+				if(player != null)
+					player.getDuel().clear();
 			}
+		} catch(Exception e) {
+			e.printStackTrace();
 		}
 	}
 

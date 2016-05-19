@@ -8,7 +8,7 @@ import org.hyperion.rs2.model.content.skill.fletching.Fletching;
 /**
  * Created by Gilles on 8/09/2015.
  */
-public class clickSkillingInterface implements ContentTemplate {
+public class ClickSkillingInterface implements ContentTemplate {
     @Override
     public int[] getValues(int type) {
         if(type == 0) {

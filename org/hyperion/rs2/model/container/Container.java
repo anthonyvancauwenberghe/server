@@ -697,8 +697,8 @@ public class Container {
         return getSlotById(id) != - 1;
     }
 
-	public boolean hasItem(Item item) {
-		int amount = getCount(item.getId());
+	public boolean hasItem(final Item item) {
+		final int amount = getCount(item.getId());
 		return (item.getCount() <= 0 && contains(item.getId()))
 				|| (contains(item.getId()) && amount >= item.getCount());
 	}

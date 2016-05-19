@@ -1,19 +1,25 @@
 package org.hyperion.rs2.model.content.skill.dungoneering;
 
-import org.hyperion.rs2.commands.Command;
-import org.hyperion.rs2.commands.CommandHandler;
-import org.hyperion.rs2.model.ItemDefinition;
-import org.hyperion.rs2.model.Player;
-import org.hyperion.rs2.model.Position;
-import org.hyperion.rs2.model.Rank;
-import org.hyperion.rs2.model.content.ContentEntity;
+import org.hyperion.Server;
+import org.hyperion.rs2.model.*;
+import org.hyperion.rs2.model.combat.Combat;
+import org.hyperion.rs2.model.combat.Magic;
+import org.hyperion.rs2.model.container.ShopManager;
+import org.hyperion.rs2.model.content.ClickType;
 import org.hyperion.rs2.model.content.ContentTemplate;
 import org.hyperion.rs2.model.content.misc.ItemSpawning;
+import org.hyperion.rs2.model.content.misc2.Edgeville;
+import org.hyperion.rs2.model.content.skill.dungoneering.reward.RingPerks;
+import org.hyperion.rs2.model.itf.InterfaceManager;
+import org.hyperion.rs2.model.itf.impl.DungoneeringParty;
+import org.hyperion.rs2.net.ActionSender;
 import org.hyperion.util.Misc;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
+import java.util.stream.Stream;
 
 /**
  * Created with IntelliJ IDEA.
@@ -23,6 +29,7 @@ import java.util.List;
  * To change this template use File | Settings | File Templates.
  */
 public class DungeoneeringManager implements ContentTemplate {
+    public static boolean ENABLED = false;
     public static final int TRADER_ID = 539;
     private static final int DIALOGUE_ID = 7000;
 
@@ -32,26 +39,29 @@ public class DungeoneeringManager implements ContentTemplate {
 
     @Override
     public int[] getValues(int type) {
-        /*
-        if (type == ClickType.EAT || type == ClickType.ITEM_OPTION7 || type == ClickType.ITEM_OPTOION6)
+        if (type == ClickType.EAT || type == ClickType.ITEM_OPTION7 || type == ClickType.ITEM_OPTOION6) {
             return new int[]{15707};
-        else if (type == ClickType.OBJECT_CLICK1)
-            return new int[]{2477, 2476, 2804};
-        else if (type == ClickType.DIALOGUE_MANAGER) {
+        } else if (type == ClickType.OBJECT_CLICK1) {
+            return new int[]{2477, 2476, 2475, 2804};
+        } else if (type == ClickType.DIALOGUE_MANAGER) {
             int[] ret = new int[25];
             for (int i = 0; i < ret.length; i++)
                 ret[i] = DIALOGUE_ID + i;
             return ret;
-        } else if (type == ClickType.NPC_OPTION1)
+        } else if (type == ClickType.NPC_OPTION1) {
             return new int[]{TRADER_ID, 9711};
-        else if (type == ClickType.NPC_OPTION2)
-            return new int[]{8827, 8824, 9711};*/
+        } else if (type == ClickType.NPC_OPTION2) {
+            return new int[]{8827, 8824, 9711};
+        }
         return new int[0];
     }
 
     @Override
     public boolean clickObject2(Player player, int type, int npcId, int x, int y, int npcSlot) {
-        /*
+        if (!ENABLED) {
+            player.sendMessage("Currently Disabled.");
+            return false;
+        }
         if (type == ClickType.NPC_OPTION2) {
             if (npcId == 9711) {
                 ShopManager.open(player, 81);
@@ -111,23 +121,31 @@ public class DungeoneeringManager implements ContentTemplate {
         } else if (type == ClickType.ITEM_OPTION7) {
             player.forceMessage(String.format("I have %,d dungoneering tokens", player.getDungeoneering().getTokens()));
             return true;
-        }*/
+        }
         return false;
     }
 
     @Override
-    public boolean itemOptionOne(Player player, int id, int slot, int interfaceId) {/*
+    public boolean itemOptionOne(Player player, int id, int slot, int interfaceId) {
+        if (!ENABLED) {
+            player.sendMessage("Currently Disabled.");
+            return false;
+        }
         if (cantJoin(player)) {
             player.sendMessage("You can only bring the ring of kinship - no summoning allowed!");
             return false;
         }
         Magic.teleport(player, LOBBY, false);
-        player.SummoningCounter = 0;*/
+        player.SummoningCounter = 0;
         return true;
     }
 
     @Override
-    public boolean npcOptionOne(Player player, int npcId, int npcLocationX, int npcLocationY, int npcSlot) {/*
+    public boolean npcOptionOne(Player player, int npcId, int npcLocationX, int npcLocationY, int npcSlot) {
+        if (!ENABLED) {
+            player.sendMessage("Currently Disabled.");
+            return false;
+        }
         if (npcId == TRADER_ID) {
             ShopManager.open(player, 80);
             return true;
@@ -137,16 +155,27 @@ public class DungeoneeringManager implements ContentTemplate {
             DialogueManager.openDialogue(player, 7011);
             return true;
         }
-*/
+
         return false;  //To change body of implemented methods use File | Settings | File Templates.
     }
 
     @Override
     public boolean objectClickOne(Player player, int id, int x, int y) {
-        /*
-        if (player.getLocation().distance(Location.create(x, y, 0)) > 2)
+        if (!ENABLED) {
+            player.sendMessage("Currently Disabled.");
+            return false;
+        }
+        if (player.getPosition().distance(Position.create(x, y, 0)) > 2)
             return false;
         switch (id) {
+            case 2475: {
+                if (player.getLocation().equals(Locations.Location.DUNGEONEERING_LOBBY)) {
+                    final DungoneeringParty itf = InterfaceManager.<DungoneeringParty>get(DungoneeringParty.ID);
+                    itf.hide(player);
+                    player.setTeleportTarget(Edgeville.POSITION);
+                }
+                break;
+            }
             case 2804:
                 if (Server.isUpdating()) {
                     player.sendMessage("You cannot start a dungeon right now");
@@ -156,7 +185,7 @@ public class DungeoneeringManager implements ContentTemplate {
                 itf.show(player);
                 break;
             case 2477:
-                final Location loc = player.getDungeoneering().clickPortal();
+                final Position loc = player.getDungeoneering().clickPortal();
                 if (loc == null) {
                     player.sendMessage("You need to clear the room before progressing");
                     return true;
@@ -166,7 +195,7 @@ public class DungeoneeringManager implements ContentTemplate {
                 player.getDungeoneering().getRoom().initialize();
                 return true;
             case 2476:
-                final Location location = player.getDungeoneering().clickBackPortal();
+                final Position location = player.getDungeoneering().clickBackPortal();
                 if (location == null) {
                     DialogueManager.openDialogue(player, 7002);
                     return true;
@@ -175,12 +204,16 @@ public class DungeoneeringManager implements ContentTemplate {
                 player.setTeleportTarget(location);
                 player.getDungeoneering().getRoom().initialize();
                 break;
-        }*/
+        }
         return false;
     }
 
     @Override
-    public boolean dialogueAction(Player player, int dialogueId) {/*
+    public boolean dialogueAction(Player player, int dialogueId) {
+        if (!ENABLED) {
+            player.sendMessage("Currently Disabled.");
+            return false;
+        }
         switch (dialogueId) {
             case 7000:
             case 7001:
@@ -238,7 +271,7 @@ public class DungeoneeringManager implements ContentTemplate {
             case 7018:
                 try {
                     final Player to = player.getDungeoneering().getCurrentDungeon().getPlayers().get(dialogueId - 7014);
-                    player.setTeleportTarget(to.getLocation());
+                    player.setTeleportTarget(to.getPosition());
                     player.getDungeoneering().setCurrentRoom(to.getDungeoneering().getRoom());
                 } catch (final Exception ex) {
                     ex.printStackTrace();
@@ -271,7 +304,7 @@ public class DungeoneeringManager implements ContentTemplate {
                 break;
         }
 
-        player.getActionSender().removeChatboxInterface();*/
+        player.getActionSender().removeChatboxInterface();
         return true;
     }
 
@@ -301,8 +334,12 @@ public class DungeoneeringManager implements ContentTemplate {
         return ret;
     }
 
-    public static final boolean cantJoin(final Player player) {
-        return ContentEntity.getTotalAmountOfEquipmentItems(player) > 0 || !(ContentEntity.getTotalAmountOfItems(player) == 1 && player.getInventory().contains(15707) || (ContentEntity.getTotalAmountOfItems(player) == 2 && player.getInventory().contains(15707) && player.getInventory().contains(1856))) || player.cE.summonedNpc != null || (player.getBoB() != null && player.getBoB().freeSlots() != player.getBoB().capacity());
+    public static boolean cantJoin(final Player player) {
+        return (!player.getInventory().contains(15707) && !player.getEquipment().contains(15707))
+                || ((Arrays.asList(player.getInventory().toArray()).stream().filter(value -> value != null).anyMatch(value -> value.getDefinition().getId() != 15707))
+                || (Arrays.asList(player.getEquipment().toArray())).stream().filter(value -> value != null).anyMatch(value -> value.getDefinition().getId() != 15707))
+                || player.cE.summonedNpc != null
+                || (player.getBoB() != null && player.getBoB().freeSlots() != player.getBoB().capacity());
     }
 
 

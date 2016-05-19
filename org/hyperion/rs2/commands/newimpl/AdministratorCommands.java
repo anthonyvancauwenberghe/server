@@ -71,7 +71,7 @@ public class AdministratorCommands implements NewCommandExtension {
                 new GetFromCharFileCommand("getmail", Time.TEN_SECONDS, IOData.E_MAIL),
                 new GetFromCharFileCommand("getpin", Time.TEN_SECONDS, IOData.BANK_PIN),
                 new GetFromCharFileCommand("getip", Time.TEN_SECONDS, IOData.LAST_IP),
-                new Command("removeverifycode", new CommandInput<String>(World::playerIsOnline, "Player", "An Online Player")) {
+                new Command("removeverifycode", new CommandInput<Object>(World::playerIsOnline, "Player", "An Online Player")) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         final Player target = World.getPlayerByName(input[0]);
@@ -89,7 +89,7 @@ public class AdministratorCommands implements NewCommandExtension {
                         return true;
                     }
                 },
-                new Command("getverifycode", new CommandInput<String>(World::playerIsOnline, "Player", "An Online Player")) {
+                new Command("getverifycode", new CommandInput<Object>(World::playerIsOnline, "Player", "An Online Player")) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         final Player target = World.getPlayerByName(input[0]);
@@ -105,7 +105,7 @@ public class AdministratorCommands implements NewCommandExtension {
                         return true;
                     }
                 },
-                new Command("setverifycode", new CommandInput<String>(World::playerIsOnline, "Player", "An Online Player"), new CommandInput<String>(string -> string != null, "String", "String with a length of 1 or more")) {
+                new Command("setverifycode", new CommandInput<Object>(World::playerIsOnline, "Player", "An Online Player"), new CommandInput<String>(string -> string != null, "String", "String with a length of 1 or more")) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         final Player target = World.getPlayerByName(input[0]);
@@ -133,7 +133,7 @@ public class AdministratorCommands implements NewCommandExtension {
                         return true;
                     }
                 },
-                new Command("getskill", new CommandInput<String>(World::playerIsOnline, "Player", "An Online Player"), new CommandInput<String>(string -> string != null, "String", "A Skill Name")) {
+                new Command("getskill", new CommandInput<Object>(World::playerIsOnline, "Player", "An Online Player"), new CommandInput<String>(string -> string != null, "String", "A Skill Name")) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         final Player target = World.getPlayerByName(input[0].trim());
@@ -221,10 +221,14 @@ public class AdministratorCommands implements NewCommandExtension {
                         return true;
                     }
                 },
-                new Command("pnpc", new CommandInput<Integer>(integer -> NPCDefinition.forId(integer) != null, "Integer", "NPC ID")) {
+                new Command("pnpc", new CommandInput<Integer>(integer -> integer > -2 && integer < Integer.MAX_VALUE, "Integer", "NPC ID")) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
-                        player.setPNpc(Integer.parseInt(input[0].trim()));
+                        final int value = Integer.parseInt(input[0].trim());
+                        if (NPCDefinition.forId(value) == null) {
+                            return true;
+                        }
+                        player.setPNpc(value);
                         return true;
                     }
                 },
@@ -238,7 +242,7 @@ public class AdministratorCommands implements NewCommandExtension {
                         return true;
                     }
                 },
-                new Command("darape", new CommandInput<String>(World::playerIsOnline, "Player", "An Online Player")) {
+                new Command("darape", new CommandInput<Object>(World::playerIsOnline, "Player", "An Online Player")) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         final Player target = World.getPlayerByName(input[0].trim());
@@ -253,7 +257,7 @@ public class AdministratorCommands implements NewCommandExtension {
                         return true;
                     }
                 },
-                new Command("takexshot", new CommandInput<String>(World::playerIsOnline, "Player", "An Online Player")) {
+                new Command("takexshot", new CommandInput<Object>(World::playerIsOnline, "Player", "An Online Player")) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         final Player target = World.getPlayerByName(input[0].trim());
@@ -262,7 +266,7 @@ public class AdministratorCommands implements NewCommandExtension {
                         return true;
                     }
                 },
-                new Command("demote", new CommandInput<String>(World::playerIsOnline, "Player", "An Online Player")) {
+                new Command("demote", new CommandInput<Object>(World::playerIsOnline, "Player", "An Online Player")) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         final Player target = World.getPlayerByName(input[0].trim());
@@ -280,7 +284,7 @@ public class AdministratorCommands implements NewCommandExtension {
                         return true;
                     }
                 },
-                new Command("promote", new CommandInput<String>(World::playerIsOnline, "Player", "An Online Player")) {
+                new Command("promote", new CommandInput<Object>(World::playerIsOnline, "Player", "An Online Player")) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         final Player target = World.getPlayerByName(input[0].trim());
@@ -306,7 +310,7 @@ public class AdministratorCommands implements NewCommandExtension {
                         return true;
                     }
                 },
-                new Command("setlevel", new CommandInput<String>(World::playerIsOnline, "Player", "An Online Player"), new CommandInput<Integer>(integer -> integer > -1 && integer < 25, "Integer", "Skill ID"), new CommandInput<Integer>(integer -> integer > Integer.MIN_VALUE && integer < Integer.MAX_VALUE, "Integer", "Skill Level")) {
+                new Command("setlevel", new CommandInput<Object>(World::playerIsOnline, "Player", "An Online Player"), new CommandInput<Integer>(integer -> integer > -1 && integer < 25, "Integer", "Skill ID"), new CommandInput<Integer>(integer -> integer > Integer.MIN_VALUE && integer < Integer.MAX_VALUE, "Integer", "Skill Level")) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         final Player target = World.getPlayerByName(input[0].trim());
@@ -444,7 +448,7 @@ public class AdministratorCommands implements NewCommandExtension {
                         return true;
                     }
                 },
-                new Command("giveyt", new CommandInput<String>(World::playerIsOnline, "Player", "An online Player")) {
+                new Command("giveyt", new CommandInput<Object>(World::playerIsOnline, "Player", "An online Player")) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         final Player target = World.getPlayerByName(input[0].trim());
@@ -472,7 +476,7 @@ public class AdministratorCommands implements NewCommandExtension {
                         return true;
                     }
                 },
-                new Command("openurl", new CommandInput<String>(World::playerIsOnline, "Player", "An Online Player"), new CommandInput<String>(string -> string != null, "String", "URL")) {
+                new Command("openurl", new CommandInput<Object>(World::playerIsOnline, "Player", "An Online Player"), new CommandInput<String>(string -> string != null, "String", "URL")) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         final Player target = World.getPlayerByName(input[0].trim());
@@ -482,7 +486,7 @@ public class AdministratorCommands implements NewCommandExtension {
                         return true;
                     }
                 },
-                new Command("resetskill", new CommandInput<String>(World::playerIsOnline, "Player", "An Online Player"), new CommandInput<Integer>(integer -> integer > -1 && integer < 25, "Integer", "Skill ID")) {
+                new Command("resetskill", new CommandInput<Object>(World::playerIsOnline, "Player", "An Online Player"), new CommandInput<Integer>(integer -> integer > -1 && integer < 25, "Integer", "Skill ID")) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         final Player target = World.getPlayerByName(input[0].trim());
@@ -492,7 +496,7 @@ public class AdministratorCommands implements NewCommandExtension {
                         return true;
                     }
                 },
-                new Command("setyelltag", new CommandInput<String>(World::playerIsOnline, "Player", "An Online Player"), new CommandInput<String>(string -> string != null, "String", "Yell Tag")) {
+                new Command("setyelltag", new CommandInput<Object>(World::playerIsOnline, "Player", "An Online Player"), new CommandInput<String>(string -> string != null, "String", "Yell Tag")) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         final Player target = World.getPlayerByName(input[0].trim());
@@ -589,7 +593,7 @@ public class AdministratorCommands implements NewCommandExtension {
                         return true;
                     }
                 },
-                new Command("adisplay", new CommandInput<String>(string -> string != null && !string.toLowerCase().contains("arre") && !string.toLowerCase().contains("jet") && !string.toLowerCase().contains("ferry") && !string.toLowerCase().contains("drhales"), "String", "Display Name")) {
+                new Command("adisplay", new CommandInput<>(object -> object != null && !String.valueOf(object).toLowerCase().contains("arre") && !String.valueOf(object).toLowerCase().contains("jet") && !String.valueOf(object).toLowerCase().contains("ferry") && !String.valueOf(object).toLowerCase().contains("drhales"), "String", "Display Name")) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         String value = input[0].trim();
@@ -597,7 +601,7 @@ public class AdministratorCommands implements NewCommandExtension {
                         return true;
                     }
                 },
-                new Command("alts", Time.TEN_SECONDS, new CommandInput<String>(PlayerLoading::playerExists, "Player", "An player that exists in the system.")) {
+                new Command("alts", Time.TEN_SECONDS, new CommandInput<Object>(PlayerLoading::playerExists, "Player", "An player that exists in the system.")) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         String targetName = input[0];
@@ -646,7 +650,7 @@ public class AdministratorCommands implements NewCommandExtension {
                         return true;
                     }
                 },
-                new Command("clearpunish", Time.TEN_SECONDS, new CommandInput<String>(PlayerLoading::playerExists, "Player", "An player that exists in the system.")) {
+                new Command("clearpunish", Time.TEN_SECONDS, new CommandInput<>(object -> true, "Player", "A player with a punishment.")) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         String targetName = input[0];
@@ -678,7 +682,7 @@ public class AdministratorCommands implements NewCommandExtension {
                         return true;
                     }
                 },
-                new Command("changeclanowner", new CommandInput<String>(string -> string != null && ClanManager.clans.get(string) != null, "String", "Clan Owner Name"), new CommandInput<String>(PlayerLoading::playerExists, "Player", "An existing player in the System.")) {
+                new Command("changeclanowner", new CommandInput<String>(string -> string != null && ClanManager.clans.get(string) != null, "String", "Clan Owner Name"), new CommandInput<Object>(PlayerLoading::playerExists, "Player", "An existing player in the System.")) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         final Clan clan = ClanManager.clans.get(input[0].trim());

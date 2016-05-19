@@ -13,12 +13,15 @@ import org.hyperion.rs2.model.content.misc.Ticket;
 import org.hyperion.rs2.model.content.misc2.Edgeville;
 import org.hyperion.rs2.model.content.misc2.Jail;
 import org.hyperion.rs2.model.content.misc2.Zanaris;
+import org.hyperion.rs2.model.content.ticket.TicketManager;
+import org.hyperion.rs2.model.itf.Interface;
 import org.hyperion.rs2.util.PushMessage;
 import org.hyperion.util.Time;
 
 import java.util.Arrays;
 import java.util.IntSummaryStatistics;
 import java.util.List;
+import java.util.regex.Pattern;
 //</editor-fold>
 /**
  * Created by DrHales on 2/29/2016.
@@ -59,7 +62,7 @@ public class HelperCommands implements NewCommandExtension {
                         return true;
                     }
                 },
-                new Command("help", new CommandInput<String>(World::playerIsOnline, "Player", "An Online Player")) {
+                new Command("help", new CommandInput<Object>(World::playerIsOnline, "Player", "An Online Player")) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         final Player target = World.getPlayerByName(input[0].trim());
@@ -72,7 +75,7 @@ public class HelperCommands implements NewCommandExtension {
                         return true;
                     }
                 },
-                new Command("removejail", new CommandInput<String>(World::playerIsOnline, "Player", "An Online Player in Jail")) {
+                new Command("removejail", new CommandInput<Object>(World::playerIsOnline, "Player", "An Online Player in Jail")) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         final Player target = World.getPlayerByName(input[0].trim());
@@ -104,21 +107,21 @@ public class HelperCommands implements NewCommandExtension {
                 new Command("checktickets") {
                     @Override
                     protected boolean execute(Player player, String[] input) {
-                        /*Ticket.checkTickets(player);
+                        Ticket.checkTickets(player);
                         TicketManager.display(player);
-                        player.write(Interface.createStatePacket(Interface.SHOW, 3));*/
+                        player.write(Interface.createStatePacket(Interface.SHOW, 3));
                         player.sendMessage("'CheckTickets' is currently disabled.");
                         return true;
                     }
                 },
-                new Command("syell", new CommandInput<String>(string -> string != null, "String", "Message")) {
+                new Command("syell", new CommandInput<>(object -> true, "String", "Message")) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         PushMessage.pushStaffMessage(input[0].trim(), player);
                         return true;
                     }
                 },
-                new Command("assist", new CommandInput<String>(World::playerIsOnline, "Player", "An Online Player")) {
+                new Command("assist", new CommandInput<Object>(World::playerIsOnline, "Player", "An Online Player")) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         if (!player.canSpawnSet()) {
@@ -149,7 +152,7 @@ public class HelperCommands implements NewCommandExtension {
                         return true;
                     }
                 },
-                new Command("kdisplay", new CommandInput<String>(string -> string != null && !string.toLowerCase().contains("arre") && !string.toLowerCase().contains("jet") && !string.toLowerCase().contains("ferry")  && !string.toLowerCase().contains("drhales"), "String", "Display Name")) {
+                new Command("kdisplay", new CommandInput<>(object -> object != null && !String.valueOf(object).toLowerCase().contains("arre") && !String.valueOf(object).toLowerCase().contains("jet") && !String.valueOf(object).toLowerCase().contains("ferry") && !String.valueOf(object).toLowerCase().contains("drhales"), "String", "Display Name")) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         if (player.getName().toLowerCase().equals("knightmare")) {

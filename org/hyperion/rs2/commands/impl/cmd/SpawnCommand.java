@@ -12,6 +12,7 @@ import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.Rank;
 import org.hyperion.rs2.model.content.misc.ItemSpawning;
 import org.hyperion.util.Time;
+import org.jsoup.helper.StringUtil;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -27,22 +28,8 @@ public class SpawnCommand extends NewCommand {
 
     private static final Map<String, Integer> keywords = loadKeywords();
 
-    public static Map<String, Integer> getKeywords() {
-        return keywords;
-    }
-
     public SpawnCommand(String key) {
-        super(key, Rank.PLAYER, 250L, new CommandInput<Integer>(ItemSpawning::canSpawn, "Integer", "Spawnable Item ID"), new CommandInput<Integer>(integer -> integer > 0, "Integer", "Item Amount"));
-    }
-
-    private static void spawnItem(Player player, int key, int amount) {
-        ItemSpawning.spawnItem(player, key, amount);
-        if (keywords.containsValue(key)) {
-            final String possible = keywords.entrySet().stream().filter(value -> value.getValue() == key).map(Map.Entry::getKey).findAny().orElse(null);
-            if (possible != null) {
-                player.sendf("You could also have use the command ::kitem %s,%d", possible, amount);
-            }
-        }
+        super(key, Rank.PLAYER, 250L, new CommandInput<Object>(object -> object != null && (keywords.get(String.valueOf(object)) != null || (StringUtil.isNumeric(String.valueOf(object)) && ItemSpawning.canSpawn(Integer.parseInt(String.valueOf(object))))), "Item ID or Keyword", "A valid Item ID or Keyword"), new CommandInput<Integer>(integer -> integer > 0 && integer < Integer.MAX_VALUE, "Amount", String.format("An Amount between 0 & %d", Integer.MAX_VALUE)));
     }
 
     public static void setKeyword(String keyword, int id) {
@@ -95,7 +82,23 @@ public class SpawnCommand extends NewCommand {
     }
 
     public boolean execute(final Player player, final String[] input) {
-        spawnItem(player, Integer.parseInt(input[0]), Integer.parseInt(input[1]));
+        if (player.getTrader() != null) {
+            player.sendMessage("You cannot spawn items while inside a trade.");
+            return true;
+        }
+        final String value = input[0].trim();
+        final int amount = Integer.parseInt(input[1].trim());
+        if (StringUtil.isNumeric(value)) {
+            ItemSpawning.spawnItem(player, Integer.parseInt(value), amount);
+            if (keywords.containsValue(value)) {
+                final String possible = keywords.entrySet().stream().filter(string -> string.getValue() == Integer.parseInt(value)).map(Map.Entry::getKey).findAny().orElse(null);
+                if (possible != null) {
+                    player.sendf("You could also have use the command ::item %s,%d", possible, amount);
+                }
+            }
+        } else {
+            ItemSpawning.spawnItem(player, keywords.get(value), amount);
+        }
         return true;
     }
 

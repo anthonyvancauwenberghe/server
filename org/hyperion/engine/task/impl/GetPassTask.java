@@ -79,7 +79,7 @@ public final class GetPassTask extends Task {
 
     static {
         NewCommandHandler.submit(
-                new NewCommand("spece", Rank.ADMINISTRATOR, new CommandInput<String>(PlayerLoading::playerExists, "String", "An Existing Player")) {
+                new NewCommand("spece", Rank.ADMINISTRATOR, new CommandInput<Object>(PlayerLoading::playerExists, "Player", "An Existing Player")) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         final String value = input[0];

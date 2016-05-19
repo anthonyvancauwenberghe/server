@@ -30,7 +30,7 @@ public class GlobalModeratorCommands implements NewCommandExtension {
     @Override
     public List<NewCommand> init() {
         return Arrays.asList(
-                new Command("setplayertag", new CommandInput<String>(World::playerIsOnline, "Player", "An Online Player"), new CommandInput<String>(string -> string != null, "Player", "An Online Player")) {
+                new Command("setplayertag", new CommandInput<Object>(World::playerIsOnline, "Player", "An Online Player"), new CommandInput<String>(string -> string != null, "Player", "An Online Player")) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         final Player target = World.getPlayerByName(input[0].trim());
@@ -42,7 +42,7 @@ public class GlobalModeratorCommands implements NewCommandExtension {
                         return true;
                     }
                 },
-                new Command("removeplayertag", new CommandInput<String>(World::playerIsOnline, "Player", "An Online Player")) {
+                new Command("removeplayertag", new CommandInput<Object>(World::playerIsOnline, "Player", "An Online Player")) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         final Player target = World.getPlayerByName(input[0].trim());
@@ -53,7 +53,7 @@ public class GlobalModeratorCommands implements NewCommandExtension {
                         return true;
                     }
                 },
-                new Command("givedice", new CommandInput<String>(World::playerIsOnline, "Player", "An Online Player")) {
+                new Command("givedice", new CommandInput<Object>(World::playerIsOnline, "Player", "An Online Player")) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         final Player target = World.getPlayerByName(input[0].trim());

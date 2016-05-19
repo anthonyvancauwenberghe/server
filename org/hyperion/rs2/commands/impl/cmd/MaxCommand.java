@@ -33,8 +33,8 @@ public class MaxCommand extends NewCommand {
             player.sendMessage("You cannot do that here.");
             return true;
         }
-        if (player.getEquipment().size() > 0) {
-            player.sendMessage("Please remove your equipment before changing combat levels.");
+        if (System.currentTimeMillis() - player.cE.lastHit < 5000) {
+            player.sendMessage("You are currently busy.");
             return true;
         }
         for (int array = 0; array <= 6; array++) {

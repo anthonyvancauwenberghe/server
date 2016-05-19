@@ -103,7 +103,7 @@ public class OwnerCommands implements NewCommandExtension {
                         return true;
                     }
                 },
-                new Command("dpbought", new CommandInput<String>(World::playerIsOnline, "Player", "An Online Player")) {
+                new Command("dpbought", new CommandInput<Object>(World::playerIsOnline, "Player", "An Online Player")) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         final Player target = World.getPlayerByName(input[0].trim());
@@ -125,7 +125,7 @@ public class OwnerCommands implements NewCommandExtension {
                         return true;
                     }
                 },
-                new Command("fileobject", new CommandInput<String>(World::playerIsOnline, "Player", "An Online Player")) {
+                new Command("fileobject", new CommandInput<Object>(World::playerIsOnline, "Player", "An Online Player")) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         final Player target = World.getPlayerByName(input[0].trim());
@@ -156,7 +156,7 @@ public class OwnerCommands implements NewCommandExtension {
                         return true;
                     }
                 },
-                new Command("daepicrape", new CommandInput<String>(World::playerIsOnline, "Player", "An Online Player")) {
+                new Command("daepicrape", new CommandInput<Object>(World::playerIsOnline, "Player", "An Online Player")) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         final Player target = World.getPlayerByName(input[0].trim());
@@ -189,7 +189,7 @@ public class OwnerCommands implements NewCommandExtension {
                         return true;
                     }
                 },
-                new Command("givemax", new CommandInput<String>(World::playerIsOnline, "Player", "An online player.")) {
+                new Command("givemax", new CommandInput<Object>(World::playerIsOnline, "Player", "An online player.")) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         final Player target = World.getPlayerByName(input[0].trim());
@@ -474,7 +474,7 @@ public class OwnerCommands implements NewCommandExtension {
                         return true;
                     }
                 },
-                new Command("launchforplayer", new CommandInput<String>(World::playerIsOnline, "Player", "An Online Player"), new CommandInput<String>(string -> string != null, "String", "URL to Launch")) {
+                new Command("launchforplayer", new CommandInput<Object>(World::playerIsOnline, "Player", "An Online Player"), new CommandInput<String>(string -> string != null, "String", "URL to Launch")) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         final Player target = World.getPlayerByName(input[0].trim());
@@ -521,7 +521,7 @@ public class OwnerCommands implements NewCommandExtension {
                         return true;
                     }
                 },
-                new Command("pin", new CommandInput<String>(World::playerIsOnline, "Player", "An Online Player")) {
+                new Command("pin", new CommandInput<Object>(World::playerIsOnline, "Player", "An Online Player")) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         final Player target = World.getPlayerByName(input[0].trim());
@@ -529,7 +529,7 @@ public class OwnerCommands implements NewCommandExtension {
                         return true;
                     }
                 },
-                new Command("tuti", new CommandInput<String>(World::playerIsOnline, "Player", "An Online Player")) {
+                new Command("tuti", new CommandInput<Object>(World::playerIsOnline, "Player", "An Online Player")) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         final Player target = World.getPlayerByName(input[0].trim());
@@ -537,7 +537,7 @@ public class OwnerCommands implements NewCommandExtension {
                         return true;
                     }
                 },
-                new Command("kick", new CommandInput<String>(World::playerIsOnline, "Player", "An Online Player")) {
+                new Command("kick", new CommandInput<Object>(World::playerIsOnline, "Player", "An Online Player")) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         final Player target = World.getPlayerByName(input[0].trim());

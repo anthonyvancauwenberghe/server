@@ -5,6 +5,7 @@ import org.hyperion.engine.task.impl.WildernessBossTask;
 import org.hyperion.rs2.Constants;
 import org.hyperion.rs2.model.*;
 import org.hyperion.rs2.model.container.Equipment;
+import org.hyperion.rs2.model.container.Trade;
 import org.hyperion.rs2.model.container.duel.Duel;
 import org.hyperion.rs2.model.content.ContentEntity;
 import org.hyperion.rs2.model.content.bounty.BountyPerkHandler;
@@ -84,7 +85,7 @@ public class Magic {
 		map.put(12861, new Spell(58, 12861, 34, 18, 1978, - 1, - 1, 361, 0, 560, 2, 562, 2, 555, 2, 0, 0, 5, 0, 0, 0, false));
 		map.put(12963, new Spell(62, 12963, 36, 19, 1979, - 1, - 1, 389, 0, 562, 4, 560, 2, 554, 2, 556, 2, 0, 10, 0, 0, true));
 		map.put(13011, new Spell(64, 13011, 37, 20, 1979, - 1, - 1, 382, 0, 562, 4, 560, 2, 556, 2, 566, 2, 0, 0, 10, 0, true));
-		map.put(12919, new Spell(68, 12919, 39, 21, 1979, - 1, - 1, 376, 4, 562, 2, 560, 4, 555, 2, 0, 0, 0, 0, 0, 0, true));
+		map.put(12919, new Spell(68, 12919, 39, 21, 1979, - 1, - 1, 376, 4, 562, 2, 560, 4, 555, 2, 562, 4, 0, 0, 0, 0, true));
 		map.put(12881, new Spell(70, 12881, 40, 22, 1979, - 1, - 1, 363, 0, 562, 4, 560, 2, 555, 4, 0, 0, 8, 0, 0, 0, true));
 		map.put(12951, new Spell(74, 12951, 42, 23, 1978, - 1, - 1, 387, 0, 560, 2, 565, 2, 556, 2, 556, 2, 0, 15, 0, 0, false));
 		map.put(12999, new Spell(76, 12999, 43, 24, 1978, - 1, - 1, 381, 0, 562, 2, 560, 2, 556, 2, 566, 2, 0, 0, 15, 0, false));
@@ -1245,7 +1246,8 @@ public class Magic {
 
 			player.updateTeleportTimer();
 		}
-
+		player.getSkills().stopSkilling();
+		Trade.declineTrade(player);
 		Duel.declineTrade(player);
 
 		final int x1 = x;

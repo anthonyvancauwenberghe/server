@@ -6,6 +6,8 @@ import org.hyperion.rs2.model.container.RunePouchContainerListener;
 import org.hyperion.rs2.model.content.ClickType;
 import org.hyperion.rs2.model.content.ContentTemplate;
 
+import java.util.Arrays;
+
 /**
  * Created by Scott Perretta on 3/22/2015.
  */
@@ -18,7 +20,7 @@ public class RunePouch implements ContentTemplate {
     public static final int INVENTORY_INTERFACE = 28995;
 
     public static void open(Player player) {
-        if(player.getBankField().isBanking()) {
+        if (player.getBankField().isBanking()) {
             player.sendMessage("You cannot store runes and bank at the same time.");
             return;
         }
@@ -29,108 +31,72 @@ public class RunePouch implements ContentTemplate {
     }
 
     private static boolean isRune(Item item) {
-        if(item != null && ((item.getId() >= 554 && item.getId() <= 565) || item.getId() == 9075)) {
-                return true;
+        if (item != null && ((item.getId() >= 554 && item.getId() <= 565) || item.getId() == 9075)) {
+            return true;
         }
         return false;
     }
 
-    public static void withdraw(Player player, int id, int amount) {
-        if (player.getBankField().isBanking()) {
+    public static void withdraw(final Player player, final int id, final int amount) {
+        if (player.getBankField().isBanking() || player.openedBoB) {
             return;
         }
-        final int slot = player.getRunePouch().getSlotById(id);
-        if(slot < 0) {
+        final int taking = amount > player.getRunePouch().getCount(id) ? player.getRunePouch().getCount(id) : amount;
+        if (taking == 0) {
             return;
         }
-        Item item = player.getRunePouch().get(slot);
-        if ((item == null) || (item.getId() != id)) {
+        final Item tranfering = Item.create(id, taking);
+        if (tranfering == null || !player.getRunePouch().hasItem(tranfering)) {
             return;
         }
-        int transferAmount = player.getRunePouch().getCount(item.getId());
-        if (transferAmount >= amount) {
-            transferAmount = amount;
-        } else if (transferAmount == 0) {
-            return;
-        }
-        if ((player.getInventory().freeSlots() <= 0)
-                && (player.getInventory().getById(id) == null)) {
-            player.getActionSender().sendMessage("You don't have enough inventory space to withdraw that many.");
-            return;
-        }
-        if (player.getInventory().add(new Item(id, transferAmount))) {
-            int newAmount = item.getCount() - transferAmount;
-            if (newAmount <= 0) {
-                player.getRunePouch().set(slot, null);
-                player.getRunePouch().shift();
-                player.getRunePouch().fireItemsChanged();
-            } else {
-                item.setCount(newAmount);
-                player.getRunePouch().set(slot, item);
-                player.getRunePouch().fireItemChanged(slot);
-            }
+        if (player.getInventory().hasRoomFor(tranfering)) {
+            player.getRunePouch().remove(tranfering);
+            player.getRunePouch().shift();
+            player.getRunePouch().fireItemsChanged();
+            player.getInventory().add(tranfering);
         } else {
             player.getActionSender().sendMessage("You don't have enough inventory space to withdraw that many.");
         }
     }
 
-    public static final void deposit(Player player, int slot, int id, int amount) {
-        if(player.getBankField().isBanking() || player.openedBoB) {
+    public static void deposit(final Player player, final int slot, final int id, final int amount) {
+        if (player.getBankField().isBanking() || player.openedBoB) {
             return;
         }
-        final boolean inventoryFiringEvents = player.getInventory().isFiringEvents();
-        final boolean runePouchFiringEvents = player.getRunePouch().isFiringEvents();
-        player.getInventory().setFiringEvents(false);
-        player.getRunePouch().setFiringEvents(true);
-        try {
-            Item item = player.getInventory().getById(id);
-            if (item == null || item.getId() != id) {
-                return;
-            }
-            if(!isRune(item)) {
-                player.sendMessage("You can only store runes in this pouch.");
-                return;
-            }
-            int transferAmount = player.getInventory().getCount(id);
-            if(transferAmount >= amount) {
-                transferAmount = amount;
-            } else if(transferAmount == 0) {
-                return;
-            }
-            if ((player.getRunePouch().freeSlots() < 1) && (player.getRunePouch().getById(id) == null)) {
-                player.getActionSender().sendMessage("You don't have enough space in your rune pouch.");
-                return;
-            }
-            int newInventoryAmount = item.getCount() - transferAmount;
-            Item newItem = (newInventoryAmount <= 0) ? null : new Item(item.getId(), newInventoryAmount);
-            if (!player.getRunePouch().add(new Item(item.getId(), transferAmount))) {
-                player.getActionSender().sendMessage("You don't have enough space in your rune pouch.");
-            } else {
-                player.getInventory().set(slot, newItem);
-                player.getInventory().fireItemsChanged();
-                player.getRunePouch().fireItemChanged(player.getRunePouch().getSlotById(id));
-            }
-        } finally {
-            player.getInventory().setFiringEvents(inventoryFiringEvents);
-            player.getRunePouch().setFiringEvents(runePouchFiringEvents);
+        final int depositing = amount > player.getInventory().getCount(id) ? player.getInventory().getCount(id) : amount;
+        if (depositing == 0) {
+            return;
+        }
+        final Item transfering = Item.create(id, depositing);
+        if (transfering == null || !player.getInventory().hasItem(transfering)) {
+            return;
+        }
+        if (!isRune(transfering)) {
+            player.sendMessage("You can only deposit runes in here.");
+            return;
+        }
+        if (player.getRunePouch().hasRoomFor(transfering)) {
+            player.getInventory().remove(transfering);
+            player.getRunePouch().add(transfering);
+            player.getRunePouch().shift();
+            player.getRunePouch().fireItemsChanged();
+        } else {
+            player.getActionSender().sendMessage("You don't have enough space in your rune pouch.");
         }
     }
 
     public static void empty(Player player) {
-        if(player == null || player.getRunePouch() == null)
+        if (player == null || player.getRunePouch() == null)
             return;
-        for(Item rune : player.getRunePouch().toArray()) {
-            if (rune != null) {
-                player.getRunePouch().remove(rune);
-                player.getInventory().add(rune);
-            }
-        }
+        Arrays.asList(player.getRunePouch().toArray()).stream().filter(value -> value != null).forEach(value -> {
+            withdraw(player, value.getId(), value.getCount());
+        });
     }
 
     @Override
     public boolean clickObject2(Player player, int type, int a, int b, int c, int d) {
-        if(type == ClickType.ITEM_OPTOION6) {
-            if(player.getRunePouch().size() > 0) {
+        if (type == ClickType.ITEM_OPTOION6) {
+            if (player.getRunePouch().size() > 0) {
                 RunePouch.empty(player);
                 return true;
             }
@@ -140,9 +106,7 @@ public class RunePouch implements ContentTemplate {
 
     @Override
     public int[] getValues(int type) {
-        if(type == ClickType.EAT || type == ClickType.ITEM_OPTOION6)
-            return new int[]{POUCH};
-        return new int[0];
+        return (type == ClickType.EAT || type == ClickType.ITEM_OPTOION6) ? new int[]{POUCH} : new int[0];
     }
 
     @Override

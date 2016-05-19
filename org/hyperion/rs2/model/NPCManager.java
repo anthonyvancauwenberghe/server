@@ -291,6 +291,13 @@ public class NPCManager {
 		return n;
 	}
 
+	public static NPC addNPC(final NPC npc) {
+		npc.agressiveDis = getAgressiveDistance(npc.getDefinition().getId());
+		npc.bones = getBones(npc.getDefinition().getId(), npc.getDefinition().getName());
+		World.register(npc);
+		return npc;
+	}
+
 	public static NPC addNPC(int x, int y, int z, int npcId, int respawnTime) {
 		return addNPC(Position.create(x, y, z), npcId, respawnTime);
 	}

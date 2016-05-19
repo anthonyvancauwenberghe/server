@@ -18,6 +18,7 @@ import org.hyperion.rs2.model.content.misc2.Edgeville;
 import org.hyperion.rs2.util.AccountLogger;
 import org.hyperion.rs2.util.TextUtils;
 import org.hyperion.util.Misc;
+import org.hyperion.util.Time;
 
 import java.io.BufferedWriter;
 import java.io.FileWriter;
@@ -46,7 +47,19 @@ public class ModeratorCommands implements NewCommandExtension {
     @Override
     public List<NewCommand> init() {
         return Arrays.asList(
-                new Command("getinfo", new CommandInput<String>(World::playerIsOnline, "Player", "An Online Player")) {
+                new Command("mypos", Time.TEN_SECONDS) {
+                    @Override
+                    protected boolean execute(Player player, String[] input) {
+                        final int x = player.getPosition().getX();
+                        final int y = player.getPosition().getY();
+                        final int z = player.getPosition().getZ();
+                        final int rx = x >> 6;
+                        final int ry = y >> 6;
+                        player.sendf("[X]: %d, [Y]: %d, [Z]: %d, [Region]: %d, [RX]: %d, [RY]: %d", x, y, z, (rx << 8) + ry, rx, ry);
+                        return true;
+                    }
+                },
+                new Command("getinfo", new CommandInput<Object>(World::playerIsOnline, "Player", "An Online Player")) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         final Player target = World.getPlayerByName(input[0].trim());
@@ -76,12 +89,12 @@ public class ModeratorCommands implements NewCommandExtension {
                         }
                         final int x = Integer.parseInt(input[0].trim());
                         final int y = Integer.parseInt(input[1].trim());
-                        final int z = Integer.parseInt(input[3].trim());
+                        final int z = Integer.parseInt(input[2].trim());
                         if (Combat.getWildLevel(x, y) > 0) {
                             player.sendMessage("Events cannot take place inside the wilderness.");
                             return true;
                         }
-                        final String event = input[4].trim();
+                        final String event = TextUtils.titleCase(input[3].trim());
                         Events.fireNewEvent(TextUtils.ucFirst(event.toLowerCase()), true, 0, Position.create(x, y, z));
                         World.getPlayers().stream().filter(target -> target != null).forEach(target -> {
                             target.sendServerMessage(String.format("%s has just created the event '%s'.", player.getSafeDisplayName(), Events.eventName));
@@ -120,7 +133,7 @@ public class ModeratorCommands implements NewCommandExtension {
                         return true;
                     }
                 },
-                new Command("checkpkstats", new CommandInput<String>(World::playerIsOnline, "Player", "An Online Player")) {
+                new Command("checkpkstats", new CommandInput<Object>(World::playerIsOnline, "Player", "An Online Player")) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         final Player target = World.getPlayerByName(input[0].trim());
@@ -129,7 +142,7 @@ public class ModeratorCommands implements NewCommandExtension {
                         return true;
                     }
                 },
-                new Command("checkpts", new CommandInput<String>(World::playerIsOnline, "Player", "An Online Player")) {
+                new Command("checkpts", new CommandInput<Object>(World::playerIsOnline, "Player", "An Online Player")) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         final Player target = World.getPlayerByName(input[0].trim());
@@ -156,7 +169,7 @@ public class ModeratorCommands implements NewCommandExtension {
                         return true;
                     }
                 },
-                new Command("rshu", new CommandInput<String>(World::playerIsOnline, "Player", "An Online Player")) {
+                new Command("rshu", new CommandInput<Object>(World::playerIsOnline, "Player", "An Online Player")) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         final Player target = World.getPlayerByName(input[0].trim());
@@ -185,7 +198,7 @@ public class ModeratorCommands implements NewCommandExtension {
                         return true;
                     }
                 },
-                new Command("xteleto", new CommandInput<String>(World::playerIsOnline, "Player", "An Online Player")) {
+                new Command("xteleto", new CommandInput<Object>(World::playerIsOnline, "Player", "An Online Player")) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         if (player.getPosition().inPvPArea() && !Rank.hasAbility(player, Rank.ADMINISTRATOR)
@@ -203,7 +216,7 @@ public class ModeratorCommands implements NewCommandExtension {
                         return true;
                     }
                 },
-                new Command("xteletome", new CommandInput<String>(World::playerIsOnline, "Player", "An Online Player")) {
+                new Command("xteletome", new CommandInput<Object>(World::playerIsOnline, "Player", "An Online Player")) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         if (player.getPosition().inPvPArea() && !Rank.hasAbility(player, Rank.DEVELOPER)
@@ -290,7 +303,7 @@ public class ModeratorCommands implements NewCommandExtension {
                         return true;
                     }
                 },
-                new Command("setwatched", new CommandInput<String>(World::playerIsOnline, "Player", "An Online Player")) {
+                new Command("setwatched", new CommandInput<Object>(World::playerIsOnline, "Player", "An Online Player")) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         String value = input[0].trim();
@@ -309,7 +322,7 @@ public class ModeratorCommands implements NewCommandExtension {
                         return true;
                     }
                 },
-                new Command("sendhome", new CommandInput<String>(World::playerIsOnline, "Player", "An Online Player")) {
+                new Command("sendhome", new CommandInput<Object>(World::playerIsOnline, "Player", "An Online Player")) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         final Player target = World.getPlayerByName(input[0].trim());
@@ -324,7 +337,7 @@ public class ModeratorCommands implements NewCommandExtension {
                         return true;
                     }
                 },
-                new Command("viewbank", new CommandInput<String>(World::playerIsOnline, "Player", "An Online Player")) {
+                new Command("viewbank", new CommandInput<Object>(World::playerIsOnline, "Player", "An Online Player")) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         if (player.getChecking().getBankListener() != null) {
@@ -350,7 +363,7 @@ public class ModeratorCommands implements NewCommandExtension {
                         return true;
                     }
                 },
-                new Command("viewinv", new CommandInput<String>(World::playerIsOnline, "Player", "An online Player")) {
+                new Command("viewinv", new CommandInput<Object>(World::playerIsOnline, "Player", "An online Player")) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         if (player.getChecking().getInvListener() != null) {
@@ -403,7 +416,7 @@ public class ModeratorCommands implements NewCommandExtension {
                         return true;
                     }
                 },
-                new Command("accvalue", new CommandInput<String>(World::playerIsOnline, "Player", "An online Player")) {
+                new Command("accvalue", new CommandInput<Object>(World::playerIsOnline, "Player", "An online Player")) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         final Player target = World.getPlayerByName(input[0].trim());
@@ -411,7 +424,7 @@ public class ModeratorCommands implements NewCommandExtension {
                         return true;
                     }
                 },
-                new Command("resetks", new CommandInput<String>(World::playerIsOnline, "Player", "An Online Player")) {
+                new Command("resetks", new CommandInput<Object>(World::playerIsOnline, "Player", "An Online Player")) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         final Player target = World.getPlayerByName(input[0].trim());
@@ -420,7 +433,7 @@ public class ModeratorCommands implements NewCommandExtension {
                         return true;
                     }
                 },
-                new Command("staff", new CommandInput<String>(World::playerIsOnline, "Player", "An Online Player")) {
+                new Command("staff", new CommandInput<Object>(World::playerIsOnline, "Player", "An Online Player")) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         if ((player.getPosition().getX() >= 2934 && player.getPosition().getY() <= 3392
@@ -462,7 +475,7 @@ public class ModeratorCommands implements NewCommandExtension {
                         return true;
                     }
                 },
-                new Command("resetslayertask", new CommandInput<String>(World::playerIsOnline, "Player", "An Online Player")) {
+                new Command("resetslayertask", new CommandInput<Object>(World::playerIsOnline, "Player", "An Online Player")) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         final Player target = World.getPlayerByName(input[0].trim());

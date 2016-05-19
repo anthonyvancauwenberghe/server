@@ -71,7 +71,6 @@ public class Challenge {
         final StringBuilder bldr = new StringBuilder(length);
         for(int i = 0; i < length; i++)
             bldr.append(DATA.charAt(RAND.nextInt(DATA.length())));
-        System.out.println(bldr.toString());
         return new Challenge(player.getSafeDisplayName(), bldr.toString(), id, amount);
     }
 }

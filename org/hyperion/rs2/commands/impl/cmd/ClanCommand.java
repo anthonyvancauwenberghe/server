@@ -13,7 +13,7 @@ import org.hyperion.rs2.model.content.clan.ClanManager;
 public class ClanCommand extends NewCommand {
 
     public ClanCommand(String key) {
-        super(key, Rank.PLAYER, 250L, new CommandInput<String>(string -> string != null, "String", "Clan Message"));
+        super(key, Rank.PLAYER, 250L, new CommandInput<>(object -> true, "String", "Clan Message"));
     }
 
     @Override

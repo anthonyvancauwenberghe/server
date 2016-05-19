@@ -61,8 +61,6 @@ public class Skills {
             return new CurrentBonusXP(Long.parseLong(split[0]), Integer.parseInt(split[1]));
 
         }
-
-
     }
 
 
@@ -80,7 +78,6 @@ public class Skills {
             "Fishing", "Firemaking", "Crafting", "Smithing",
             "Mining", "Herblore", "Agility", "Thieving",
             "Slayer", "Farming", "Runecrafting", "Construction", "Hunter", "Summoning", "Dungeoneering"};
-
 
     /**
      * The bonus skill.
@@ -172,7 +169,13 @@ public class Skills {
     public Skills(Player player) {
         this.player = player;
         reset();
+    }
 
+    public void stopSkilling() {
+        if (player.getCurrentTask() != null) {
+            player.getCurrentTask().stop();
+            player.setCurrentTask(null);
+        }
     }
 
     public void reset() {

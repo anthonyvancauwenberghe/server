@@ -6,9 +6,7 @@ import org.hyperion.rs2.Constants;
 import org.hyperion.rs2.model.*;
 
 import java.io.*;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 import java.util.logging.Level;
 
 /**
@@ -923,7 +921,13 @@ public class WorldMap {
         return -1;
     }
 
+    private static final List<Integer> walkableObjects = Arrays.asList(6591, 2475, 2476, 2477);
+    private static boolean isWalkableObject(final int value) {
+        return walkableObjects.stream().anyMatch(array -> array.equals(value));
+    }
+
     public static boolean isWalkAble2(int height, int absX, int absY, int toAbsX, int toAbsY, int check) {
+        //System.out.println(String.format("%d %d %d %d %d %d", height, absX, absY, toAbsX, toAbsY, check));
         //if(world == null) return true;
         if (absX == toAbsX && absY == toAbsY) {
             return true;
@@ -949,7 +953,7 @@ public class WorldMap {
         }
         final GameObject obj = ObjectManager.getObjectAt(absX, absY, 0);
         if (obj != null) {
-            return obj.getDefinition().getId() == 6951;
+            return isWalkableObject(obj.getDefinition().getId());
         }
         if (World.World_Objects[which] != null && which < World.World_Objects[which].size()) {
             return true;
@@ -957,7 +961,6 @@ public class WorldMap {
         if (World.World_Objects[which] == null) {
             return true;
         }
-
         if (World.World_Objects[which].containsKey(f)) {
             dc = World.World_Objects[which].get(f);
         } else if (World.World_Objects[which].containsKey(f2)) {

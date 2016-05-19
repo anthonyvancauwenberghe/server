@@ -122,7 +122,6 @@ public class Player extends Entity implements Persistable, Cloneable {
 	public int[] delayObjectClick = new int[4];// id,x,y,type
 	public int wildernessLevel = -1;
 	public int headIconId = -1;
-	public int logoutTries = 0;
 	public int[] specialUid;
 	public int[] chatStatus = new int[3];
 	public int forceWalkX1;
@@ -210,6 +209,7 @@ public class Player extends Entity implements Persistable, Cloneable {
 	 */
 	public boolean cleaned = false;
 	public boolean loggedOut = false;
+	public boolean forcedLogout = false;
 	public boolean showEP = true;
 	public boolean active = false;
 	public boolean hasBeenInformed;
@@ -335,6 +335,7 @@ public class Player extends Entity implements Persistable, Cloneable {
 	private SpellBook spellBook = new SpellBook(SpellBook.DEFAULT_SPELLBOOK);
 	private FriendList friendList = new FriendList();
 	private PvPTask currentPvPTask;
+	private Task currentTask;
 	private Farm farm = Farming.getFarming().new Farm();
 	private AutoSaving autoSaving = new AutoSaving(this);
 	private BankField bankField = new BankField(this);
@@ -545,20 +546,18 @@ public class Player extends Entity implements Persistable, Cloneable {
 	private final List<Integer> requiredSkills = Arrays.asList(7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 22/*, 23*/, 24);
 
 	public boolean checkMaxCapeRequirment() {
-		for (int array : requiredSkills) {
-			if (getSkills().getLevels()[array] < 99) {
-				return false;
-			}
-		}
-		return getPoints().getEloPeak() >= 1900;
+		return requiredSkills.stream().allMatch(value -> getSkills().getLevels()[value] >= 99 && getPoints().getEloPeak() >= 1900);
 	}
 
-	// private InterfaceManager itfManager;
-
 	public boolean checkCompCapeReq() {
+		if (!checkMaxCapeRequirment()) {
+			return false;
+		}
 		for (int array : requiredSkills) {
-			if (getSkills().getExps()[array] < 200000000) {
-				return hasCompCape;
+			if (array != 22) {
+				if (getSkills().getExps()[array] < 200000000) {
+					return hasCompCape;
+				}
 			}
 		}
 		if (getPoints().getEloPeak() < 2200) {
@@ -568,14 +567,14 @@ public class Player extends Entity implements Persistable, Cloneable {
 	}
 
 	public void checkCapes() {
-		checkContainers(12747, checkCompCapeReq(), "Completionist cape");
-		checkContainers(12744, checkMaxCapeRequirment(), "Max cape");
 		checkContainers(18509, skills.getRealLevels()[Skills.DUNGEONEERING]== 99, "Dungeoneering cape");
 		checkContainers(19709, skills.getExperience(Skills.DUNGEONEERING) == Skills.MAXIMUM_EXP, "Dungeoneering master cape");
+		checkContainers(12744, checkMaxCapeRequirment(), "Max cape");
+		checkContainers(12747, checkCompCapeReq(), "Completionist cape");
 	}
 
 	public void checkSacredClay() {
-		Item.SACRED_CLAY.forEach(value -> checkContainers(value, false, ItemDefinition.forId(value).getName()));
+		Item.SACRED_CLAY.forEach(value -> checkContainers(value, false, String.format("Sacred Clay (Class %d)", value)));
 	}
 
 	private void checkContainers(final int id, final boolean add, String name) {
@@ -585,7 +584,7 @@ public class Player extends Entity implements Persistable, Cloneable {
 			if(container.contains(id)) {
 				contains = true;
 				if(!add) {
-					container.remove(Item.create(id));
+					container.remove(Item.create(id, container.getCount(id)));
 				}
 			}
 		}
@@ -1532,9 +1531,7 @@ public class Player extends Entity implements Persistable, Cloneable {
 			if(! this.isDead()) {
 				Prayer.retribution(this);
 				World.submit(new PlayerDeathTask(this));
-
 			}
-			this.setDead(true);
 		}
 	}
 
@@ -1548,9 +1545,6 @@ public class Player extends Entity implements Persistable, Cloneable {
 	}
 
 	public void heal(int hp, int skill) {
-		if (isDead()) {
-			return;
-		}
 		int cHp = skills.getLevel(skill);
 		if(skill == 3) {
 			if((cHp + hp) > skills.calculateMaxLifePoints())
@@ -1568,9 +1562,6 @@ public class Player extends Entity implements Persistable, Cloneable {
 	}
 
 	public void heal(int hp, boolean brew) {
-		if (isDead()) {
-			return;
-		}
 		int cHp = skills.getLevel(3);
 		int j = 3;
 		int brewBonus = (int)(skills.calculateMaxLifePoints() * .15);
@@ -1905,6 +1896,14 @@ public class Player extends Entity implements Persistable, Cloneable {
 		teleBlockTimer = l;
 	}
 
+	public Task getCurrentTask() { return currentTask; }
+
+	public void setCurrentTask(final Task value) {
+		if (currentTask != null) {
+			currentTask.stop();
+		}
+		this.currentTask = value; }
+
 	public PvPTask getPvPTask() {
 		return currentPvPTask;
 	}
@@ -2149,6 +2148,8 @@ public class Player extends Entity implements Persistable, Cloneable {
 
 	public void setKillCount(int kc) {
 		killCount = kc;
+		questtab.updateComponent(QuestTab.QuestTabComponent.KILLS);
+		questtab.updateComponent(QuestTab.QuestTabComponent.KILL_DEATH);
 	}
 
 	public int getDeathCount() {
@@ -2157,6 +2158,8 @@ public class Player extends Entity implements Persistable, Cloneable {
 
 	public void setDeathCount(int dc) {
 		deathCount = dc;
+		questtab.updateComponent(QuestTab.QuestTabComponent.DEATHS);
+		questtab.updateComponent(QuestTab.QuestTabComponent.KILL_DEATH);
 	}
 
 	public boolean isOverloaded() {

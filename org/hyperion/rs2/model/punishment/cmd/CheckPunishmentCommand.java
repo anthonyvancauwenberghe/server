@@ -22,7 +22,7 @@ import java.util.concurrent.TimeUnit;
 public class CheckPunishmentCommand extends NewCommand {
 
     public CheckPunishmentCommand(String key) {
-        super(key, Rank.HELPER, Time.FIVE_SECONDS, new CommandInput<String>(PlayerLoading::playerExists, "player", "A player that exists in the system."));
+        super(key, Rank.HELPER, Time.FIVE_SECONDS, new CommandInput<Object>(PlayerLoading::playerExists, "player", "A player that exists in the system."));
     }
 
     public boolean execute(final Player player, final String[] input) {

@@ -1,5 +1,9 @@
 package org.hyperion.rs2.model;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import org.hyperion.Configuration;
 import org.hyperion.Server;
 import org.hyperion.cache.Cache;
@@ -11,7 +15,9 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.logging.Level;
 
@@ -24,6 +30,7 @@ import static org.hyperion.rs2.model.Position.create;
  */
 public class ObjectManager {
 
+    private static final File file = new File("./data/ObjectSpawns.json");
     private static int definitionCount = 0;
     private static int objectCount = 0;
     /**
@@ -70,36 +77,18 @@ public class ObjectManager {
         } catch(IOException ex) {
             Server.getLogger().log(Level.SEVERE, "Something went wrong while loading the cache.", ex);
         }
-
-        try(BufferedReader reader = new BufferedReader(new FileReader("./data/objspawns.cfg"))) {
-            reader.lines().forEach(line -> {
-                String parts[] = line.replace("spawn = ", "").split("\t");
-                addObject(new GameObject(GameObjectDefinition.forId(Integer.parseInt(parts[0])), Position.create(Integer.parseInt(parts[1]), Integer.parseInt(parts[2]), Integer.parseInt(parts[3])), Integer.parseInt(parts[5]), Integer.parseInt(parts[4])));
-            });
-            if(Configuration.getBoolean(Configuration.ConfigurationObject.DEBUG))
-                Server.getLogger().log(Level.INFO, "Successfully loaded all objects from the file.");
-        } catch(IOException ex) {
-            Server.getLogger().log(Level.SEVERE, "Something went wrong while loading the game objects from the file.", ex);
+        JsonParser parser = new JsonParser();
+        try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
+            JsonArray array = (JsonArray) parser.parse(reader);
+            Iterator<JsonElement> iterator = array.iterator();
+            while (iterator.hasNext()) {
+                JsonObject object = iterator.next().getAsJsonObject();
+                addObject(new GameObject(GameObjectDefinition.forId(object.get("Object").getAsInt()), Position.create(object.get("X").getAsInt(), object.get("Y").getAsInt(), object.get("Z").getAsInt()), object.get("Type").getAsInt(), object.get("Rotation").getAsInt()));
+            }
+            reader.close();
+        } catch (IOException ex) {
+            Server.getLogger().log(Level.SEVERE, String.format("Unable to parse Object Spawns."), ex);
         }
-
-        //TODO ADD THIS TO THE FILE
-        addObject(new GameObject(GameObjectDefinition.forId(2213), create(3275, 2785, 0), 10, 1));
-        addObject(new GameObject(GameObjectDefinition.forId(2213), create(3275, 2784, 0), 10, 1));
-
-        addObject(new GameObject(GameObjectDefinition.forId(7353), create(3203, 3422, 0), 10, 0));//slayer portal
-        //addObject(new GameObject(GameObjectDefinition.forId(61), create(3098, 3506, 0), 10, 2));//chaos altar
-        //addObject(new GameObject(GameObjectDefinition.forId(409), create(3094, 3506, 0), 10, 2));//Normal altar
-        //addObject(new GameObject(GameObjectDefinition.forId(6552), create(3096, 3500, 0), 10, 0));//ancient altar
-        //addObject(new GameObject(GameObjectDefinition.forId(410), create(3106, 3507, 0), 10, 0));//guthix (curses) altar
-
-        addObject(new GameObject(GameObjectDefinition.forId(13192), create(2617, 3306, 0), 10, 2));
-        //RFD Stuff.
-        addObject(new GameObject(GameObjectDefinition.forId(12356), create(3207, 3225, 0), 10, 2));
-        addObject(new GameObject(GameObjectDefinition.forId(2403), create(3207, 3220, 0), 10, 0));
-        addObject(new GameObject(GameObjectDefinition.forId(2156), create(2975, 3392, 0), 10, 2));
-        addObject(new GameObject(GameObjectDefinition.forId(2157), create(2957, 3195, 0), 10, 0));
-        addObject(OSPK.loadObjects());
-        OSPK.loadObjects();
     }
 
     public static void objectParsed(GameObject obj) {
@@ -151,6 +140,30 @@ public class ObjectManager {
                 player.getActionSender().sendReplaceObject(gameObject.getPosition(), gameObject.getDefinition().getId(), gameObject.getRotation(), gameObject.getType());
             }
         }
+        if ((player.getLocation().equals(Locations.Location.DUNGEONEERING_START)
+                || player.getLocation().equals(Locations.Location.DUNGEONEERING_PVM))
+                && player.getDungeoneering().inDungeon()) {
+            loadDungeoneering(player);
+        }
+    }
+
+    private static void loadDungeoneering(final Player player) {
+        final int coordX = player.getPosition().getX();
+        final int coordY = player.getPosition().getY();
+        Map<Integer, Map<Integer, GameObject>> objectOnX = GAME_OBJECTS.get(0);
+        if(objectOnX == null || objectOnX.isEmpty())
+            return;
+        for(int i = -64; i < 64; i++) {
+            Map<Integer, GameObject> objectOnY = objectOnX.get(coordX + i);
+            if(objectOnY == null || objectOnY.isEmpty())
+                continue;
+            for(int j = -64; j < 64; j++) {
+                GameObject gameObject = objectOnY.get(coordY + j);
+                if(gameObject == null)
+                    continue;
+                player.getActionSender().sendReplaceObject(gameObject.getPosition(), gameObject.getDefinition().getId(), gameObject.getRotation(), gameObject.getType());
+            }
+        }
     }
 
     public static void replace(GameObject obj, GameObject obj2) {
@@ -173,7 +186,7 @@ public class ObjectManager {
         return objectsOnX.get(position.getY());
     }
 
-    public static boolean objectExist(Position loc, int id) {
-        return true;
+    public static boolean objectExist(Position loc) {
+        return getObjectAt(loc.getX(), loc.getY(), loc.getZ()) != null;
     }
 }

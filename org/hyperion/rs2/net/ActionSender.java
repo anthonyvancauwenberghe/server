@@ -1323,23 +1323,10 @@ public class ActionSender {
      */
     public ActionSender sendLogout() {
         if (player.loggedOut) return this;
-        if (player.duelAttackable > 0 && player.logoutTries < 10) {
-            if (player.logoutTries == 0) ;
-            player.getActionSender().sendMessage("If you really want to logout here spam the logout button 10 times!");
-            player.logoutTries++;
+        if (player.duelAttackable > 0) {
+            player.sendMessage("You cannot logout during a Duel.");
             return this;
         }
-        if (player.logoutTries >= 10 && player.logoutTries < 20 && player.duelAttackable > 0) {
-            if (player.logoutTries == 10)
-                player.getActionSender().sendMessage("How about another 10 times?");
-            player.logoutTries++;
-            return this;
-        }
-        if (player.logoutTries >= 20 && player.duelAttackable > 0) {
-            player.getActionSender().sendMessage("Nah");
-            return this;
-        }
-        player.logoutTries = 0;
         if (System.currentTimeMillis() - player.cE.lastHit >= 10000L) {
             player.write((new PacketBuilder(109)).toPacket());
             player.loggedOut = true;

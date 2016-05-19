@@ -74,6 +74,7 @@ public class PlayerPoints {
 
     public void setEloRating(int rating) {
         this.eloRating = rating;
+        player.getQuestTab().updateComponent(QuestTab.QuestTabComponent.PVP_RATING);
         if (this.eloPeak < eloRating)
             eloPeak = Integer.valueOf(eloRating);
         Rank newRank = eloRating >= 2200 ? Rank.LEGEND : eloRating >= 1900 ? Rank.HERO : Rank.PLAYER;
@@ -118,8 +119,10 @@ public class PlayerPoints {
         if (amount > 200000)
             return;
         donatorPoints += amount;
+        player.getQuestTab().updateComponent(QuestTab.QuestTabComponent.DONATOR_POINTS);
         if (bought) {
             donatorPointsBought += amount;
+            player.getQuestTab().updateComponent(QuestTab.QuestTabComponent.DONATOR_POINTS_BOUGHT);
             checkDonator();
             try {
                 final File f = new File("./data/donate.txt");
@@ -163,10 +166,13 @@ public class PlayerPoints {
     public void setDonatorPoints(int am) {
         player.getExpectedValues().changeDeltaOther("Donator points set", am - donatorPoints);
         donatorPoints = am;
+        player.getActionSender().sendString(3901, String.format("Donator points: @gre@%,d", donatorPoints));
+        player.getQuestTab().updateComponent(QuestTab.QuestTabComponent.DONATOR_POINTS);
     }
 
     public void setDonatorsBought(int am) {
         donatorPointsBought = am;
+        player.getQuestTab().updateComponent(QuestTab.QuestTabComponent.DONATOR_POINTS_BOUGHT);
     }
 
     /**
@@ -174,6 +180,8 @@ public class PlayerPoints {
      */
     public void setHonorPoints(int value) {
         this.honorPoints = value;
+        player.getActionSender().sendString(3901, String.format("Honor points: @gre@%,d", honorPoints));
+        player.getQuestTab().updateComponent(QuestTab.QuestTabComponent.HONOR_POINTS);
     }
 
     /**
@@ -182,6 +190,8 @@ public class PlayerPoints {
     public void setVotingPoints(int points) {
         player.getExpectedValues().changeDeltaOther("Voting points set", points - votingPoints);
         votingPoints = points;
+        player.getActionSender().sendString(3901, String.format("Voting points: @gre@%,d", votingPoints));
+        player.getQuestTab().updateComponent(QuestTab.QuestTabComponent.VOTING_POINTS);
     }
 
     public void increaseVotingPoints(int times) {
@@ -192,6 +202,8 @@ public class PlayerPoints {
             toAdd += Misc.random(maxpoints) + 1;
         }
         votingPoints += toAdd;
+        player.getActionSender().sendString(3901, String.format("Voting points: @gre@%,d", player.getPoints().getVotingPoints()));
+        player.getQuestTab().updateComponent(QuestTab.QuestTabComponent.VOTING_POINTS);
         player.getExpectedValues().changeDeltaOther("Voting points added", toAdd);
         player.sendServerMessage("Your voting points have been increased by " +
                 toAdd + ", you now have " + votingPoints + " voting points!");
@@ -215,6 +227,8 @@ public class PlayerPoints {
      */
     public void setPkPoints(int points) {
         pkPoints = points;
+        player.getActionSender().sendString(3901, String.format("ArteroPK points: @gre@%,d", pkPoints));
+        player.getQuestTab().updateComponent(QuestTab.QuestTabComponent.PK_POINTS);
     }
 
     public void increasePkPoints(int points) {
@@ -223,6 +237,8 @@ public class PlayerPoints {
 
     public void increasePkPoints(int points, boolean message) {
         pkPoints += points;
+        player.getActionSender().sendString(3901, String.format("ArteroPK points: @gre@%,d", pkPoints));
+        player.getQuestTab().updateComponent(QuestTab.QuestTabComponent.PK_POINTS);
         if (message)
             player.sendPkMessage("Your " + Configuration.getString(Configuration.ConfigurationObject.NAME) + " points have been increased by " + points + "!");
     }

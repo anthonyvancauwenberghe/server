@@ -23,11 +23,11 @@ public class CommunityManagerCommands implements NewCommandExtension {
 
     private abstract class Command extends NewCommand {
         public Command(String key, long delay, CommandInput... requiredInput) {
-            super(key, delay, requiredInput);
+            super(key, Rank.COMMUNITY_MANAGER, delay, requiredInput);
         }
 
         public Command(String key, CommandInput... requiredInput) {
-            super(key, requiredInput);
+            super(key, Rank.COMMUNITY_MANAGER, requiredInput);
         }
     }
 

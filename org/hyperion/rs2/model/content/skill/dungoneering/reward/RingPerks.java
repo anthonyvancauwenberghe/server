@@ -1,6 +1,7 @@
 package org.hyperion.rs2.model.content.skill.dungoneering.reward;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -11,78 +12,6 @@ import java.util.List;
  * To change this template use File | Settings | File Templates.
  */
 public class RingPerks {
-
-    public static final void main(String[] args) {
-        final RingPerks perks = new RingPerks();
-        System.out.println(perks.bonus(0, false));
-        perks.upgradePerk(Perk.MELEE);
-        System.out.println(perks.bonus(0, false));
-
-
-    }
-
-    public static enum Perk {
-        MELEE(0, 3) {
-            @Override double getBonusPercent(final int level) {
-                return (((double)level * 1.2) / 100D);
-            }
-            @Override double getAccuracyPercent(final int level) {
-                return ((level) * 2 / 100D);
-            }
-        },
-        RANGE(1, 3) {
-            @Override double getBonusPercent(final int level) {
-                return ((level * 1.5) / 100D);
-            }
-            @Override double getAccuracyPercent(final int level) {
-                return ((level) * 2 / 100D);
-            }
-
-        },
-        MAGIC(2, 3) {
-            @Override double getBonusPercent(final int level) {
-                return (((double)level * 1.5) / 100D);
-            }
-
-            @Override double getAccuracyPercent(final int level) {
-                return ((level) * 2 / 100D);
-            }
-        };
-
-        public final int maxLevel, index;
-
-        private Perk(final int index, final int maxLevel) {
-            this.index = index;
-            this.maxLevel = maxLevel;
-        }
-
-        double getBonusPercent(final int level) {
-            throw new AbstractMethodError();
-        }
-
-        double getAccuracyPercent(final int level) {
-            throw new AbstractMethodError();
-        }
-
-        public int getFlag(int level) {
-            return 1 << (ordinal() + level * 3);
-        }
-
-        public String toString() {
-            return super.toString().substring(0, super.toString().indexOf("_"));
-        }
-
-        public static final Perk forStyle(int style) {
-            if(style >= 5)
-                style -= 5;
-            for(final Perk perk : values()) {
-                if(perk.index == style)
-                    return perk;
-            }
-            return null;
-        }
-
-    }
 
     private int perks = 0;
 
@@ -108,8 +37,7 @@ public class RingPerks {
     }
 
     public void addFlags(final Perk... perks) {
-        for (Perk p : perks)
-            addFlag(p.getFlag(hasPerk(p) + 1));
+        Arrays.asList(perks).forEach(value -> addFlag(value.getFlag(hasPerk(value) + 1)));
     }
 
     private void addFlag(final int perk) {
@@ -126,37 +54,33 @@ public class RingPerks {
 
     public void upgradePerk(Perk perk) {
         final int oldLevel = hasPerk(perk);
-        if(oldLevel + 1 > perk.maxLevel)
+        if (oldLevel + 1 > perk.maxLevel)
             return;
         addFlags(perk);
-        if(oldLevel > -1)
+        if (oldLevel > -1)
             removeFlag(perk, oldLevel);
     }
 
     public int calcNextPerkCost(int style) {
-        return (int)(35_000 * Math.pow(1.5, hasPerk(Perk.forStyle(style)) + 1));
+        return (int) (35_000 * Math.pow(1.5, hasPerk(Perk.forStyle(style)) + 1));
     }
 
     public double bonus(final int style, boolean accuracy) {
         double base = 1.0;
         Perk perk = Perk.forStyle(style);
         final int level = hasPerk(perk) + 1;
-        base += accuracy ? perk.getAccuracyPercent(level) :perk.getBonusPercent(level);
+        base += accuracy ? perk.getAccuracyPercent(level) : perk.getBonusPercent(level);
         return base;
     }
 
     public double boost(final int style, final boolean accuracy, final double original) {
-        return (int)(original * bonus(style, accuracy));       //
-        //return 1;
+        return (int) (original * bonus(style, accuracy));
     }
 
     public List<Perk> getPerks() {
-        List<Perk> playerperks = new ArrayList<>();
-        for (Perk perk : Perk.values()) {
-            if (hasPerk(perk) >= 0)
-                playerperks.add(perk);
-        }
-        return playerperks;
+        final List<Perk> list = new ArrayList<>();
+        Arrays.asList(Perk.values()).stream().filter(value -> hasPerk(value) >= 0).forEach(list::add);
+        return list;
     }
 
     public String toString() {
@@ -172,5 +96,76 @@ public class RingPerks {
 
     public String[] boosts() {
         return toString().split("_B_");
+    }
+
+    public enum Perk {
+        MELEE(0, 3) {
+            @Override
+            double getBonusPercent(final int level) {
+                return (((double) level * 1.2) / 100D);
+            }
+
+            @Override
+            double getAccuracyPercent(final int level) {
+                return ((level) * 2 / 100D);
+            }
+        },
+        RANGE(1, 3) {
+            @Override
+            double getBonusPercent(final int level) {
+                return ((level * 1.5) / 100D);
+            }
+
+            @Override
+            double getAccuracyPercent(final int level) {
+                return ((level) * 2 / 100D);
+            }
+
+        },
+        MAGIC(2, 3) {
+            @Override
+            double getBonusPercent(final int level) {
+                return (((double) level * 1.5) / 100D);
+            }
+
+            @Override
+            double getAccuracyPercent(final int level) {
+                return ((level) * 2 / 100D);
+            }
+        };
+
+        public final int index, maxLevel;
+
+        Perk(final int index, final int maxLevel) {
+            this.index = index;
+            this.maxLevel = maxLevel;
+        }
+
+        public static final Perk forStyle(int style) {
+            if (style >= 5)
+                style -= 5;
+            for (final Perk perk : values()) {
+                if (perk.index == style)
+                    return perk;
+            }
+            return null;
+        }
+
+        double getBonusPercent(final int level) {
+            throw new AbstractMethodError();
+        }
+
+        double getAccuracyPercent(final int level) {
+            throw new AbstractMethodError();
+        }
+
+        public int getFlag(int level) {
+            return 1 << (ordinal() + level * 3);
+        }
+
+        public String toString() {
+            return super.toString().substring(0, super.toString().indexOf("_"));
+        }
+
     }
 }

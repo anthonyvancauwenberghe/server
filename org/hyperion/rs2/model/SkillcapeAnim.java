@@ -1,416 +1,179 @@
 package org.hyperion.rs2.model;
 
-import org.hyperion.rs2.model.cluescroll.ClueScrollManager;
+import org.hyperion.engine.task.Task;
+import org.hyperion.engine.task.TaskManager;
 
+import java.util.Arrays;
+import java.util.List;
+
+/**
+ * @author DrHales
+ */
 public class SkillcapeAnim {
 
-	public static int skillIdForCape(int cape) {
-		switch(cape) {
-			case 9747:
-			case 9748:
-				return 0;
-	        /*
-		     * Defense cape.
-		     */
-			case 9753:
-			case 9754:
-				return 1;
-		    /*
-		     * Strength cape.
-		     */
-			case 9750:
-			case 9751:
-				return 2;
-		    /*
-		     * Hitpoints cape.
-		     */
-			case 9768:
-			case 9769:
-				return 3;
-		    /*
-		     * Ranging cape.
-		     */
-			case 9756:
-			case 9757:
-				return 4;
-		    /*
-		     * Prayer cape.
-		     */
-			case 9759:
-			case 9760:
-				return 5;
-		    /*
-		     * Magic cape.
-		     */
-			case 9762:
-			case 9763:
-				return 6;
-		    /*
-		     * Cooking cape.
-		     */
-			case 9801:
-			case 9802:
-				return 7;
-		    /*
-		     * Woodcutting cape.
-		     */
-			case 9807:
-			case 9808:
-				return 8;
-		    /*
-		     * Fletching cape.
-		     */
-			case 9783:
-			case 9784:
-				return 9;
-		    /*
-		     * Fishing cape.
-		     */
-			case 9798:
-			case 9799:
-				return 10;
-		    /*
-		     * Firemaking cape.
-		     */
-			case 9804:
-			case 9805:
-				return 11;
-		    /*
-		     * Crafting cape.
-		     */
-			case 9780:
-			case 9781:
-				return 12;
-		    /*
-		     * Smithing cape.
-		     */
-			case 9795:
-			case 9796:
-				return 13;
-		    /*
-		     * Mining cape.
-		     */
-			case 9792:
-			case 9793:
-				return 14;
-		    /*
-		     * Herblore cape.
-		     */
-			case 9774:
-			case 9775:
-				return 15;
-		    /*
-		     * Agility cape.
-		     */
-			case 9771:
-			case 9772:
-				return 16;
-		    /*
-		     * Thieving cape.
-		     */
-			case 9777:
-			case 9778:
-				return 17;
-		    /*
-		     * Slayer cape.
-		     */
-			case 9786:
-			case 9787:
-				return 18;
+    public static void skillcapeEmote(final Player player) {
+        final Item item = player.getEquipment().get(1);
+        if (item != null) {
+            final Cape cape = Cape.getCape(item.getId());
+            if (cape != null) {
+                if (cape.getSkillId() == -1 || (player.getSkills().getLevel(cape.getSkillId()) >= 99
+                        && player.getSkills().getExps()[cape.getSkillId()] >= cape.getExperience())) {
+                    cape.action(player);
+                } else {
+                    player.sendf("You need to be level 99 %s to perform this emote.", cape.equals(Cape.DUNGEONEERING_MASTER) ? "and 200000000 experience" : "");
+                }
+            } else {
+                player.sendMessage("You need to be wearing a skillcape to perform an emote.");
+            }
+        } else {
+            player.sendMessage("You need to be wearing a skillcape to perform an emote.");
+        }
+    }
 
-		    /*
-		     * Farming cape.
-		     */
-			case 9810:
-			case 9811:
-				return 19;
-		    /*
-		     * Runecraft cape.
-		     */
-			case 9765:
-			case 9766:
-				return 20;
-		    /*
-		     * Hunter's cape
-		     */
-			case 9948:
-			case 9949:
-				return 21;
-		    /*
-		     * Construct. cape.
-		     */
-			case 9789:
-			case 9790:
-				return 22;
-		    /*
-		     * Summoning cape.
-		     */
-			case 12169:
-			case 12170:
-				return 23;
-		    /*
-		     * Quest cape.
-		     */
-			case 9813:
-				return 24;
-		}
-		return - 1;
-	}
+    public enum Cape {
+        ATTACK(Arrays.asList(9747, 9748, 10639), Skills.ATTACK, 4959, 823),
+        DEFENCE(Arrays.asList(9753, 9754, 10641), Skills.DEFENCE, 4961, 824),
+        STRENGTH(Arrays.asList(9750, 9751, 10640), Skills.STRENGTH, 4981, 828),
+        HITPOINTS(Arrays.asList(9768, 9769, 10647), Skills.HITPOINTS, 4971, 833),
+        RANGING(Arrays.asList(9756, 9757, 10642), Skills.RANGED, 4973, 832),
+        PRAYER(Arrays.asList(9759, 9760, 10643), Skills.PRAYER, 4979, 829),
+        MAGIC(Arrays.asList(9762, 9763, 10644), Skills.MAGIC, 4939, 813),
+        COOKING(Arrays.asList(9801, 9802, 10658), Skills.COOKING, 4955, 821),
+        WOODCUTTING(Arrays.asList(9807, 9808, 10660), Skills.WOODCUTTING, 4957, 822),
+        FLETCHING(Arrays.asList(9783, 9784, 10652), Skills.FLETCHING, 4937, 812),
+        FISHING(Arrays.asList(9798, 9799, 10657), Skills.FISHING, 4951, 819),
+        FIREMAKING(Arrays.asList(9804, 9805, 10659), Skills.FIREMAKING, 4975, 831),
+        CRAFTING(Arrays.asList(9780, 9781, 10651), Skills.CRAFTING, 4949, 818),
+        SMITHING(Arrays.asList(9795, 9796, 10656), Skills.SMITHING, 4943, 815),
+        MINING(Arrays.asList(9792, 9792, 10655), Skills.MINING, 4941, 814),
+        HERBLORE(Arrays.asList(9774, 9775, 10649), Skills.HERBLORE, 4969, 835),
+        AGILITY(Arrays.asList(9771, 9772, 10648), Skills.AGILITY, 4977, 830),
+        THIEVING(Arrays.asList(9777, 9778, 10650), Skills.THIEVING, 4965, 826),
+        SLAYER(Arrays.asList(9786, 9787, 10653), Skills.SLAYER, 4967, 827),
+        FARMING(Arrays.asList(9810, 9811, 10661), Skills.FARMING, 4963, 825),
+        RUNECRAFTING(Arrays.asList(9765, 9766, 10645), Skills.RUNECRAFTING, 4947, 817),
+        CONSTRUCTION(Arrays.asList(9789, 9790, 10654), Skills.CONSTRUCTION, 4953, 820),
+        HUNTER(Arrays.asList(9948, 9949, 10646), Skills.HUNTER, 5158, 907),
+        SUMMONING(Arrays.asList(12169, 12170, 12524), Skills.SUMMONING, 8525, 1515),
+        DUNGEONEERING(Arrays.asList(15706, 18508, 18509), Skills.DUNGEONEERING, -1, -1) {
+            @Override
+            public void action(final Player player) {
+                player.getSkills().stopSkilling();
+                player.playAnimation(Animation.create(13190));
+                player.playGraphics(Graphic.create(2442));
+                player.setCurrentTask(new Task(625L, true, "Dungeoneering Animation Task") {
+                    final int value = (int) (Math.random() * (2 + 1));
+                    int count;
+                    @Override
+                    public void execute() {
+                        if (count == 1) {
+                            player.setPNpc(value == 0 ? 11227 : value == 1 ? 11228 : 11229);
+                            player.playAnimation(Animation.create(value == 0 ? 13192 : value == 1 ? 13193 : 13194));
+                        } else if (count == 6) {
+                            stop();
+                        }
+                        count++;
+                    }
+                    @Override
+                    public void stop() {
+                        setRunning(false);
+                        player.setPNpc(-1);
+                        player.playAnimation(Animation.create(-1));
+                        player.playGraphics(Graphic.create(-1));
+                    }
+                });
+                TaskManager.submit(player.getCurrentTask());
+            }
+        },
+        DUNGEONEERING_MASTER(Arrays.asList(19709, 19710), Skills.DUNGEONEERING, -1, -1) {
+            @Override
+            public int getExperience() {
+                return 200000000;
+            }
 
-	public static void skillcapeEmote(final Player player) {
-		int skill = - 1, skillcapeAnimation = - 1, skillcapeGraphic = - 1;
-		String skillcapeName = "";
-		int cape = 0;
-		if(player.getEquipment().get(1) == null)
-			cape = - 1;
-		else
-			cape = player.getEquipment().get(1).getId();
-		if(cape != - 1) {
-			int skillId = skillIdForCape(cape);
-			switch(skillId) {
-		    /*
-		     * Attack cape.
-		     */
-				case 0:
-					skill = 0;
-					skillcapeAnimation = 4959;
-					skillcapeGraphic = 823;
-					skillcapeName = "Attack";
-					break;
-		    /*
-		     * Defense cape.
-		     */
-				case 1:
-					skill = 1;
-					skillcapeAnimation = 4961;
-					skillcapeGraphic = 824;
-					skillcapeName = "Defense";
-					break;
-		    /*
-		     * Strength cape.
-		     */
-				case 2:
-					skill = 2;
-					skillcapeAnimation = 4981;
-					skillcapeGraphic = 828;
-					skillcapeName = "Strength";
-					break;
-		    /*
-		     * Hitpoints cape.
-		     */
-				case 3:
-					skill = 3;
-					skillcapeAnimation = 4971;
-					skillcapeGraphic = 833;
-					skillcapeName = "Hitpoints";
-					break;
-		    /*
-		     * Ranging cape.
-		     */
-				case 4:
-					skill = 4;
-					skillcapeAnimation = 4973;
-					skillcapeGraphic = 832;
-					skillcapeName = "Ranging";
-					break;
-		    /*
-		     * Prayer cape.
-		     */
-				case 5:
-					skill = 5;
-					skillcapeAnimation = 4979;
-					skillcapeGraphic = 829;
-					skillcapeName = "Prayer";
-					break;
-		    /*
-		     * Magic cape.
-		     */
-				case 6:
-					skill = 6;
-					skillcapeAnimation = 4939;
-					skillcapeGraphic = 813;
-					skillcapeName = "Magic";
-					break;
-		    /*
-		     * Cooking cape.
-		     */
-				case 7:
-					skill = 7;
-					skillcapeAnimation = 4955;
-					skillcapeGraphic = 821;
-					skillcapeName = "Cooking";
-					break;
-		    /*
-		     * Woodcutting cape.
-		     */
-				case 8:
-					skill = 8;
-					skillcapeAnimation = 4957;
-					skillcapeGraphic = 822;
-					skillcapeName = "Woodcutting";
-					break;
-		    /*
-		     * Fletching cape.
-		     */
-				case 9:
-					skill = 9;
-					skillcapeAnimation = 4937;
-					skillcapeGraphic = 812;
-					skillcapeName = "Fletching";
-					break;
-		    /*
-		     * Fishing cape.
-		     */
-				case 10:
-					skill = 10;
-					skillcapeAnimation = 4951;
-					skillcapeGraphic = 819;
-					skillcapeName = "Fishing";
-					break;
-		    /*
-		     * Firemaking cape.
-		     */
-				case 11:
-					skill = 11;
-					skillcapeAnimation = 4975;
-					skillcapeGraphic = 831;
-					skillcapeName = "Firemaking";
-					break;
-		    /*
-		     * Crafting cape.
-		     */
-				case 12:
-					skill = 12;
-					skillcapeAnimation = 4949;
-					skillcapeGraphic = 818;
-					skillcapeName = "Crafting";
-					break;
-		    /*
-		     * Smithing cape.
-		     */
-				case 13:
-					skill = 13;
-					skillcapeAnimation = 4943;
-					skillcapeGraphic = 815;
-					skillcapeName = "Smithing";
-					break;
-		    /*
-		     * Mining cape.
-		     */
-				case 14:
-					skill = 14;
-					skillcapeAnimation = 4941;
-					skillcapeGraphic = 814;
-					skillcapeName = "Mining";
-					break;
-		    /*
-		     * Herblore cape.
-		     */
-				case 15:
-					skill = 15;
-					skillcapeAnimation = 4969;
-					skillcapeGraphic = 835;
-					skillcapeName = "Herblore";
-					break;
-		    /*
-		     * Agility cape.
-		     */
-				case 16:
-					skill = 16;
-					skillcapeAnimation = 4977;
-					skillcapeGraphic = 830;
-					skillcapeName = "Agility";
-					break;
-		    /*
-		     * Thieving cape.
-		     */
-				case 17:
-					skill = 17;
-					skillcapeAnimation = 4965;
-					skillcapeGraphic = 826;
-					skillcapeName = "Thieving";
-					break;
-		    /*
-		     * Slayer cape.
-		     */
-				case 18:
-					skill = 18;
-					skillcapeAnimation = 4967;
-					skillcapeGraphic = 827;
-					skillcapeName = "Slayer";
-					break;
+            @Override
+            public void action(final Player player) {
+                player.getSkills().stopSkilling();
+                player.playAnimation(Animation.create(13190));
+                player.playGraphics(Graphic.create(2442));
+                player.setCurrentTask(new Task(625L, true, "Dungeoneering Animation Task") {
+                    final int value = (int) (Math.random() * (2 + 1));
+                    int count;
+                    @Override
+                    public void execute() {
+                        if (count == 1) {
+                            player.setPNpc(value == 0 ? 11227 : value == 1 ? 11228 : 11229);
+                            player.playAnimation(Animation.create(value == 0 ? 13192 : value == 1 ? 13193 : 13194));
+                        } else if (count == 6) {
+                            stop();
+                        }
+                        count++;
+                    }
+                    @Override
+                    public void stop() {
+                        setRunning(false);
+                        player.setPNpc(-1);
+                        player.playAnimation(Animation.create(-1));
+                        player.playGraphics(Graphic.create(-1));
+                    }
+                });
+                TaskManager.submit(player.getCurrentTask());
+            }
+        },
+        QUEST(Arrays.asList(9813, 10662), -1, 9445, 816);
 
-		    /*
-		     * Farming cape.
-		     */
-				case 19:
-					skill = 19;
-					skillcapeAnimation = 4963;
-					skillcapeGraphic = 825;
-					skillcapeName = "Farming";
-					break;
-		    /*
-		     * Runecraft cape.
-		     */
-				case 20:
-					skill = 20;
-					skillcapeAnimation = 4947;
-					skillcapeGraphic = 817;
-					skillcapeName = "Runecrafting";
-					break;
-		    /*
-		     * Hunter's cape
-		     */
-				case 21:
-					skill = 21;
-					skillcapeAnimation = 5158;
-					skillcapeGraphic = 907;
-					skillcapeName = "Hunter";
-					break;
-		    /*
-		     * Construct. cape.
-		     */
-				case 22:
-					skill = 22;
-					skillcapeAnimation = 4953;
-					skillcapeGraphic = 820;
-					skillcapeName = "Construction";
-					break;
-		    /*
-		     * Summoning cape.
-		     */
-				case 23:
-					skill = 23;
-					skillcapeAnimation = 8525;
-					skillcapeGraphic = 1515;
-					skillcapeName = "Summmoning";
-					break;
-		    /*
-		     * Quest cape.
-		     */
-				case 24:
-					skillcapeAnimation = 4945;
-					skillcapeGraphic = 816;
-					skillcapeName = "Quest";
-					break;
-				default:
-					player.getActionSender().sendMessage(
-							"You need to be wearing a skillcape to do the skillcape emote.");
-					break;
-			}
-			if(skill == - 1 || player.getSkills().getLevelForExp(skill) >= 99) {
-				player.playAnimation(Animation.create(skillcapeAnimation));
-				player.playGraphics(Graphic.create(skillcapeGraphic));
-                ClueScrollManager.trigger(player, skillcapeAnimation);
-			} else {
-				player.getActionSender().sendMessage(
-						"You need to be level 99 " + skillcapeName
-								+ " to do the "
-								+ skillcapeName + " emote.");
-			}
-		} else {
-			player.getActionSender().sendMessage(
-					"You need to be wearing a skillcape to do the skillcape emote.");
-		}
-	}
+        private final List<Integer> capes;
+        private final int skillId, animation, graphics;
+        private final int experience = 13034436;
+
+        Cape(List<Integer> capes, int skillId, int animation, int graphics) {
+            this.capes = capes;
+            this.skillId = skillId;
+            this.animation = animation;
+            this.graphics = graphics;
+        }
+
+        public static Cape getCape(final int id) {
+            return ATTACK.capes.stream().anyMatch(value -> value.equals(id))
+                    ? ATTACK : DEFENCE.capes.stream().anyMatch(value -> value.equals(id))
+                    ? DEFENCE : STRENGTH.capes.stream().anyMatch(value -> value.equals(id))
+                    ? STRENGTH : HITPOINTS.capes.stream().anyMatch(value -> value.equals(id))
+                    ? HITPOINTS : RANGING.capes.stream().anyMatch(value -> value.equals(id))
+                    ? RANGING : PRAYER.capes.stream().anyMatch(value -> value.equals(id))
+                    ? PRAYER : MAGIC.capes.stream().anyMatch(value -> value.equals(id))
+                    ? MAGIC : COOKING.capes.stream().anyMatch(value -> value.equals(id))
+                    ? COOKING : WOODCUTTING.capes.stream().anyMatch(value -> value.equals(id))
+                    ? WOODCUTTING : FLETCHING.capes.stream().anyMatch(value -> value.equals(id))
+                    ? FLETCHING : FISHING.capes.stream().anyMatch(value -> value.equals(id))
+                    ? FISHING : FIREMAKING.capes.stream().anyMatch(value -> value.equals(id))
+                    ? FIREMAKING : CRAFTING.capes.stream().anyMatch(value -> value.equals(id))
+                    ? CRAFTING : SMITHING.capes.stream().anyMatch(value -> value.equals(id))
+                    ? SMITHING : MINING.capes.stream().anyMatch(value -> value.equals(id))
+                    ? MINING : HERBLORE.capes.stream().anyMatch(value -> value.equals(id))
+                    ? HERBLORE : AGILITY.capes.stream().anyMatch(value -> value.equals(id))
+                    ? AGILITY : THIEVING.capes.stream().anyMatch(value -> value.equals(id))
+                    ? THIEVING : SLAYER.capes.stream().anyMatch(value -> value.equals(id))
+                    ? SLAYER : FARMING.capes.stream().anyMatch(value -> value.equals(id))
+                    ? FARMING : RUNECRAFTING.capes.stream().anyMatch(value -> value.equals(id))
+                    ? RUNECRAFTING : CONSTRUCTION.capes.stream().anyMatch(value -> value.equals(id))
+                    ? CONSTRUCTION : HUNTER.capes.stream().anyMatch(value -> value.equals(id))
+                    ? HUNTER : SUMMONING.capes.stream().anyMatch(value -> value.equals(id))
+                    ? SUMMONING : DUNGEONEERING.capes.stream().anyMatch(value -> value.equals(id))
+                    ? DUNGEONEERING : DUNGEONEERING_MASTER.capes.stream().anyMatch(value -> value.equals(id))
+                    ? DUNGEONEERING_MASTER : null;
+        }
+
+        public int getSkillId() {
+            return skillId;
+        }
+
+        public int getExperience() {
+            return experience;
+        }
+
+        public void action(final Player player) {
+            player.playAnimation(Animation.create(animation));
+            player.playGraphics(Graphic.create(graphics));
+        }
+    }
 }

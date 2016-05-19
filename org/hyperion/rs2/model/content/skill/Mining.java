@@ -21,7 +21,7 @@ import java.util.stream.Stream;
  */
 public class Mining implements ContentTemplate {
 
-    private final List<Integer> OBJECTS = Arrays.asList(2491, 2108, 2109, 2094, 2095, 14902, 2090, 2091, 14906, 2092, 2093, 14913, 2100, 2101, 14902, 2096, 2097, 14850, 2098, 2099, 2102, 2103, 14853, 2104, 2105, 14862, 14859, 14860, 1755, 2112, 2113);
+    private final List<Integer> OBJECTS = Arrays.asList(450, 2491, 2108, 2109, 2094, 2095, 14902, 2090, 2091, 14906, 2092, 2093, 14913, 2100, 2101, 14902, 2096, 2097, 14850, 2098, 2099, 2102, 2103, 14853, 2104, 2105, 14862, 14859, 14860, 1755, 2112, 2113);
 
     @Override
     public void init() throws FileNotFoundException {
@@ -38,14 +38,12 @@ public class Mining implements ContentTemplate {
     }
 
     private boolean mine(final Player player, final int id, final int x, final int y) {
+        player.getSkills().stopSkilling();
         if (id == 450) {
             player.sendMessage("This rock contains no ore.");
             return false;
         }
         final Rock rock = Rock.getRock(id);
-        if (player.isBusy()) {
-            return true;
-        }
         if (rock != null) {
             final Pickaxe pickaxe = Pickaxe.getPickaxe(player);
             if (pickaxe == null) {
@@ -60,24 +58,18 @@ public class Mining implements ContentTemplate {
                 player.sendMessage("There is not enough space in your inventory.");
                 return false;
             }
-            player.setBusy(true);
             player.cE.face(x, y);
             player.playAnimation(Animation.create(pickaxe.getAnimation()));
             final int cycles = getCycles(player, pickaxe, rock) < 1 ? 1 : getCycles(player, pickaxe, rock);
-            TaskManager.submit(new Task(600L, "Mining Rocks Task") {
+            player.setCurrentTask(new Task(600L, "Mining Rocks Task") {
                 int cycle = 0;
 
                 @Override
                 public void execute() {
-                    if (!player.isBusy()) {
-                        stop();
-                        return;
-                    }
                     if (player.getInventory().freeSlots() < 1) {
                         player.playAnimation(Animation.create(65535));
                         player.sendMessage("You do not have any free inventory space left.");
                         stop();
-                        player.setBusy(false);
                         return;
                     }
                     if (cycle < cycles) {
@@ -94,12 +86,11 @@ public class Mining implements ContentTemplate {
                             ObjectManager.addObject(expired);
                             player.playAnimation(Animation.create(65535));
                             stop();
-                            player.setBusy(false);
                             TaskManager.submit(new Task(rock.getRespawn(), String.format("%s Ore Respawn Task", TextUtils.titleCase(String.valueOf(rock)))) {
                                 @Override
                                 public void execute() {
-                                    ObjectManager.replace(expired, new GameObject(GameObjectDefinition.forId(id), Position.create(x, y, player.getPosition().getZ()), 10, 0));
                                     stop();
+                                    ObjectManager.replace(expired, new GameObject(GameObjectDefinition.forId(id), Position.create(x, y, player.getPosition().getZ()), 10, 0));
                                 }
                             });
                         } else {
@@ -108,13 +99,14 @@ public class Mining implements ContentTemplate {
                     }
                 }
             });
+            TaskManager.submit(player.getCurrentTask());
             return true;
         }
         return false;
     }
 
     private int getCycles(final Player player, final Pickaxe pickaxe, final Rock rock) {
-        return Misc.inclusiveRandom((int) (rock.getTicks() - (player.getSkills().getLevel(Skills.HUNTER) * 0.03) + pickaxe.getSpeed()), rock.getTicks());
+        return Misc.inclusiveRandom((int) (rock.getTicks() - (player.getSkills().getLevel(Skills.HUNTER) * 0.01) + pickaxe.getSpeed()), rock.getTicks());
     }
 
     private boolean prospect(final Player player, final int id, final int x, final int y) {
@@ -156,11 +148,11 @@ public class Mining implements ContentTemplate {
         BRONZE(1265, 1, 625, 1.0),
         IRON(1267, 1, 626, 1.05),
         STEEL(1269, 6, 627, 1.1),
-        MITHRIL(1273, 21, 628, 1.2),
-        ADAMANT(1271, 31, 629, 1.25),
-        RUNITE(1275, 41, 624, 1.3),
-        DRAGON(15259, 61, 12188, 1.50),
-        ADZE(13661, 80, 10226, 1.60);
+        MITHRIL(1273, 21, 628, 1.15),
+        ADAMANT(1271, 31, 629, 1.2),
+        RUNITE(1275, 41, 624, 1.25),
+        DRAGON(15259, 61, 12188, 1.3),
+        ADZE(13661, 80, 10226, 1.35);
 
         private final static Pickaxe[] VALUES = values();
         private final static List<Pickaxe> ORDINAL = Stream.of(VALUES).sorted((one, two) -> Integer.compare(one.ordinal(), two.ordinal())).collect(Collectors.toCollection(LinkedList::new));

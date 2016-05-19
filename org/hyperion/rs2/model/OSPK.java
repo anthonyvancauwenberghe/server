@@ -10,11 +10,6 @@ public class OSPK extends NIGGERUZ {
     public OSPK() {
         super(600);
     }
-
-
-	public static GameObject loadObjects() {
-		return new GameObject(GameObjectDefinition.forId(2470), Position.create(3085, 3515, 0), 10, 1);
-	}
 	
 	public String canEnter(Player player) {
         final String base = "You cannot have: ";

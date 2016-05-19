@@ -22,7 +22,7 @@ public class GetFromCharFileCommand extends NewCommand {
     private final IOData ioData;
 
     public GetFromCharFileCommand(String key, Rank rank, long delay, IOData ioData) {
-        super(key, rank, delay, new CommandInput<String>(PlayerLoading::playerExists, "player", "A player that exists in the system."));
+        super(key, rank, delay, new CommandInput<Object>(PlayerLoading::playerExists, "player", "A player that exists in the system."));
         this.ioData = ioData;
     }
 

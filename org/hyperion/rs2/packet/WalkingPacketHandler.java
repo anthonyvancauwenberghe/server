@@ -17,6 +17,7 @@ public class WalkingPacketHandler implements PacketHandler {
 
 	@Override
 	public void handle(Player player, Packet packet) {
+		player.getSkills().stopSkilling();
 		if(player.doubleChar()) {
 			DialogueManager.openDialogue(player, 500);
 			return;

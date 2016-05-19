@@ -268,8 +268,7 @@ public class ObjectClickHandler {
 
     public static boolean objectExist(int id, int x, int y, int height) {
         final Position position = Position.create(x, y, height);
-        return ObjectManager.objectExist(position, id);
-
+        return ObjectManager.objectExist(position);
     }
 
     public static boolean slipObject(final int id) {

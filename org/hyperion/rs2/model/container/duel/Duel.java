@@ -173,7 +173,7 @@ public class Duel {
      * @param amount The amount of the item to deposit.
      */
     public static void deposit(Player player, int slot, int id, int amount) {
-		/*
+        /*
         if(player.getExtraData().getBoolean("cantdoshit")) {
             player.sendMessage("Please PM a moderator as your account is locked for its own safety!");
             return;
@@ -543,8 +543,8 @@ public class Duel {
     }
 
     public static void finishDuel(Player player, Player opponent, boolean won) {
+        player.setDead(false);
         player.cE.setPoisoned(false);
-        opponent.cE.setPoisoned(false);
         player.cannotSwitch = false;
         player.getCombat().morrigansLeft = 0;
         if (won) {
@@ -562,8 +562,8 @@ public class Duel {
             AchievementHandler.progressAchievement(player, "Duel");
         }
         healup(player);
-        opponent.setTeleportTarget(Position.create(3360 + Combat.random(17), 3274 + Combat.random(3), 0), false);
         player.setTeleportTarget(Position.create(3360 + Combat.random(17), 3274 + Combat.random(3), 0), false);
+        player.playAnimation(Animation.create(-1));
         player.getActionSender().sendMessage("You have " + (won ? "won" : "lost") + " the duel.");
         player.getActionSender().sendPlayerOption("Trade", 4, 0);
         FileLogging.savePlayerLog(opponent, "Duel " + (won ? "Won" : "Lost") + " against " + player.getName());
@@ -578,20 +578,12 @@ public class Duel {
     }
 
     public static void finishFullyDuel(final Player player) {
-        try {
-            Player target = player.getTrader();
-            if (target != null) {
-                if (player.isDead() || target.isDead()) {
-                    return;
-                }
-                finishDuel(target, player, true);
-                finishDuel(player, target, false);
-            } else {
-                if (player != null)
-                    player.getDuel().clear();
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
+        Player target = player.getTrader();
+        if (target != null) {
+            finishDuel(target, player, true);
+            finishDuel(player, target, false);
+        } else {
+            player.getDuel().clear();
         }
     }
 

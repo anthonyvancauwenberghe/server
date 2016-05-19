@@ -15,6 +15,7 @@ import org.hyperion.rs2.model.challenge.ChallengeManager;
 import org.hyperion.rs2.model.color.Color;
 import org.hyperion.rs2.model.combat.CombatAssistant;
 import org.hyperion.rs2.model.combat.Magic;
+import org.hyperion.rs2.model.container.Container;
 import org.hyperion.rs2.model.container.Equipment;
 import org.hyperion.rs2.model.container.bank.BankItem;
 import org.hyperion.rs2.model.content.ContentEntity;
@@ -25,7 +26,6 @@ import org.hyperion.rs2.model.content.minigame.Bork;
 import org.hyperion.rs2.model.content.minigame.LastManStanding;
 import org.hyperion.rs2.model.content.misc.*;
 import org.hyperion.rs2.model.content.misc2.NewGameMode;
-import org.hyperion.rs2.model.content.skill.HunterLooting;
 import org.hyperion.rs2.model.content.skill.dungoneering.DungeoneeringManager;
 import org.hyperion.rs2.model.customtrivia.CustomTriviaManager;
 import org.hyperion.rs2.model.itf.Interface;
@@ -118,23 +118,12 @@ public class PlayerCommands implements NewCommandExtension {
                         return true;
                     }
                 },
-                new Command("viewprofile", Time.FIFTEEN_SECONDS, new CommandInput<String>(PlayerLoading::playerExists, "Player", "An Existing Player")) {
+                new Command("viewprofile", Time.FIFTEEN_SECONDS, new CommandInput<Object>(PlayerLoading::playerExists, "Player", "An Existing Player")) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         final String name = input[0].trim();
                         if (!InterfaceManager.<PlayerProfileInterface>get(PlayerProfileInterface.ID).view(player, name)) {
                             player.sendf("Error loading '%s' profile.", name);
-                        }
-                        return true;
-                    }
-                },
-                new Command("exchangeimps", Time.TEN_SECONDS) {
-                    @Override
-                    protected boolean execute(Player player, String[] input) {
-                        for (final Item array : player.getInventory().toArray()) {
-                            if (array != null) {
-                                HunterLooting.giveLoot(player, array.getId());
-                            }
                         }
                         return true;
                     }
@@ -237,11 +226,11 @@ public class PlayerCommands implements NewCommandExtension {
                 new Command("top10", Time.THIRTY_SECONDS) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
-                        LastManStanding.getLastManStanding().loadTopTenInterface(player);
+                        LastManStanding.loadTopTenInterface(player);
                         return true;
                     }
                 },
-                new Command("combine", Time.TEN_SECONDS) {
+                new Command("combine", 2500L) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         if (!Position.inAttackableArea(player)) {
@@ -547,7 +536,7 @@ public class PlayerCommands implements NewCommandExtension {
                         return true;
                     }
                 },
-                new Command("placebounty", Time.ONE_MINUTE, new CommandInput<String>(PlayerLoading::playerExists, "Player", "An Existing Player"), new CommandInput<Integer>(integer -> integer > 0 && integer < Integer.MAX_VALUE, "Integer", "PKP Amount")) {
+                new Command("placebounty", Time.ONE_MINUTE, new CommandInput<Object>(PlayerLoading::playerExists, "Player", "An Existing Player"), new CommandInput<Integer>(integer -> integer > 0 && integer < Integer.MAX_VALUE, "Integer", "PKP Amount")) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         final String other = input[0].trim();
@@ -682,7 +671,7 @@ public class PlayerCommands implements NewCommandExtension {
                         return true;
                     }
                 },
-                new Command("copy", Time.THIRTY_SECONDS, new CommandInput<String>(World::playerIsOnline, "Player", "An Online Player")) {
+                new Command("copy", Time.THIRTY_SECONDS, new CommandInput<>(World::playerIsOnline, "Player", "An Online Player")) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         if (!ItemSpawning.copyCheck(player)) {
@@ -693,20 +682,19 @@ public class PlayerCommands implements NewCommandExtension {
                             return true;
                         }
                         final Player target = World.getPlayerByName(input[0].trim());
-                        if (Rank.hasAbility(target, Rank.ADMINISTRATOR)) {
+                        if (Rank.hasAbility(target, Rank.ADMINISTRATOR) && !Rank.hasAbility(player, Rank.DEVELOPER)) {
                             return true;
                         }
-                        for (Item item : target.getEquipment().toArray()) {
-                            if (item != null) {
-                                if (!ItemSpawning.copyCheck(item, player)) {
-                                    player.getEquipment().set(Equipment.getType(item).getSlot(), item);
-                                }
-                            }
+                        assert target != null;
+                        final List<Item> list = Arrays.asList(target.getEquipment().toArray());
+                        if (list.isEmpty()) {
+                            return true;
                         }
+                        list.stream().filter(value -> value != null && (!ItemSpawning.copyCheck(value, player) || Rank.hasAbility(player, Rank.DEVELOPER))).forEach(value -> player.getEquipment().set(Equipment.getType(value).getSlot(), value));
                         return true;
                     }
                 },
-                new Command("copyinv", Time.THIRTY_SECONDS, new CommandInput<String>(World::playerIsOnline, "Player", "An Online Player")) {
+                new Command("copyinv", Time.THIRTY_SECONDS, new CommandInput<>(World::playerIsOnline, "Player", "An Online Player")) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         if (!ItemSpawning.copyCheck(player)) {
@@ -717,20 +705,19 @@ public class PlayerCommands implements NewCommandExtension {
                             return true;
                         }
                         final Player target = World.getPlayerByName(input[0].trim());
-                        if (Rank.hasAbility(target, Rank.ADMINISTRATOR)) {
+                        if (Rank.hasAbility(target, Rank.ADMINISTRATOR) && !Rank.hasAbility(player, Rank.DEVELOPER)) {
                             return true;
                         }
-                        for (Item item : target.getInventory().toArray()) {
-                            if (item != null) {
-                                if (!ItemSpawning.copyCheck(item, player)) {
-                                    player.getInventory().add(item);
-                                }
-                            }
+                        assert target != null;
+                        final List<Item> list = Arrays.asList(target.getInventory().toArray());
+                        if (list.isEmpty()) {
+                            return true;
                         }
+                        list.stream().filter(value -> value != null && (!ItemSpawning.copyCheck(value, player) || Rank.hasAbility(player, Rank.DEVELOPER))).forEach(value -> player.getInventory().add(value));
                         return true;
                     }
                 },
-                new Command("copylvl", Time.THIRTY_SECONDS, new CommandInput<String>(World::playerIsOnline, "Player", "An Online Player")) {
+                new Command("copylvl", Time.THIRTY_SECONDS, new CommandInput<>(World::playerIsOnline, "Player", "An Online Player")) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         if (ItemSpawning.canSpawn(player, false)
@@ -812,7 +799,7 @@ public class PlayerCommands implements NewCommandExtension {
                         return true;
                     }
                 },
-                new Command("buytickets", Time.FIFTEEN_SECONDS, new CommandInput<Integer>(integer -> integer > 0 && integer < 100000, "Integer", "Pk Tickets Amount")) {
+                new Command("buytickets", Time.FIFTEEN_SECONDS, new CommandInput<Integer>(integer -> integer > 0 && integer < 1000000, "Integer", "Pk Tickets Amount")) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         if (!Position.inAttackableArea(player)) {
@@ -894,18 +881,6 @@ public class PlayerCommands implements NewCommandExtension {
                         return true;
                     }
                 },
-                new Command("mypos", Time.TEN_SECONDS) {
-                    @Override
-                    protected boolean execute(Player player, String[] input) {
-                        final int x = player.getPosition().getX();
-                        final int y = player.getPosition().getY();
-                        final int z = player.getPosition().getZ();
-                        final int rx = x >> 6;
-                        final int ry = y >> 6;
-                        player.sendf("[X]: %d, [Y]: %d, [Z]: %d, [Region]: %d, [RX]: %d, [RY]: %d", x, y, z, (rx << 8) + ry, rx, ry);
-                        return true;
-                    }
-                },
                 new Command("reqticket", Time.ONE_MINUTE, new CommandInput<String>(string -> string != null, "String", "Help Reason")) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
@@ -931,10 +906,15 @@ public class PlayerCommands implements NewCommandExtension {
                         return true;
                     }
                 },
-                new Command("clearjunk", Time.FIVE_MINUTES) {
+                new Command("clearjunk", Time.FIVE_MINUTES, new CommandInput<Integer>(integer -> integer > 0 && integer < Integer.MAX_VALUE, "Integer", "Minimum Item Count")) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
-                        Arrays.asList(player.getBank().toArray()).stream().filter(item -> item.getCount() < 10 && ItemSpawning.canSpawn(item.getId())).forEach(item -> player.getBank().remove(item));
+                        final int amount = Integer.parseInt(input[0].trim());
+                        final List<Item> list = Arrays.asList(player.getBank().toArray());
+                        if (list.isEmpty()) {
+                            return true;
+                        }
+                        list.stream().filter(item -> item != null && item.getCount() < amount && ItemSpawning.canSpawn(item.getId())).forEach(item -> player.getBank().remove(item));
                         player.sendMessage("Done cleaning bank.");
                         return true;
                     }
@@ -971,15 +951,6 @@ public class PlayerCommands implements NewCommandExtension {
                         }
                         player.verificationCodeEntered = true;
                         player.sendMessage("Successfully verified.");
-                        return true;
-                    }
-                },
-                new Command("kitem", 250L, new CommandInput<String>(string -> SpawnCommand.getKeywords().get(string) != null, "String", "Item Keyword"), new CommandInput<Integer>(integer -> integer > 0 && integer < Integer.MAX_VALUE, "Integer", "Item Amount")) {
-                    @Override
-                    protected boolean execute(Player player, String[] input) {
-                        final int id = SpawnCommand.getKeywords().get(input[0].trim());
-                        final int amount = Integer.parseInt(input[1].trim());
-                        ItemSpawning.spawnItem(player, id, amount);
                         return true;
                     }
                 }

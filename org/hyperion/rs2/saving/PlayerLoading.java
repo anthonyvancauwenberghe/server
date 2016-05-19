@@ -98,11 +98,9 @@ public class PlayerLoading {
         return true;
     }
 
-    public static boolean playerExists(String playerName) {
-        File file = new File(IOData.getCharFilePath(), playerName.toLowerCase() + ".json");
-        return file.exists();
+    public static boolean playerExists(final Object value) {
+        return (new File(IOData.getCharFilePath(), String.format("%s.json", String.valueOf(value))).exists());
     }
-
 
     public static Optional<JsonElement> getProperty(String playerName, IOData property) {
         if(playerName == null || property == null || playerName.trim().isEmpty() ||!playerExists(playerName))

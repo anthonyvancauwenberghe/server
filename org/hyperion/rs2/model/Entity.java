@@ -326,7 +326,14 @@ public abstract class Entity {
 		return location;
 	}
 
+	private Locations.Location previous;
+
+	public Locations.Location getPreviousLocation() {
+		return previous;
+	}
+
 	public void setLocation(Locations.Location location) {
+		previous = this.location;
 		this.location = location;
 	}
 

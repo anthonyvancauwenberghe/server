@@ -48,7 +48,7 @@ public class CommandPacketHandler implements PacketHandler {
             }
         }
         COMMAND_USAGE.put(player.getSafeDisplayName(), System.currentTimeMillis());
-        if (NewCommandHandler.processCommand(key, player, command)) {
+        if (NewCommandHandler.processCommand(key.toLowerCase().trim(), player, command.replaceFirst(String.format("%s ", key), ""))) {
             return;
         }
     }

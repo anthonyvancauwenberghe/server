@@ -75,13 +75,13 @@ public abstract class NewCommand {
             for (int i = 0; i < input.length; i++) {
                 //Over here we need to test what the argument is.
                 //It gives warnings, but it's nothing unwanted, we're careful with the exception and simply can't test any more.
-                if (StringUtil.isNumeric(input[i])) {
+                if (StringUtil.isNumeric(input[i]) || Pattern.matches("-?([0-9]){1,10}", input[i])) {
                     if (Pattern.matches("-?([0-9]*)\\.([0-9]*)", input[i]) && !getRequiredInput()[i].testInput(player, Double.parseDouble(input[i]))) {
                         return GOT_ERROR_MESSAGE;
                     } else if (!getRequiredInput()[i].testInput(player, Integer.parseInt(input[i]))) {
                         return GOT_ERROR_MESSAGE;
                     }
-                } else if ((input[i].equals("true") || input[i].equals("false")) && !getRequiredInput()[i].testInput(player, Boolean.parseBoolean(input[i]))) {
+                } else if (Pattern.matches("true|false", input[i]) && !getRequiredInput()[i].testInput(player, Boolean.parseBoolean(input[i]))) {
                     return GOT_ERROR_MESSAGE;
                 } else if (!getRequiredInput()[i].testInput(player, input[i])) {
                     return GOT_ERROR_MESSAGE;
@@ -105,6 +105,6 @@ public abstract class NewCommand {
     }
 
     public final String filterInput(String input) {
-        return input.replace(key + " ", "");
+        return input.replaceFirst(String.format("%s ", key), "");
     }
 }

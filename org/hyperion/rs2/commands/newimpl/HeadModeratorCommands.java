@@ -30,7 +30,7 @@ public class HeadModeratorCommands implements NewCommandExtension {
     @Override
     public List<NewCommand> init() {
         return Arrays.asList(
-                new Command("resetdeaths", new CommandInput<String>(World::playerIsOnline, "Player", "An Online Player")) {
+                new Command("resetdeaths", new CommandInput<Object>(World::playerIsOnline, "Player", "An Online Player")) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         final Player target = World.getPlayerByName(input[0].trim());
@@ -38,7 +38,7 @@ public class HeadModeratorCommands implements NewCommandExtension {
                         return true;
                     }
                 },
-                new Command("resetkills", new CommandInput<String>(World::playerIsOnline, "Player", "An Online Player")) {
+                new Command("resetkills", new CommandInput<Object>(World::playerIsOnline, "Player", "An Online Player")) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         final Player target = World.getPlayerByName(input[0].trim());
@@ -46,7 +46,7 @@ public class HeadModeratorCommands implements NewCommandExtension {
                         return true;
                     }
                 },
-                new Command("resetelo", new CommandInput<String>(World::playerIsOnline, "Player", "An Online Player")) {
+                new Command("resetelo", new CommandInput<Object>(World::playerIsOnline, "Player", "An Online Player")) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         final Player target = World.getPlayerByName(input[0].trim());
@@ -54,14 +54,14 @@ public class HeadModeratorCommands implements NewCommandExtension {
                         return true;
                     }
                 },
-                new Command("update") {
+                new Command("update", new CommandInput<>(object -> String.valueOf(object) != null, "String", "Restart Reason")) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         Server.update(120, String.format("%sRestart Request", player.getName()));
                         return true;
                     }
                 },
-                new Command("sethp", new CommandInput<String>(World::playerIsOnline, "Player", "An Online Player"), new CommandInput<Integer>(integer -> integer > 0 && integer < Integer.MAX_VALUE, "Integer", "HP Amount")) {
+                new Command("sethp", new CommandInput<Object>(World::playerIsOnline, "Player", "An Online Player"), new CommandInput<Integer>(integer -> integer > 0 && integer < Integer.MAX_VALUE, "Integer", "HP Amount")) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         final Player target = World.getPlayerByName(input[0].trim());
@@ -76,7 +76,7 @@ public class HeadModeratorCommands implements NewCommandExtension {
                         return true;
                     }
                 },
-                new Command("unlock", new CommandInput<String>(World::playerIsOnline, "Player", "An Online Player")) {
+                new Command("unlock", new CommandInput<Object>(World::playerIsOnline, "Player", "An Online Player")) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         final Player target = World.getPlayerByName(input[0].trim());
@@ -107,7 +107,7 @@ public class HeadModeratorCommands implements NewCommandExtension {
                         return true;
                     }
                 },
-                new Command("givekorasi", new CommandInput<String>(World::playerIsOnline, "Player", "An Online Player")) {
+                new Command("givekorasi", new CommandInput<Object>(World::playerIsOnline, "Player", "An Online Player")) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         final Player target = World.getPlayerByName(input[0].trim());
@@ -121,7 +121,7 @@ public class HeadModeratorCommands implements NewCommandExtension {
                         return true;
                     }
                 },
-                new Command("givevigour", new CommandInput<String>(World::playerIsOnline, "Player", "An Online Player")) {
+                new Command("givevigour", new CommandInput<Object>(World::playerIsOnline, "Player", "An Online Player")) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         final Player target = World.getPlayerByName(input[0].trim());
@@ -135,7 +135,7 @@ public class HeadModeratorCommands implements NewCommandExtension {
                         return true;
                     }
                 },
-                new Command("resetkdr", new CommandInput<String>(World::playerIsOnline, "Player", "An Online Player")) {
+                new Command("resetkdr", new CommandInput<Object>(World::playerIsOnline, "Player", "An Online Player")) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         final Player target = World.getPlayerByName(input[0].trim());

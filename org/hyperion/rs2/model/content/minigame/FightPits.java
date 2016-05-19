@@ -28,7 +28,17 @@ import java.util.Vector;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 public class FightPits implements ContentTemplate {
-	
+
+	private static boolean ENABLED = false;
+
+	public static void setEnabled(final boolean value) {
+		ENABLED = value;
+	}
+
+	public static boolean getEnabled() {
+		return ENABLED;
+	}
+
 	public static final int RED_CAPE = 1007;
 	
 	public static final int BLUE_CAPE = 1021;
@@ -205,7 +215,7 @@ public class FightPits implements ContentTemplate {
 	}
 	
 	public static void fightPitsCheck(Player player) {
-		if(!FightPits.inPitsFightArea(player.getPosition().getX(), player.getPosition().getY()) && inGame(player) && !waitingRoom.contains(player) && !player.joiningPits
+		if(!player.getLocation().equals(Locations.Location.FIGHT_PITS) && inGame(player) && !waitingRoom.contains(player) && !player.joiningPits
 				|| Server.isUpdating()) {
 			removePlayerFromGame(player, true);
 		}
@@ -339,11 +349,19 @@ public class FightPits implements ContentTemplate {
 
 	public boolean clickObject(Player player, int clickType, int clickId, int k, int l, int i1) {
 		if(clickType == ClickType.OBJECT_CLICK1) {
-			if(clickId == 9369) { //enter lobby
-				firstDoor(player);
-			} else if(clickId == 9368) { //leave fight pits in game
-				secondDoor(player);
-			}
+				if(clickId == 9369) { //enter lobby
+					if (ENABLED) {
+						firstDoor(player);
+					} else {
+						player.sendMessage("@red@Currently Disabled@bla@.");
+					}
+				} else if(clickId == 9368) { //leave fight pits in game
+					if (ENABLED) {
+						secondDoor(player);
+					} else {
+						player.sendMessage("@red@Currently Disabled@bla@.");
+					}
+				}
 			if(clickId == ClickId.ATTACKABLE) {
 				return inGame(player);
 			}
@@ -591,7 +609,7 @@ public class FightPits implements ContentTemplate {
 				player.getActionSender().sendMessage("Please bank all of your items before joining!");
 				return;
 			}
-			if (waitingRoom.stream().filter(target -> target != null).anyMatch(target -> (target.getUID() == player.getUID()) || (target.getShortIP() == player.getShortIP()))) {
+			if (waitingRoom.stream().filter(target -> target != null).anyMatch(target -> (target.getUID() == player.getUID()) || (target.getShortIP() == player.getShortIP()) || target.getLastMac() == player.getLastMac())) {
 				player.sendf("You can only have one account in here at a time!");
 				return;
 			}

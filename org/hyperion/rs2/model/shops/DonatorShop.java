@@ -115,7 +115,6 @@ public class DonatorShop extends Shop {
 			player.getInventory().add(item);
 			player.getActionSender().sendUpdateItems(3823, player.getInventory().toArray());
 			updatePlayers();
-			player.getActionSender().sendString(3901, String.format("Donator points: @gre@%,d", player.getPoints().getDonatorPoints()));
 			if(isVeblenGood(item.getId())) {
 				if(first) {
 					first = false;

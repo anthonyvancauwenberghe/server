@@ -230,6 +230,7 @@ public class BountyHunter {
 
     public void setKills(final int kills) {
         this.bhPoints = kills;
+        player.getQuestTab().updateComponent(QuestTab.QuestTabComponent.BOUNTY_HUNTER_POINTS);
     }
 
     public Player getTarget() {

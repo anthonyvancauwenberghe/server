@@ -44,7 +44,7 @@ public class PlayerDeathTask extends Task {
     @Override
     public void execute() {
         try {
-            if (!player.isActive() || player.isHidden()) {
+            if (!player.isActive() || player.isHidden() || !player.isDead()) {
                 this.stop();
                 return;
             }

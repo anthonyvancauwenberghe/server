@@ -15,7 +15,7 @@ public class PromoteCommand extends NewCommand {
     private final Rank rank;
 
     public PromoteCommand(String key, Rank required, Rank rank) {
-        super(key, required, new CommandInput<String>(World::playerIsOnline, "Player", "An Online Player to Promote"));
+        super(key, required, new CommandInput<Object>(World::playerIsOnline, "Player", "An Online Player to Promote"));
         this.rank = rank;
     }
 

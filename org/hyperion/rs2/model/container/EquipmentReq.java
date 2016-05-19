@@ -237,9 +237,9 @@ public class EquipmentReq {
 
 		}
 		s = s.toLowerCase().replaceAll("_", " ");
-		int skillCape = SkillcapeAnim.skillIdForCape(ItemId);
-		if(skillCape != - 1 && skillCape < equipReqData.length) {
-			equipReqData[skillCape] = 99;
+		final SkillcapeAnim.Cape cape = SkillcapeAnim.Cape.getCape(ItemId);
+		if (cape != null && cape.getSkillId() < equipReqData.length) {
+			equipReqData[cape.getSkillId()] = 99;
 			return equipReqData;
 		}
 		if(s.contains("vesta") || s.contains("statius") || s.contains("morrigan") || s.contains("zuriel")) {

@@ -59,6 +59,9 @@ public class ItemSpawning {
 	 * @param amount
 	 */
 	public static void spawnItem(Player player, int id, int amount) {
+		if (player.getTrader() != null) {
+			return;
+		}
         if(!player.getLocation().isSpawningAllowed()) {
 			player.sendMessage("You cannot spawn items here.");
 			return;

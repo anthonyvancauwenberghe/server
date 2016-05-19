@@ -7,7 +7,10 @@ import org.hyperion.rs2.model.content.minigame.Bork;
 import org.hyperion.rs2.model.content.minigame.FightPits;
 import org.hyperion.rs2.model.content.misc2.Edgeville;
 import org.hyperion.rs2.model.content.misc2.Jail;
+import org.hyperion.rs2.model.content.skill.dungoneering.DungeoneeringManager;
 import org.hyperion.util.Misc;
+
+import java.util.Arrays;
 
 /**
  * Created by Gilles on 3/03/2016.
@@ -47,6 +50,93 @@ public class Locations {
      * AND IT WILL TAKE THE FIRST INITIALIZED AS PRIORITY.
      */
     public enum Location {
+        DUNGEONEERING_PVM(new int[]{3136, 3327}, new int[]{5442, 5567}, true, false, true, true, false, false, Rank.PLAYER) {
+            @Override
+            public boolean canTeleport(Player player) {
+                player.sendMessage("You cannot teleport while in a Dungeon.");
+                return false;
+            }
+
+            @Override
+            public boolean onDeath(Player player) {
+                player.setTeleportTarget(player.getDungeoneering().getCurrentDungeon().getStartRoom().getSpawnLocation(), false);
+                player.getDungeoneering().getCurrentDungeon().kill(player);
+                return true;
+            }
+
+            @Override
+            public void enter(Player player) {
+                if (!player.getDungeoneering().inDungeon()) {
+                    player.setTeleportTarget(Edgeville.POSITION);
+                }
+            }
+
+            @Override
+            public void leave(Player player) {
+                if (player.getDungeoneering().inDungeon() && (!player.getLocation().equals(DUNGEONEERING_LOBBY)
+                        && !player.getLocation().equals(DUNGEONEERING_START))) {
+                    player.setTeleportTarget(Position.create(2908, 9913, player.getDungeoneering().getCurrentDungeon().getStartRoom().heightLevel), false);
+                    player.getDungeoneering().setCurrentRoom(player.getDungeoneering().getCurrentDungeon().getStartRoom());
+                }
+            }
+        },
+        DUNGEONEERING_START(new int[]{2884, 2943}, new int[]{9881, 9919}, false, false, true, false, false, false, Rank.PLAYER) {
+            @Override
+            public boolean canTeleport(Player player) {
+                player.sendMessage("You cannot teleport while in a Dungeon.");
+                return false;
+            }
+
+            @Override
+            public boolean onDeath(Player player) {
+                player.setTeleportTarget(player.getDungeoneering().getCurrentDungeon().getStartRoom().getSpawnLocation(), false);
+                player.getDungeoneering().getCurrentDungeon().kill(player);
+                return true;
+            }
+
+            @Override
+            public void enter(Player player) {
+                if (!player.getDungeoneering().inDungeon()) {
+                    player.setTeleportTarget(Edgeville.POSITION);
+                }
+            }
+
+            @Override
+            public void leave(Player player) {
+                if (player.getDungeoneering().inDungeon() && (!player.getLocation().equals(DUNGEONEERING_LOBBY)
+                        && !player.getLocation().equals(DUNGEONEERING_PVM))) {
+                    player.setTeleportTarget(Position.create(2908, 9913, player.getDungeoneering().getCurrentDungeon().getStartRoom().heightLevel), false);
+                    player.getDungeoneering().setCurrentRoom(player.getDungeoneering().getCurrentDungeon().getStartRoom());
+                }
+            }
+        },
+        DUNGEONEERING_LOBBY(new int[]{2981, 2993}, new int[]{9629, 9644}, new int[]{0}, false, false, true, false, false, false, Rank.PLAYER) {
+            @Override
+            public boolean canTeleport(Player player) {
+                player.sendMessage("You cannot teleport out of the Lobby.");
+                return false;
+            }
+
+            @Override
+            public void enter(Player player) {
+                if ((!DungeoneeringManager.ENABLED) || (!player.getInventory().contains(15707)
+                        && !player.getEquipment().contains(15707))
+                        || ((Arrays.asList(player.getInventory().toArray()).stream().filter(value -> value != null).anyMatch(value -> value.getDefinition().getId() != 15707))
+                        || (Arrays.asList(player.getEquipment().toArray())).stream().filter(value -> value != null).anyMatch(value -> value.getDefinition().getId() != 15707))) {
+                    player.setTeleportTarget(Edgeville.POSITION);
+                }
+            }
+        },
+        DUNGEONEERING_LOBBY_BORDER(new int[]{2975, 2997}, new int[]{9625, 9648}, false, false, false, false, false, false, Rank.PLAYER) {
+            @Override
+            public void enter(Player player) {
+                if (player.getPreviousLocation().equals(DUNGEONEERING_LOBBY)) {
+                    player.setTeleportTarget(Position.create(2987, 9637, 0));
+                } else {
+                    player.setTeleportTarget(Edgeville.POSITION);
+                }
+            }
+        },
         BORK(new int[]{3490, 3585}, new int[]{9915, 9970}, true, true, false, false, false, false) {
             @Override
             public boolean onDeath(Player player) {
@@ -82,6 +172,7 @@ public class Locations {
                 return true;
             }
         },
+        AVATAR_OF_DESTRUCTION_AREA(new int[]{2641, 2668}, new int[]{9617, 9664}, new int[]{0}, true, true, false, false, false, false, Rank.PLAYER),
         CORPOREAL_BEAST_AREA(new int[]{2499, 2539}, new int[]{4630, 4663}, new int[]{0}, true, true, true, false, false, false, Rank.PLAYER),
         EDGEVILLE_BANK_BANKER_AREA(new int[]{3095, 3098}, new int[]{3488, 3493}, false, false, false, false, false, false, Rank.OWNER),
         EDGEVILLE_BANK_AREA(new int[]{3091, 3094, 3095, 3098, 3090, 3090}, new int[]{3488, 3499, 3494, 3499, 3493, 3497}, false, false, false, false, true, true, Rank.PLAYER),
@@ -356,9 +447,7 @@ public class Locations {
 
             @Override
             public void enter(Player player) {
-                if (!FightPits.inGame(player)) {
-                    player.setTeleportTarget(Position.create(2399, 5178, 0), false);
-                }
+                FightPits.fightPitsCheck(player);
                 if (!player.attackOption) {
                     player.getActionSender().sendPlayerOption("Attack", 2, 0);
                     player.attackOption = true;
@@ -385,7 +474,9 @@ public class Locations {
                 return FightPits.inGame(player) && !FightPits.isSameTeam(player, target);
             }
         },
-        FIGHT_PITS_WAIT_ROOM(new int[]{2393, 2404}, new int[]{5168, 5176}, false, false, false, false, false, false, Rank.PLAYER),
+        FIGHT_PITS_WAIT_ROOM(new int[]{2393, 2404}, new int[]{5168, 5176}, false, false, false, false, false, false, Rank.PLAYER) {
+
+        },
         DUEL_ARENA_BANK(new int[]{3380, 3384}, new int[]{3267, 3271}, false, false, false, false, true, true, Rank.PLAYER),
         DUEL_ARENA(new int[]{3332, 3358, 3333, 3357, 3334, 3356, 3335, 3355, 3336, 3354, 3337, 3353, 3338, 3352, 3339, 3351, 3363, 3389, 3364, 3388, 3365, 3387, 3366, 3386, 3367, 3385, 3368, 3384, 3369, 3383, 3370, 3382, 3332, 3358, 3333, 3357, 3334, 3356, 3335, 3355, 3336, 3354, 3337, 3353, 3338, 3352, 3339, 3351, 3363, 3389, 3364, 3388, 3365, 3387, 3366, 3386, 3367, 3385, 3368, 3384, 3369, 3383, 3370, 3382, 3332, 3358, 3333, 3357, 3334, 3356, 3335, 3355, 3336, 3354, 3337, 3353, 3338, 3352, 3339, 3351, 3363, 3389, 3364, 3388, 3365, 3387, 3366, 3386, 3367, 3385, 3368, 3384, 3369, 3383, 3370, 3382}, new int[]{3250, 3252, 3249, 3253, 3247, 3255, 3246, 3256, 3246, 3256, 3245, 3257, 3244, 3258, 3244, 3258, 3250, 3252, 3249, 3253, 3247, 3255, 3246, 3256, 3246, 3256, 3245, 3257, 3245, 3257, 3244, 3258, 3231, 3233, 3230, 3234, 3228, 3236, 3227, 3237, 3227, 3237, 3226, 3238, 3226, 3238, 3225, 3239, 3231, 3233, 3230, 3234, 3228, 3236, 3227, 3237, 3227, 3237, 3226, 3238, 3226, 3238, 3225, 3239, 3212, 3214, 3211, 3215, 3209, 3217, 3208, 3218, 3208, 3218, 3207, 3219, 3207, 3219, 3206, 3220, 3212, 3214, 3211, 3215, 3209, 3217, 3208, 3218, 3208, 3218, 3207, 3219, 3207, 3219, 3206, 3220}, false, false, false, false, false, false, Rank.PLAYER) {
             @Override
@@ -433,8 +524,7 @@ public class Locations {
                 return false;
             }
         },
-        //DUEL_ARENA_LOBBY(new int[]{3322, 3394, 3311, 3323, 3331, 3391}, new int[]{3195, 3291, 3223, 3248, 3242, 3260}, false, false, false, false, false, false, Rank.PLAYER) {
-        DUEL_ARENA_LOBBY(new int[]{3355, 3379, 3374, 3379, 3327, 3392}, new int[]{3267, 3279, 3280, 3286, 3203, 3266}, new int[]{0}, false, false, false, false, false, false, Rank.PLAYER) {
+        DUEL_ARENA_LOBBY(new int[]{3355, 3379, 3374, 3379, 3327, 3392}, new int[]{3267, 3279, 3280, 3286, 3203, 3266}, new int[]{0}, false, false, false, false, false, true, Rank.PLAYER) {
             @Override
             public void enter(Player player) {
                 if (!player.duelOption) {

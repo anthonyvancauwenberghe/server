@@ -140,6 +140,14 @@ public class NPC extends Entity {
 	public int charm;
 	public boolean summoned = false;
 
+	public void setWalkDistance(final Position position, final int maxX, final int minX, final int maxY, final int minY) {
+		walkToXMax = position.getX() + maxX;
+		walkToXMin = position.getX() - minX;
+		walkToYMax = position.getY() + maxY;
+		walkToYMin = position.getY() - minY;
+		randomWalk = true;
+	}
+
 	public static void randomWalk(NPC npc) {
 		if(npc.cE.isFrozen() || ! npc.randomWalk || Combat.random(5) != 1) {
 			return;

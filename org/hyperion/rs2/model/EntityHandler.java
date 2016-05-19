@@ -44,6 +44,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
 
 /**
@@ -313,15 +314,32 @@ public class EntityHandler {
     public static boolean deregister(Entity entity) {
         TaskManager.cancelTasks(entity);
         if (entity instanceof Player) {
-            return deregister((Player) entity);
+            final Player player = entity.cE.getPlayer();
+            if (!(System.currentTimeMillis() - player.cE.lastHit >= 10000L) && !player.forcedLogout) {
+                TaskManager.submit(new Task(10000L, String.format("%s Logout Task", player.getName())) {
+                    int count;
+                    @Override
+                    public void execute() {
+                        if ((System.currentTimeMillis() - player.cE.lastHit >= 10000L) || count == 6) {
+                            stop();
+                            player.forcedLogout = true;
+                            deregister(player);
+                        }
+                        count++;
+                    }
+                });
+                return false;
+            }
+            return deregister(entity.cE.getPlayer());
         }
-        return entity instanceof NPC && deregister((NPC) entity);
+        return entity instanceof NPC && deregister(entity.cE.getNPC());
     }
 
     private static boolean deregister(Player player) {
         if(!World.getPlayers().remove(player))
             return !World.getPlayers().contains(player);
         System.out.println("[World] Deregistering player '" + player.getSafeDisplayName() + "' from '" + player.getShortIP() + "'.");
+        player.getSkills().stopSkilling();
         Locations.logout(player);
         Combat.logoutReset(player.cE);
         player.getDungeoneering().fireOnLogout(player);

@@ -498,7 +498,7 @@ public class QuestTab {
         TRIVIA {
             @Override
             public String updateValue(Player player) {
-                return Lock.isEnabled(player, Lock.TRIVIA) ? "Disabled" : "Enabled";
+                return Lock.isEnabled(player, Lock.TRIVIA) ? "Enabled" : "Disabled";
             }
 
             @Override

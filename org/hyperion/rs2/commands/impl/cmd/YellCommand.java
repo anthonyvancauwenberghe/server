@@ -25,7 +25,7 @@ public class YellCommand extends NewCommand {
     public static int minYellRank = 0;
 
     public YellCommand() {
-        super("yell", Rank.PLAYER, new CommandInput<String>(string -> string != null, "String", "Input Message"));
+        super("yell", Rank.PLAYER, new CommandInput<>(object -> true, "String", "Input Message"));
     }
 
     private int getYellDelay(Player player) {
@@ -97,8 +97,6 @@ public class YellCommand extends NewCommand {
         final String tag = getTag(player);
         final String suffix = (player.hardMode() ? "[I]" : "") + "[" + colors + tag + "@bla@] " + player.getSafeDisplayName() + "@bla@: " + (Rank.getPrimaryRank(player) == Rank.OWNER ? colors : "@bla@");
         final String suffixWithoutTitles = (player.hardMode() ? "[I]" : "") + "[" + colors + Rank.getPrimaryRank(player).toString() + "@bla@] " + player.getSafeDisplayName() + "@bla@: " + (Rank.getPrimaryRank(player) == Rank.OWNER ? colors : "@bla@");
-        message = message.replaceFirst("yell ", "");
-        message = TextUtils.ucFirst(message);
         if (!Rank.isStaffMember(player) && !Configuration.getString(Configuration.ConfigurationObject.NAME).equalsIgnoreCase("ArteroBeta")) {
             World.submit(
                     new Task(yellDelay, "yell reminder") {

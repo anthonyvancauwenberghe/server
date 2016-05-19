@@ -49,8 +49,8 @@ public class SuperDonatorCommands implements NewCommandExtension {
                 new Command("switchprayers", Time.FIFTEEN_SECONDS) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
-                        if (player.getPosition().inPvPArea() && player.isInCombat()) {
-                            player.sendMessage("You cannot do this at this time.");
+                        if (!player.getLocation().isSpawningAllowed()) {
+                            player.sendMessage("You cannot do this here.");
                             return true;
                         }
                         Prayer.changeCurses(player);
@@ -60,8 +60,8 @@ public class SuperDonatorCommands implements NewCommandExtension {
                 new Command("lunars", Time.FIFTEEN_SECONDS) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
-                        if (player.getPosition().inPvPArea() && player.isInCombat()) {
-                            player.sendMessage("You cannot do this at this time.");
+                        if (!player.getLocation().isSpawningAllowed()) {
+                            player.sendMessage("You cannot do this here.");
                             return true;
                         }
                         player.getSpellBook().changeSpellBook(SpellBook.LUNAR_SPELLBOOK);
@@ -72,8 +72,8 @@ public class SuperDonatorCommands implements NewCommandExtension {
                 new Command("ancients", Time.FIFTEEN_SECONDS) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
-                        if (player.getPosition().inPvPArea() && player.isInCombat()) {
-                            player.sendMessage("You cannot do this at this time.");
+                        if (!player.getLocation().isSpawningAllowed()) {
+                            player.sendMessage("You cannot do this here.");
                             return true;
                         }
                         player.getSpellBook().changeSpellBook(SpellBook.ANCIENT_SPELLBOOK);
@@ -84,8 +84,8 @@ public class SuperDonatorCommands implements NewCommandExtension {
                 new Command("moderns", Time.FIFTEEN_SECONDS) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
-                        if (player.getPosition().inPvPArea() && player.isInCombat()) {
-                            player.sendMessage("You cannot do this at this time.");
+                        if (!player.getLocation().isSpawningAllowed()) {
+                            player.sendMessage("You cannot do this here.");
                             return true;
                         }
                         player.getSpellBook().changeSpellBook(SpellBook.REGULAR_SPELLBOOK);

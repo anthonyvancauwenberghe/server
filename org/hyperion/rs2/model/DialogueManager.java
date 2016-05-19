@@ -20,7 +20,6 @@ import org.hyperion.rs2.model.content.misc.Starter;
 import org.hyperion.rs2.model.content.misc2.Dicing;
 import org.hyperion.rs2.model.content.misc2.SkillCapeShops;
 import org.hyperion.rs2.model.content.pvptasks.PvPTask;
-import org.hyperion.rs2.model.content.skill.HunterLooting;
 import org.hyperion.rs2.model.content.specialareas.SpecialArea;
 import org.hyperion.rs2.model.content.specialareas.SpecialAreaHolder;
 import org.hyperion.rs2.model.content.transport.TeleTabs;
@@ -783,11 +782,8 @@ public class DialogueManager {
 				player.getInterfaceState().setNextDialogueId(1, - 1);
 				break;
 			case 120:
-				for(Item i : player.getInventory().toArray()) {
-					if(i != null)
-						HunterLooting.giveLoot(player, i.getId());
-				}
-				player.getActionSender().removeAllInterfaces();
+				player.getActionSender().sendDialogue(npc.getDefinition().getName(), DialogueType.NPC, npc.getDefinition().getId(), FacialAnimation.DEFAULT,
+						"I've forgotten how to open these..", "Maybe try looting them yourself?");
 				break;
 			case 121:
 				player.getActionSender().sendDialogue("Select a Spellbook", DialogueType.OPTION, - 1, FacialAnimation.DEFAULT,
@@ -943,12 +939,12 @@ public class DialogueManager {
 				break;
 			case 144:
 				for(int i = 0; i < 28; i++) {
+					player.getSkills().stopSkilling();
 					Item item = player.getInventory().get(i);
                     if(item == null) continue;
 					int itemId = item.getId();
 					if(itemId == 12747 || itemId == 12744 || itemId == 18509 || itemId == 19709)
 						continue;
-
 					player.getExpectedValues().removeItemFromInventory("Emptying", item);
 					player.getInventory().remove(item);
 

@@ -68,6 +68,8 @@ public abstract class Task {
         return running;
     }
 
+    public void setRunning(final boolean value) { this.running = value; }
+
     public long getDelay() {
         return this.delay;
     }

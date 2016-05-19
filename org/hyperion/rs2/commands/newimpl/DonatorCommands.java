@@ -6,6 +6,7 @@ import org.hyperion.rs2.commands.NewCommandExtension;
 import org.hyperion.rs2.commands.util.CommandInput;
 import org.hyperion.rs2.model.DialogueManager;
 import org.hyperion.rs2.model.Player;
+import org.hyperion.rs2.model.Rank;
 import org.hyperion.rs2.model.Skills;
 import org.hyperion.util.Time;
 
@@ -19,10 +20,10 @@ public class DonatorCommands implements NewCommandExtension {
     
     public abstract class Command extends NewCommand {
         public Command(String key, long delay, CommandInput... requiredInput) {
-            super(key, delay, requiredInput);
+            super(key, Rank.DONATOR, delay, requiredInput);
         }
         public Command(String key, CommandInput... requiredInput) {
-            super(key, requiredInput);
+            super(key, Rank.DONATOR, requiredInput);
         }
     }
     

@@ -543,7 +543,7 @@ public class Player extends Entity implements Persistable, Cloneable {
 		this.viewingDifficulty = viewingDifficulty;
 	}
 
-	private final List<Integer> requiredSkills = Arrays.asList(7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 22/*, 23*/, 24);
+	public final List<Integer> requiredSkills = Arrays.asList(7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 22/*, 23*/, 24);
 
 	public boolean checkMaxCapeRequirment() {
 		return requiredSkills.stream().allMatch(value -> getSkills().getLevels()[value] >= 99 && getPoints().getEloPeak() >= 1900);

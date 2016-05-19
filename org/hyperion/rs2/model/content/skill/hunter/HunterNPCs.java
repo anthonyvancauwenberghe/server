@@ -1,14 +1,15 @@
-package org.hyperion.rs2.model;
+package org.hyperion.rs2.model.content.skill.hunter;
 
+import org.hyperion.rs2.model.*;
 import org.hyperion.rs2.util.EntityList;
 
 import java.util.*;
 
 /**
- * @author DrHales
+ * @author Daniel
+ *         5/19/2016
  */
-
-public class HunterNpcs {
+public class HunterNPCs {
 
     final static Map<Spawn, Integer> map = new HashMap<>();
     private static final int MAXIMUM_NPCS = 250;

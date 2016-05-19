@@ -189,16 +189,14 @@ public class OwnerCommands implements NewCommandExtension {
                         return true;
                     }
                 },
-                new Command("givemax", new CommandInput<Object>(World::playerIsOnline, "Player", "An online player.")) {
+                new Command("givemax", new CommandInput<>(World::playerIsOnline, "Player", "An online player.")) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         final Player target = World.getPlayerByName(input[0].trim());
-                        for (int array = 0; array <= 24; array++) {
-                            if (array != 21 && array != 22) {
-                                target.getSkills().setLevel(array, 99);
-                                target.getSkills().setExperience(array, Skills.getXPForLevel(99));
-                            }
-                        }
+                        target.requiredSkills.stream().filter(value -> target.getSkills().getLevel(value) <= 98).forEach(value -> {
+                            target.getSkills().setLevel(value, 99);
+                            target.getSkills().setExperience(value, Skills.getXPForLevel(99));
+                        });
                         target.getPoints().setEloRating(1900);
                         return true;
                     }

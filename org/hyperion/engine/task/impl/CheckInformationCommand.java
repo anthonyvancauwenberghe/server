@@ -63,6 +63,8 @@ public class CheckInformationCommand extends NewCommand {
                 list.add("@dre@-----Points----------");
                 element = getElement(value, IOData.ACCOUNT_VALUE);
                 list.add(String.format("[Account Value]:%s", String.valueOf(target != null ? target.getAccountValue().getTotalValue() : element != null ? element.get().getAsInt() : "0")));
+                element = getElement(value, IOData.PK_POINTS);
+                list.add(String.format("[PK Points]:%s", String.valueOf(target != null ? target.getPoints().getPkPoints() : element != null ? element.get().getAsInt() : "0")));
                 element = getElement(value, IOData.DICED_VALUE);
                 list.add(String.format("[Diced]:%s", String.valueOf(target != null ? target.getDiced() : element != null ? element.get().getAsInt() : "0")));
                 element = getElement(value, IOData.ELO);

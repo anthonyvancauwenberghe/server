@@ -251,7 +251,7 @@ public class DeveloperCommands implements NewCommandExtension {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         final Player target = World.getPlayerByName(input[0].trim());
-                        target.getInventory().clear();
+                        target.getEquipment().clear();
                         player.sendf("Wiped %s's equipment.", TextUtils.optimizeText(target.getName()));
                         return true;
                     }
@@ -903,7 +903,7 @@ public class DeveloperCommands implements NewCommandExtension {
                     protected boolean execute(Player player, String[] input) {
                         DungeoneeringManager.ENABLED = !DungeoneeringManager.ENABLED;
                         player.sendf("[Dungeoneering]:%s@bla@.", DungeoneeringManager.ENABLED ? "@gre@Enabled" : "@red@Disabled");
-                        World.getPlayers().stream().filter(target -> target != null && target.getDungeoneering().inDungeon() || target.getLocation().equals(Locations.Location.DUNGEONEERING_LOBBY)).forEach(target -> {
+                        World.getPlayers().stream().filter(target -> target != null && target.getDungeoneering().inDungeon() || (target.getLocation() != null && target.getLocation().equals(Locations.Location.DUNGEONEERING_LOBBY))).forEach(target -> {
                             if (target.getLocation().equals(Locations.Location.DUNGEONEERING_LOBBY)) {
                                 player.setTeleportTarget(Edgeville.POSITION);
                             } else {

@@ -5,7 +5,7 @@ import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.Skills;
 import org.hyperion.rs2.model.World;
 import org.hyperion.rs2.model.content.ContentEntity;
-import org.hyperion.rs2.model.content.skill.ClickSkillingInterface2;
+import org.hyperion.rs2.model.content.skill.ClickSkillingInterface;
 import org.hyperion.util.Misc;
 
 /**
@@ -128,11 +128,11 @@ public class LeatherCrafting extends Crafting {
             c.setBusy(true);
             Leather_Item[] items = l.getItems();
             if(items.length > 1) {
-                ContentEntity.sendString(c, "What would you like to make?", ClickSkillingInterface2.frameId[items.length][0]);
-                c.getActionSender().sendPacket164(ClickSkillingInterface2.frameId[items.length][0]);
+                ContentEntity.sendString(c, "What would you like to make?", ClickSkillingInterface.frameId[items.length][0]);
+                c.getActionSender().sendPacket164(ClickSkillingInterface.frameId[items.length][0]);
                 for (int i = 0; i < items.length; i++) {
-                    ContentEntity.sendString(c, items[i].getName(), ClickSkillingInterface2.frameId[items.length][i + 1]);
-                    ContentEntity.sendInterfaceModel(c, ClickSkillingInterface2.frameId[items.length][items.length + i + 1], 250, items[i].getItemId());
+                    ContentEntity.sendString(c, items[i].getName(), ClickSkillingInterface.frameId[items.length][i + 1]);
+                    ContentEntity.sendInterfaceModel(c, ClickSkillingInterface.frameId[items.length][items.length + i + 1], 250, items[i].getItemId());
                 }
             } else {
                 startAgain(c, 1, 0);

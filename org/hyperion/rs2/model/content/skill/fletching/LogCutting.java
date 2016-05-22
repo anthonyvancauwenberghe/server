@@ -5,7 +5,7 @@ import org.hyperion.rs2.model.Player;
 import org.hyperion.rs2.model.Skills;
 import org.hyperion.rs2.model.World;
 import org.hyperion.rs2.model.content.ContentEntity;
-import org.hyperion.rs2.model.content.skill.clickSkillingInterface;
+import org.hyperion.rs2.model.content.skill.ClickSkillingInterface2;
 import org.hyperion.util.Misc;
 
 /**
@@ -114,11 +114,11 @@ public class LogCutting extends Fletching {
 
         cutItems[] items = log.getItems();
         if(items.length > 1) {
-            ContentEntity.sendString(client, "What would you like to make?", clickSkillingInterface.frameId[items.length][0]);
-            client.getActionSender().sendPacket164(clickSkillingInterface.frameId[items.length][0]);
+            ContentEntity.sendString(client, "What would you like to make?", ClickSkillingInterface2.frameId[items.length][0]);
+            client.getActionSender().sendPacket164(ClickSkillingInterface2.frameId[items.length][0]);
             for (int i = 0; i < items.length; i++) {
-                ContentEntity.sendString(client, items[i].getName(), clickSkillingInterface.frameId[items.length][i + 1]);
-                ContentEntity.sendInterfaceModel(client, clickSkillingInterface.frameId[items.length][items.length + i + 1], 250, items[i].getItemId());
+                ContentEntity.sendString(client, items[i].getName(), ClickSkillingInterface2.frameId[items.length][i + 1]);
+                ContentEntity.sendInterfaceModel(client, ClickSkillingInterface2.frameId[items.length][items.length + i + 1], 250, items[i].getItemId());
             }
         } else {
         }

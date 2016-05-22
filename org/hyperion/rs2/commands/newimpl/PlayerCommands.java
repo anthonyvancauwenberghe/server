@@ -190,7 +190,7 @@ public class PlayerCommands implements NewCommandExtension {
                         return true;
                     }
                 },
-                new Command("dicing", Time.THIRTY_SECONDS) {
+                new Command("dicing", Time.FIFTEEN_SECONDS) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         Magic.teleport(player, Position.create(3048, 4979, 1), false);
@@ -230,7 +230,7 @@ public class PlayerCommands implements NewCommandExtension {
                         return true;
                     }
                 },
-                new Command("combine", 2500L) {
+                new Command("combine", 500L) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         if (!Position.inAttackableArea(player)) {
@@ -265,7 +265,7 @@ public class PlayerCommands implements NewCommandExtension {
                         return true;
                     }
                 },
-                new Command("answertrivia", Time.FIVE_SECONDS, new CommandInput<Object>(object -> object != null && (String.valueOf(object) != null || Integer.parseInt(String.valueOf(object)) > Integer.MIN_VALUE && Integer.parseInt(String.valueOf(object)) < Integer.MAX_VALUE), "String", "Custom Trivia Answer")) {
+                new Command("answertrivia", Time.FIVE_SECONDS, new CommandInput<>(object -> true, "String", "Custom Trivia Answer")) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         CustomTriviaManager.processAnswer(player, input[0].trim());
@@ -632,7 +632,7 @@ public class PlayerCommands implements NewCommandExtension {
                         return true;
                     }
                 },
-                new Command("nameitem", Time.FIVE_SECONDS, new CommandInput<String>(string -> string != null, "String", "Item Phrase")) {
+                new Command("nameitem", Time.FIVE_SECONDS, new CommandInput<>(object -> true, "String", "Item Phrase")) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         final String value = input[0].toLowerCase().trim();
@@ -839,7 +839,7 @@ public class PlayerCommands implements NewCommandExtension {
                         return true;
                     }
                 },
-                new Command("empty", Time.TEN_SECONDS) {
+                new Command("empty", Time.FIVE_SECONDS) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         if (!player.getPosition().inPvPArea()) {

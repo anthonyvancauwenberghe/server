@@ -31,7 +31,7 @@ public class DonatorCommands implements NewCommandExtension {
     @Override
     public List<NewCommand> init() {
         return Arrays.asList(
-                new Command("suicide", Time.ONE_MINUTE) {
+                new Command("suicide", Time.THIRTY_SECONDS) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         if (player.getPosition().inFunPk()) {

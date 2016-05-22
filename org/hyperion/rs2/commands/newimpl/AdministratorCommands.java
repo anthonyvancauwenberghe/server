@@ -225,6 +225,10 @@ public class AdministratorCommands implements NewCommandExtension {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         final int value = Integer.parseInt(input[0].trim());
+                        if (value < 0) {
+                            player.setPNpc(-1);
+                            return true;
+                        }
                         if (NPCDefinition.forId(value) == null) {
                             return true;
                         }
@@ -598,32 +602,6 @@ public class AdministratorCommands implements NewCommandExtension {
                     protected boolean execute(Player player, String[] input) {
                         String value = input[0].trim();
                         player.display = Character.toString(value.charAt(0)).toUpperCase() + value.substring(1);
-                        return true;
-                    }
-                },
-                new Command("alts", Time.TEN_SECONDS, new CommandInput<Object>(PlayerLoading::playerExists, "Player", "An player that exists in the system.")) {
-                    @Override
-                    protected boolean execute(Player player, String[] input) {
-                        String targetName = input[0];
-                        player.sendMessage("Getting " + Misc.formatPlayerName(targetName) + "'s alts... Please be patient.");
-                        GameEngine.submitSql(new EngineTask<Boolean>("alts command", 10, TimeUnit.SECONDS) {
-                            @Override
-                            public void stopTask() {
-                                player.sendMessage("Request timed out... Please try again at a later point.");
-                            }
-
-                            @Override
-                            public Boolean call() throws Exception {
-                                List<String> usedIps = DbHub.getPlayerDb().getLogs().getIpForPlayer(targetName).stream().map(IPLog::getIp).collect(Collectors.toList());
-                                usedIps = usedIps.stream().filter(ip -> !GenericWorldLoader.isIpAllowed(ip)).collect(Collectors.toList());
-
-                                List<IPLog> alts = new ArrayList<>();
-                                usedIps.forEach(entry -> DbHub.getPlayerDb().getLogs().getAltsByIp(entry).forEach(alts::add));
-                                player.sendMessage("@dre@" + Misc.formatPlayerName(targetName) + " has " + alts.size() + " alt" + (alts.size() == 1 ? "" : "s") + ".");
-                                alts.forEach(alt -> player.sendMessage("@dre@" + Misc.formatPlayerName(alt.getPlayerName() + " @bla@- Last login: @dre@" + alt.getFormattedTimestamp() + "@bla@ IP used: @dre@" + alt.getIp())));
-                                return true;
-                            }
-                        });
                         return true;
                     }
                 },

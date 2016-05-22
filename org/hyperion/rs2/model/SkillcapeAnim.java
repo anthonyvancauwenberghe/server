@@ -4,7 +4,9 @@ import org.hyperion.engine.task.Task;
 import org.hyperion.engine.task.TaskManager;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author DrHales
@@ -14,7 +16,7 @@ public class SkillcapeAnim {
     public static void skillcapeEmote(final Player player) {
         final Item item = player.getEquipment().get(1);
         if (item != null) {
-            final Cape cape = Cape.getCape(item.getId());
+            final Cape cape = Cape.getCapeById(item.getId());
             if (cape != null) {
                 if (cape.getSkillId() == -1 || (player.getSkills().getLevel(cape.getSkillId()) >= 99
                         && player.getSkills().getExps()[cape.getSkillId()] >= cape.getExperience())) {
@@ -76,10 +78,10 @@ public class SkillcapeAnim {
                     }
                     @Override
                     public void stop() {
-                        setRunning(false);
                         player.setPNpc(-1);
-                        player.playAnimation(Animation.create(-1));
+                        player.playAnimation(Animation.create(65535));
                         player.playGraphics(Graphic.create(-1));
+                        super.stop();
                     }
                 });
                 TaskManager.submit(player.getCurrentTask());
@@ -111,16 +113,22 @@ public class SkillcapeAnim {
                     }
                     @Override
                     public void stop() {
-                        setRunning(false);
                         player.setPNpc(-1);
-                        player.playAnimation(Animation.create(-1));
+                        player.playAnimation(Animation.create(65535));
                         player.playGraphics(Graphic.create(-1));
+                        super.stop();
                     }
                 });
                 TaskManager.submit(player.getCurrentTask());
             }
         },
-        QUEST(Arrays.asList(9813, 10662), -1, 9445, 816);
+        QUEST(Arrays.asList(9813, 10662), -1, 4945, 816);
+
+        private static Map<Integer, Cape> BY_ITEM_ID = new HashMap<>();
+
+        static {
+            Arrays.stream(values()).forEach(cape -> cape.getCapes().forEach(integer -> BY_ITEM_ID.put(integer, cape)));
+        }
 
         private final List<Integer> capes;
         private final int skillId, animation, graphics;
@@ -133,34 +141,12 @@ public class SkillcapeAnim {
             this.graphics = graphics;
         }
 
-        public static Cape getCape(final int id) {
-            return ATTACK.capes.stream().anyMatch(value -> value.equals(id))
-                    ? ATTACK : DEFENCE.capes.stream().anyMatch(value -> value.equals(id))
-                    ? DEFENCE : STRENGTH.capes.stream().anyMatch(value -> value.equals(id))
-                    ? STRENGTH : HITPOINTS.capes.stream().anyMatch(value -> value.equals(id))
-                    ? HITPOINTS : RANGING.capes.stream().anyMatch(value -> value.equals(id))
-                    ? RANGING : PRAYER.capes.stream().anyMatch(value -> value.equals(id))
-                    ? PRAYER : MAGIC.capes.stream().anyMatch(value -> value.equals(id))
-                    ? MAGIC : COOKING.capes.stream().anyMatch(value -> value.equals(id))
-                    ? COOKING : WOODCUTTING.capes.stream().anyMatch(value -> value.equals(id))
-                    ? WOODCUTTING : FLETCHING.capes.stream().anyMatch(value -> value.equals(id))
-                    ? FLETCHING : FISHING.capes.stream().anyMatch(value -> value.equals(id))
-                    ? FISHING : FIREMAKING.capes.stream().anyMatch(value -> value.equals(id))
-                    ? FIREMAKING : CRAFTING.capes.stream().anyMatch(value -> value.equals(id))
-                    ? CRAFTING : SMITHING.capes.stream().anyMatch(value -> value.equals(id))
-                    ? SMITHING : MINING.capes.stream().anyMatch(value -> value.equals(id))
-                    ? MINING : HERBLORE.capes.stream().anyMatch(value -> value.equals(id))
-                    ? HERBLORE : AGILITY.capes.stream().anyMatch(value -> value.equals(id))
-                    ? AGILITY : THIEVING.capes.stream().anyMatch(value -> value.equals(id))
-                    ? THIEVING : SLAYER.capes.stream().anyMatch(value -> value.equals(id))
-                    ? SLAYER : FARMING.capes.stream().anyMatch(value -> value.equals(id))
-                    ? FARMING : RUNECRAFTING.capes.stream().anyMatch(value -> value.equals(id))
-                    ? RUNECRAFTING : CONSTRUCTION.capes.stream().anyMatch(value -> value.equals(id))
-                    ? CONSTRUCTION : HUNTER.capes.stream().anyMatch(value -> value.equals(id))
-                    ? HUNTER : SUMMONING.capes.stream().anyMatch(value -> value.equals(id))
-                    ? SUMMONING : DUNGEONEERING.capes.stream().anyMatch(value -> value.equals(id))
-                    ? DUNGEONEERING : DUNGEONEERING_MASTER.capes.stream().anyMatch(value -> value.equals(id))
-                    ? DUNGEONEERING_MASTER : null;
+        public static Cape getCapeById(final int value) {
+            return BY_ITEM_ID.get(value);
+        }
+
+        public List<Integer> getCapes() {
+            return capes;
         }
 
         public int getSkillId() {

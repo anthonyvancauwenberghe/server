@@ -96,7 +96,7 @@ public class ServerMessageTask extends Task {
                         return true;
                     }
                 },
-                new NewCommand("addservermessage", Rank.DEVELOPER, new CommandInput<String>(string -> string != null && string.length() <= 250, "message", "The message to add to the server message list.")) {
+                new NewCommand("addservermessage", Rank.DEVELOPER, new CommandInput<>(object -> true, "message", "The message to add to the server message list.")) {
                     @Override
                     public boolean execute(Player player, String[] input) {
                         addMessage(filterInput(input[0]));
@@ -104,7 +104,7 @@ public class ServerMessageTask extends Task {
                         return true;
                     }
                 },
-                new NewCommand("removeservermessage", Rank.DEVELOPER) {
+                new NewCommand("removeservermessage", Rank.DEVELOPER, new CommandInput<>(object -> true, "message", "The message to remove from the server message list.")) {
                     @Override
                     public boolean execute(Player player, String[] input) {
                         if (removeMessage(filterInput(input[0]))) {

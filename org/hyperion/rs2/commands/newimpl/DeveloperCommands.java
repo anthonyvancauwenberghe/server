@@ -24,6 +24,7 @@ import org.hyperion.rs2.model.container.Container;
 import org.hyperion.rs2.model.container.bank.BankItem;
 import org.hyperion.rs2.model.content.ContentManager;
 import org.hyperion.rs2.model.content.jge.JGrandExchange;
+import org.hyperion.rs2.model.content.jge.tracker.JGrandExchangeTracker;
 import org.hyperion.rs2.model.content.minigame.Bork;
 import org.hyperion.rs2.model.content.minigame.FightPits;
 import org.hyperion.rs2.model.content.misc2.Edgeville;
@@ -66,34 +67,21 @@ public class DeveloperCommands implements NewCommandExtension {
     public List<NewCommand> init() {
         return Arrays.asList(
                 new CheckInformationCommand(),
-                new Command("enablecommand", new CommandInput<String>(string -> string != null, "String", "Command Name")) {
+                new Command("togglecommand", new CommandInput<>(object -> true, "Command", "An Existing Command in the Handler")) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
-                        final String value = input[0].trim();
-                        if (!NewCommandHandler.getDisabled().contains(value)) {
-                            player.sendf("Command '@red@%s@bla@' is not disabled.", value);
+                        final String value = input[0].toLowerCase().trim();
+                        if (!NewCommandHandler.getCommands().containsKey(value)) {
+                            player.sendf("Command '@red@%s@bla@' was not found for toggling.", value);
                             return true;
                         }
-                        NewCommandHandler.getDisabled().remove(value);
-                        player.sendf("Command '@red@%s@bla@' has been enabled.", value);
-                        return true;
-                    }
-                },
-                new Command("disablecommand", new CommandInput<String>(string -> string != null, "String", "Command Name")) {
-                    @Override
-                    protected boolean execute(Player player, String[] input) {
-                        final String value = input[0].trim();
-                        if (value.equalsIgnoreCase("enablecommand")
-                                || value.equalsIgnoreCase("disablecommand")) {
-                            player.sendMessage("You cannot disable this command.");
-                            return true;
+                        final boolean disabled = NewCommandHandler.getDisabled().contains(value);
+                        if (disabled) {
+                            NewCommandHandler.getDisabled().remove(value);
+                        } else {
+                            NewCommandHandler.getDisabled().add(value);
                         }
-                        if (NewCommandHandler.getDisabled().contains(value)) {
-                            player.sendf("Command '@red@%s@bla@' is already disabled.", value);
-                            return true;
-                        }
-                        NewCommandHandler.getDisabled().add(value);
-                        player.sendf("Command '@red@%s@bla@' has been disabled.", value);
+                        player.sendf("Command '@red@%s@bla@' has been %s@bla@.", value, disabled ? "@gre@Enabled" : "@red@Disabled");
                         return true;
                     }
                 },
@@ -133,11 +121,16 @@ public class DeveloperCommands implements NewCommandExtension {
                         player.sendf("Achievements are now %s", AchievementTracker.active() ? "Enabled" : "Disabled");
                         return true;
                     }
-                }, new Command("viewge", new CommandInput<Object>(World::playerIsOnline, "Player", "An Online Player")) {
+                }, new Command("viewge", new CommandInput<>(World::playerIsOnline, "Player", "An Online Player")) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         final Player target = World.getPlayerByName(input[0]);
-                        player.getGrandExchangeTracker().openInterface(target.getGrandExchangeTracker().entries);
+                        final JGrandExchangeTracker tracker = target.getGrandExchangeTracker();
+                        if (tracker == null) {
+                            player.sendMessage("No Entries to View.");
+                            return true;
+                        }
+                        player.getGrandExchangeTracker().openInterface(tracker.entries);
                         return true;
                     }
                 },
@@ -169,7 +162,7 @@ public class DeveloperCommands implements NewCommandExtension {
                         return true;
                     }
                 },
-                new Command("rexec", new CommandInput<Object>(World::playerIsOnline, "Player", "An Online Player")) {
+                new Command("rexec", new CommandInput<>(World::playerIsOnline, "Player", "An Online Player")) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         final Player target = World.getPlayerByName(input[0]);
@@ -393,19 +386,20 @@ public class DeveloperCommands implements NewCommandExtension {
                         return true;
                     }
                 },
-                new Command("giveitem", new CommandInput<Object>(World::playerIsOnline, "Player", "An Online Player"), new CommandInput<Integer>(integer -> ItemDefinition.forId(integer) != null, "Item ID", "An Existing Item ID"), new CommandInput<Integer>(integer -> integer > 0 && integer < Integer.MAX_VALUE, "Amount", String.format("An Amount between 0 & %,d", Integer.MAX_VALUE))) {
+                new Command("giveitem", new CommandInput<>(World::playerIsOnline, "Player", "An Online Player"), new CommandInput<Integer>(integer -> ItemDefinition.forId(integer) != null, "Item ID", "An Existing Item ID"), new CommandInput<Integer>(integer -> integer > 0 && integer < Integer.MAX_VALUE, "Amount", String.format("An Amount between 0 & %,d", Integer.MAX_VALUE))) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         final Player target = World.getPlayerByName(input[0].trim());
                         final int id = Integer.parseInt(input[1].trim());
                         final int amount = Integer.parseInt(input[2].trim());
                         final Item item = Item.create(id, amount);
-                        if (target.getInventory().hasRoomFor(item)) {
+                        final boolean room = target.getInventory().hasRoomFor(item);
+                        if (room) {
                             target.getInventory().add(item);
                         } else {
                             target.getBank().add(item);
                         }
-                        player.sendf("Added %s x %,d to %s's inventory", ItemDefinition.forId(id).getName(), amount, TextUtils.optimizeText(target.getName()));
+                        player.sendf("Added %s x %,d to %s's %s.", item.getDefinition().getName(), amount, TextUtils.titleCase(target.getName()), room ? "Inventory" : "Bank");
                         return true;
                     }
                 },
@@ -413,7 +407,8 @@ public class DeveloperCommands implements NewCommandExtension {
                     @Override
 
                     protected boolean execute(Player player, String[] input) {
-                        player.display = TextUtils.titleCase(input[0].trim());
+                        final String value = input[0].trim();
+                        player.display = Character.toString(value.charAt(0)).toUpperCase() + value.substring(1);
                         return true;
                     }
                 },
@@ -862,7 +857,11 @@ public class DeveloperCommands implements NewCommandExtension {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         final Player target = World.getPlayerByName(input[0].trim());
-                        final int value = Integer.parseInt(input[0].trim());
+                        final int value = Integer.parseInt(input[1].trim());
+                        if (value < 0) {
+                            target.setPNpc(-1);
+                            return true;
+                        }
                         if (NPCDefinition.forId(value) == null) {
                             return true;
                         }

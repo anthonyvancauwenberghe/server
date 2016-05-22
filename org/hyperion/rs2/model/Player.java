@@ -1062,7 +1062,7 @@ public class Player extends Entity implements Persistable, Cloneable {
 
 	public void setPNpc(int id) {
 		this.npcId = id;
-		this.npcState = id > - 1 ? true : false;
+		this.npcState = id > -1;
 		getUpdateFlags().flag(UpdateFlag.APPEARANCE);
 	}
 
@@ -1528,9 +1528,13 @@ public class Player extends Entity implements Persistable, Cloneable {
 		}
 		skills.detractLevel(Skills.HITPOINTS, inc.getDamage());
 		if(skills.getLevel(Skills.HITPOINTS) <= 0) {
-			if(! this.isDead()) {
-				Prayer.retribution(this);
+			if(!this.isDead()) {
 				World.submit(new PlayerDeathTask(this));
+				if (prayers.isEnabled(21)) {
+					Prayer.retribution(this);
+				} else if (prayers.isEnabled(47)) {
+					Prayer.wrath(this);
+				}
 			}
 		}
 	}

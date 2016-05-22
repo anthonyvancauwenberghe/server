@@ -1209,15 +1209,15 @@ public class Combat {
     }
 
     public static void follow3(final CombatEntity combatEntity, final CombatEntity opponent) {
-
         try {
-
+            if (combatEntity.getPlayer() != null && combatEntity.getPlayer().isDead()) {
+                return;
+            }
             int dis = combatEntity.getEntity().getPosition().distance(opponent.getEntity().getPosition());
             if (dis > 20 || dis < 1)
                 return;
 
-            combatEntity.face(opponent.getAbsX(), opponent.getAbsY()
-            );
+            combatEntity.face(opponent.getAbsX(), opponent.getAbsY());
 
             combatEntity.getEntity().setInteractingEntity(opponent.getEntity());
 

@@ -173,7 +173,6 @@ public class Skills {
 
     public void stopSkilling() {
         if (player.getCurrentTask() != null) {
-            player.getCurrentTask().stop();
             player.setCurrentTask(null);
         }
     }

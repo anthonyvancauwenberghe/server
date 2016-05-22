@@ -45,7 +45,7 @@ public class Events {
         eventStartTime = 0;
         eventTimeTillStart = 0;
         eventPosition = null;
-        World.getPlayers().forEach(player -> {
+        World.getPlayers().stream().filter(player -> player != null).forEach(player -> {
             player.getQuestTab().updateComponent(QuestTab.QuestTabComponent.EVENT);
             player.getActionSender().sendString("cancel", 32456);
         });

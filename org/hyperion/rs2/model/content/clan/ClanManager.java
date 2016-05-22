@@ -231,7 +231,7 @@ public class ClanManager {
                 ClanManager.leaveChat(p, true, true);
                 p.setClanRank(old + 1);
                 clan.addRankedMember(new ClanMember(p.getName(), p.getClanRank()));
-                sendClanMessage(player, "@bla@ "+TextUtils.titleCase(name)+ " has been promoted to "+p.getClanRankName(), true);
+                sendClanMessage(player, String.format("%s has been promoted to %s", TextUtils.titleCase(name), p.getClanRankName()), true);
             } else {
                 player.sendClanMessage("This player already has the highest rank possible");
                 return true;

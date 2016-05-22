@@ -254,12 +254,12 @@ public final class World {
      * @return the player with the specified username, not case sensitive
      */
     public static Player getPlayerByName(String name) {
-            Optional<Player> op = players.search(p -> p != null && p.getName().toLowerCase().equals(name.toLowerCase().replaceAll("_", " ")));
+            Optional<Player> op = players.search(p -> p != null && p.getName().toLowerCase().equals(name.toLowerCase().replace("_", " ").toLowerCase()));
             return op.isPresent() ? op.get() : null;
     }
 
     public static boolean playerIsOnline(final Object value) {
-        return players.search(player -> player != null && player.getName().toLowerCase().equals(String.valueOf(value).replace(" ", " "))).isPresent();
+        return players.search(player -> player != null && player.getName().toLowerCase().equals(String.valueOf(value).replace("_", " ").toLowerCase())).isPresent();
     }
 
     /**

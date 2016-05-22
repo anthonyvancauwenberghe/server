@@ -237,8 +237,8 @@ public class EquipmentReq {
 
 		}
 		s = s.toLowerCase().replaceAll("_", " ");
-		final SkillcapeAnim.Cape cape = SkillcapeAnim.Cape.getCape(ItemId);
-		if (cape != null && cape.getSkillId() < equipReqData.length) {
+		final SkillcapeAnim.Cape cape = SkillcapeAnim.Cape.getCapeById(ItemId);
+		if (cape != null && cape.getSkillId() < equipReqData.length && cape.getSkillId() != -1) {
 			equipReqData[cape.getSkillId()] = 99;
 			return equipReqData;
 		}

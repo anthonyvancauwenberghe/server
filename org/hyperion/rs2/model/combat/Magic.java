@@ -1,6 +1,7 @@
 package org.hyperion.rs2.model.combat;
 
 import org.hyperion.engine.task.Task;
+import org.hyperion.engine.task.TaskManager;
 import org.hyperion.engine.task.impl.WildernessBossTask;
 import org.hyperion.rs2.Constants;
 import org.hyperion.rs2.model.*;
@@ -16,8 +17,10 @@ import org.hyperion.rs2.model.content.skill.dungoneering.Room;
 import org.hyperion.rs2.model.content.skill.slayer.SlayerTask;
 import org.hyperion.rs2.model.content.specialareas.SpecialAreaHolder;
 import org.hyperion.rs2.model.shops.SlayerShop;
+import org.hyperion.rs2.util.TextUtils;
 import org.hyperion.util.Misc;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -814,50 +817,40 @@ public class Magic {
 		return true;
 	}
 
-	/* Misc magic */
-	public static void alch(final Player player, int item, int slot, int spell) {
-		if(item == 995 || player.isBusy())
+	public static void alch(final Player player, int value, int spell) {
+		if (System.currentTimeMillis() - player.contentTimer < 3000) {
 			return;
-		player.setBusy(true);
-		World.submit(new Task(3000L,"magic3") {
-
-			@Override
-			public void execute() {
-				this.stop();
-				player.setBusy(false);
-			}
-
-		});
-		if(spell == 1162 || spell == 1178) {
-			if(! ContentEntity.isItemInBag(player, item, slot))
-				return;
-			if(ContentEntity.getItemAmount(player, 561) < 1) {
-				ContentEntity
-						.sendMessage(player,
-								"You do not have enough nature runes to cast this spell");
+		}
+		final Item item = Item.create(value);
+		if (!player.getInventory().hasItem(item)) {
+			return;
+		}
+		if (spell == 1162 || spell == 1178) {
+			final Item nature = Item.create(561);
+			if (!player.getInventory().hasItem(nature)) {
+				player.sendMessage("You do not have enough nature runes to cast this spell.");
 				return;
 			}
-			if(hasStaff(player.cE, 554)
-					|| ContentEntity.getItemAmount(player, 554) >= ((spell == 1162) ? 3
-					: 5)) {
-				ContentEntity.deleteItemA(player, 554,
-						((spell == 1162) ? 3 : 5));
-				ContentEntity.deleteItemA(player, 561, 1);
-				ContentEntity.deleteItem(player, item, slot, 1);
-				ContentEntity.startAnimation(player, ((spell == 1162) ? 712
-						: 713));
-				ContentEntity.addItem(player, 995,
-						((spell == 1162) ? ItemDefinition.forId(item)
-								.getLowAlcValue() : ItemDefinition.forId(item)
-								.getHighAlcValue()));
-				ContentEntity.playerGfx(player, ((spell == 1162) ? 112 : 113),
-						0);
-				ContentEntity.addSkillXP(player, ((spell == 1162) ? 350 : 800),
-						6);
+			final Item fire = Item.create(554, ((spell == 1162) ? 3 : 5));
+			if (hasStaff(player.cE, 554)
+					|| (player.getInventory().hasItem(fire))) {
+				if (item.getId() == 995 || item.getId() == 12747  || item.getId() == 12744 || item.getId() == 18509 || item.getId() == 19709 || item.getId() == 15707) {
+					player.sendf("%s is not alchable.", TextUtils.titleCase(item.getDefinition().getName()));
+					return;
+				}
+				player.contentTimer = System.currentTimeMillis();
+				player.getInventory().remove(nature);
+				if (!hasStaff(player.cE, 554)) {
+					player.getInventory().remove(fire);
+				}
+				player.getInventory().remove(item);
+				player.playAnimation(Animation.create(spell == 1162 ? 712 : 713));
+				player.getInventory().add(Item.create(995, spell == 1162 ? item.getDefinition().getLowAlcValue() : item.getDefinition().getHighAlcValue()));
+				player.playGraphics(Graphic.create(spell == 1162 ? 112 : 113));
+				player.getSkills().addExperience(Skills.MAGIC, spell == 1162 ? 350 : 800);
 				player.getActionSender().setViewingSidebar(6);
 			} else {
-				ContentEntity.sendMessage(player,
-						"You do not have enough fire runes to cast this spell");
+				player.sendMessage("You do not have enough fire runes to cast this spell");
 			}
 		}
 	}

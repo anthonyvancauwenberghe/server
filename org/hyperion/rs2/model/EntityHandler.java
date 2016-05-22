@@ -85,7 +85,7 @@ public class EntityHandler {
         HostGateway.enter(player.getShortIP());
         LogManager.insertLog(Log.ipLog(player));
 
-        System.out.println("[World] Registering player '" + Misc.formatPlayerName(player.getName()) + "' from '" + player.getShortIP() + "'.");
+        System.out.println(String.format("[Registering]: %s @ %s.", player.getSafeDisplayName(), player.getShortIP()));
 
         /**
          * We send the player his details.
@@ -312,33 +312,40 @@ public class EntityHandler {
      * @param entity The entity to deregister
      */
     public static boolean deregister(Entity entity) {
-        TaskManager.cancelTasks(entity);
         if (entity instanceof Player) {
             final Player player = entity.cE.getPlayer();
-            if (!(System.currentTimeMillis() - player.cE.lastHit >= 10000L) && !player.forcedLogout) {
+            if (!canDeregister(player) && !player.forcedLogout) {
                 TaskManager.submit(new Task(10000L, String.format("%s Logout Task", player.getName())) {
                     int count;
                     @Override
                     public void execute() {
-                        if ((System.currentTimeMillis() - player.cE.lastHit >= 10000L) || count == 6) {
-                            stop();
+                        if ((count >= 6 && !player.isDead() && player.getSkills().getLevel(Skills.HITPOINTS) >= 1)
+                                || canDeregister(player)) {
                             player.forcedLogout = true;
-                            deregister(player);
+                            stop();
                         }
                         count++;
                     }
                 });
                 return false;
             }
-            return deregister(entity.cE.getPlayer());
+            return deregister(player);
         }
-        return entity instanceof NPC && deregister(entity.cE.getNPC());
+        TaskManager.cancelTasks(entity);
+        return entity instanceof NPC && deregister((NPC) entity);
+    }
+
+    private static boolean canDeregister(final Player player) {
+        return !((System.currentTimeMillis() - player.cE.lastHit <= 9999)
+                || player.getSkills().getLevel(Skills.HITPOINTS) <= 0
+                || player.isDead());
     }
 
     private static boolean deregister(Player player) {
+        TaskManager.cancelTasks(player);
         if(!World.getPlayers().remove(player))
             return !World.getPlayers().contains(player);
-        System.out.println("[World] Deregistering player '" + player.getSafeDisplayName() + "' from '" + player.getShortIP() + "'.");
+        System.out.println(String.format("[Deregistering]: %s @ %s.", player.getSafeDisplayName(), player.getShortIP()));
         player.getSkills().stopSkilling();
         Locations.logout(player);
         Combat.logoutReset(player.cE);

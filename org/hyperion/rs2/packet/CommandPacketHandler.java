@@ -37,7 +37,7 @@ public class CommandPacketHandler implements PacketHandler {
             return;
         }
         if ((player.verificationCode != null && !player.verificationCode.isEmpty() && !player.verificationCodeEntered)) {
-            if (!NewCommandHandler.processCommand("verify", player, command)) {
+            if (!NewCommandHandler.processCommand(player, "verify", command)) {
                 player.sendMessage("You must verify your account before parsing commands.", "::verify 'verification code'");
             }
             return;
@@ -48,7 +48,7 @@ public class CommandPacketHandler implements PacketHandler {
             }
         }
         COMMAND_USAGE.put(player.getSafeDisplayName(), System.currentTimeMillis());
-        if (NewCommandHandler.processCommand(key.toLowerCase().trim(), player, command.replaceFirst(String.format("%s ", key), ""))) {
+        if (NewCommandHandler.processCommand(player, key.toLowerCase().trim(), command.trim().equals(key) ? command.toLowerCase().trim() : command.replaceFirst(String.format("%s ", key), ""))) {
             return;
         }
     }

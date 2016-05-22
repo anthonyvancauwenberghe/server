@@ -51,9 +51,9 @@ public class RunePouch implements ContentTemplate {
         }
         if (player.getInventory().hasRoomFor(tranfering)) {
             player.getRunePouch().remove(tranfering);
+            player.getInventory().add(tranfering);
             player.getRunePouch().shift();
             player.getRunePouch().fireItemsChanged();
-            player.getInventory().add(tranfering);
         } else {
             player.getActionSender().sendMessage("You don't have enough inventory space to withdraw that many.");
         }

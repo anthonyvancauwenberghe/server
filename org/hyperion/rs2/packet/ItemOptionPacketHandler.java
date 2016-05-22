@@ -216,7 +216,7 @@ public class ItemOptionPacketHandler implements PacketHandler {
 		if(ContentManager.handlePacket(18, player, castSpell, castOnItem, castOnSlot, - 1))
 			return;
 		//random stuff
-		Magic.alch(player, castOnItem, castOnSlot, castSpell);
+		Magic.alch(player, castOnItem, castSpell);
 		return;
 	}
 

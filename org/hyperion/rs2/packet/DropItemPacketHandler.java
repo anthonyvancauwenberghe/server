@@ -43,6 +43,7 @@ public class DropItemPacketHandler implements PacketHandler {
 		if(Rank.hasAbility(player, Rank.MODERATOR))
 			GlobalItemManager.dropItem(player, itemId, itemSlot);
 		else {
+			player.getSkills().stopSkilling();
 			player.getInventory().remove(toRemove);
 		    player.getActionSender().sendMessage("Your item disappears.");
         }

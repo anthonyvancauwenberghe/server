@@ -223,9 +223,7 @@ public class OwnerCommands implements NewCommandExtension {
                                 new ServerEventTask.CountDownEventBuilder(8596, Position.create(2660, 9634, 0)),
                                 new ServerEventTask.CountDownEventBuilder(50, Position.create(2270, 4687, 0))
                         };
-                        for (int array = 0; array < ServerEventTask.builders.length; array++) {
-                            ServerEventTask.builders[array] = builders[array];
-                        }
+                        System.arraycopy(builders, 0, ServerEventTask.builders, 0, ServerEventTask.builders.length);
                         return true;
                     }
                 },

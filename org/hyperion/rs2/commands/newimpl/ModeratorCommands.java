@@ -2,6 +2,9 @@ package org.hyperion.rs2.commands.newimpl;
 //<editor-fold defaultstate="collapsed" desc="Imports">
 
 import org.hyperion.Server;
+import org.hyperion.engine.EngineTask;
+import org.hyperion.engine.GameEngine;
+import org.hyperion.rs2.GenericWorldLoader;
 import org.hyperion.rs2.commands.NewCommand;
 import org.hyperion.rs2.commands.NewCommandExtension;
 import org.hyperion.rs2.commands.impl.cmd.SpawnCommand;
@@ -15,8 +18,11 @@ import org.hyperion.rs2.model.container.impl.InterfaceContainerListener;
 import org.hyperion.rs2.model.content.Events;
 import org.hyperion.rs2.model.content.misc.TriviaBot;
 import org.hyperion.rs2.model.content.misc2.Edgeville;
+import org.hyperion.rs2.saving.PlayerLoading;
 import org.hyperion.rs2.util.AccountLogger;
 import org.hyperion.rs2.util.TextUtils;
+import org.hyperion.sql.DbHub;
+import org.hyperion.sql.impl.log.type.IPLog;
 import org.hyperion.util.Misc;
 import org.hyperion.util.Time;
 
@@ -24,6 +30,7 @@ import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.stream.Collectors;
 //</editor-fold>
@@ -63,6 +70,7 @@ public class ModeratorCommands implements NewCommandExtension {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         final Player target = World.getPlayerByName(input[0].trim());
+                        assert target != null;
                         player.sendf("Creation Date: " + new Date(target.getCreatedTime()));
                         player.sendf("Last HP Rewards: %s", new Date(target.getLastHonorPointsReward()));
                         return true;
@@ -71,10 +79,40 @@ public class ModeratorCommands implements NewCommandExtension {
                 new Command("removeevent") {
                     @Override
                     protected boolean execute(Player player, String[] input) {
-                        String event = Events.eventName;
+                        if (Events.eventName == null
+                                && Events.eventName.isEmpty()) {
+                            player.sendMessage("There is no event active.");
+                            return true;
+                        }
+                        final String event = Events.eventName;
+                        final String name = TextUtils.titleCase(player.getName());
                         Events.resetEvent();
-                        World.getPlayers().stream().filter(target -> target != null).forEach(target -> {
-                            target.sendServerMessage(String.format("%s has ended the event '%s'", player.getSafeDisplayName(), event));
+                        World.getPlayers().stream().filter(target -> target != null).forEach(target -> target.sendServerMessage(String.format("%s has ended the event '%s'", name, event)));
+                        return true;
+                    }
+                },
+                new Command("alts", Time.TEN_SECONDS, new CommandInput<Object>(PlayerLoading::playerExists, "Player", "An player that exists in the system.")) {
+                    @Override
+                    protected boolean execute(Player player, String[] input) {
+                        String targetName = input[0];
+                        player.sendMessage("Getting " + Misc.formatPlayerName(targetName) + "'s alts... Please be patient.");
+                        GameEngine.submitSql(new EngineTask<Boolean>("alts command", 10, TimeUnit.SECONDS) {
+                            @Override
+                            public void stopTask() {
+                                player.sendMessage("Request timed out... Please try again at a later point.");
+                            }
+
+                            @Override
+                            public Boolean call() throws Exception {
+                                List<String> usedIps = DbHub.getPlayerDb().getLogs().getIpForPlayer(targetName).stream().map(IPLog::getIp).collect(Collectors.toList());
+                                usedIps = usedIps.stream().filter(ip -> !GenericWorldLoader.isIpAllowed(ip)).collect(Collectors.toList());
+
+                                List<IPLog> alts = new ArrayList<>();
+                                usedIps.forEach(entry -> DbHub.getPlayerDb().getLogs().getAltsByIp(entry).forEach(alts::add));
+                                player.sendMessage("@dre@" + Misc.formatPlayerName(targetName) + " has " + alts.size() + " alt" + (alts.size() == 1 ? "" : "s") + ".");
+                                alts.forEach(alt -> player.sendMessage("@dre@" + Misc.formatPlayerName(alt.getPlayerName() + " @bla@- Last login: @dre@" + alt.getFormattedTimestamp() + "@bla@ IP used: @dre@" + alt.getIp())));
+                                return true;
+                            }
                         });
                         return true;
                     }

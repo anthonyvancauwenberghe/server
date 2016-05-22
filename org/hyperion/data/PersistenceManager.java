@@ -27,7 +27,6 @@ public class PersistenceManager {
 		xstream.alias("potion", Potion.class);
 		xstream.alias("unfinPotion", UnfinishedPotion.class);
 		xstream.alias("smeltingItem", SmeltingItem.class);
-		xstream.alias("cookingItem", CookingItem.class);
 		xstream.alias("npc", PickpocketNpc.class);
 		xstream.alias("stall", Stall.class);
 		xstream.alias("runes", Rune.class);

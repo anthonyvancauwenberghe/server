@@ -13,9 +13,9 @@ import org.hyperion.rs2.util.TextUtils;
  */
 public class PointCommand extends NewCommand {
 
-    private final TYPE type;
+    private final Type type;
 
-    public PointCommand(String key, Rank rank, TYPE type) {
+    public PointCommand(String key, Rank rank, Type type) {
         super(key, rank, new CommandInput<>(World::playerIsOnline, "Player", "an Online Player"), new CommandInput<Integer>(integer -> integer > Integer.MIN_VALUE && integer < Integer.MAX_VALUE, "Integer", "Amount of Points"));
         this.type = type;
     }
@@ -25,12 +25,13 @@ public class PointCommand extends NewCommand {
         final Player target = World.getPlayerByName(input[0].trim());
         final int amount = Integer.parseInt(input[1].trim());
         type.increment(target, amount);
+        assert target != null;
         player.sendf("%s has been given %,d %s points and now has %,d.", TextUtils.titleCase(target.getName()), amount, TextUtils.titleCase(String.valueOf(type)), type.getPoints(target));
         target.sendf("%s has given you %,d %s points. You now have %,d.", TextUtils.titleCase(player.getName()), amount, TextUtils.titleCase(String.valueOf(type)), type.getPoints(target));
         return true;
     }
 
-    public enum TYPE {
+    public enum Type {
         DUNGEONEERING {
             @Override
             public void increment(final Player player, final int value) {

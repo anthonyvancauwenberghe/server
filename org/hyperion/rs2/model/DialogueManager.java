@@ -938,12 +938,13 @@ public class DialogueManager {
 				player.getInterfaceState().setNextDialogueId(1, -1);
 				break;
 			case 144:
+				player.getSkills().stopSkilling();
 				for(int i = 0; i < 28; i++) {
 					player.getSkills().stopSkilling();
 					Item item = player.getInventory().get(i);
                     if(item == null) continue;
 					int itemId = item.getId();
-					if(itemId == 12747 || itemId == 12744 || itemId == 18509 || itemId == 19709)
+					if(itemId == 12747 || itemId == 12744 || itemId == 18509 || itemId == 19709 || itemId == 15707)
 						continue;
 					player.getExpectedValues().removeItemFromInventory("Emptying", item);
 					player.getInventory().remove(item);

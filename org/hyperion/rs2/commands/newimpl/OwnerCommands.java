@@ -2,6 +2,7 @@ package org.hyperion.rs2.commands.newimpl;
 //<editor-fold defaultstate="collapsed" desc="Imports">
 import org.hyperion.Configuration;
 import org.hyperion.Server;
+import org.hyperion.engine.task.impl.CheckInformationCommand;
 import org.hyperion.engine.task.impl.NpcDeathTask;
 import org.hyperion.rs2.commands.NewCommand;
 import org.hyperion.rs2.commands.NewCommandExtension;
@@ -54,6 +55,7 @@ public class OwnerCommands implements NewCommandExtension {
     @Override
     public List<NewCommand> init() {
         return Arrays.asList(
+                new CheckInformationCommand(),
                 new Command("reloaddrops") {
                     @Override
                     protected boolean execute(Player player, String[] input) {
@@ -231,6 +233,75 @@ public class OwnerCommands implements NewCommandExtension {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         NpcDeathTask.npcIdForDoubleDrops = -1;
+                        return true;
+                    }
+                },
+                new Command("removerank", new CommandInput<>(World::playerIsOnline, "Player", "An Online Player"), new CommandInput<Integer>(integer -> Rank.forIndex(integer) != null && Rank.forIndex(integer) != Rank.PLAYER, "Integer", "Rank Index above Player")) {
+                    @Override
+                    protected boolean execute(Player player, String[] input) {
+                        final Player target = World.getPlayerByName(input[0].trim());
+                        final Rank rank = Rank.forIndex(Integer.parseInt(input[1].trim()));
+                        target.setPlayerRank(Rank.removeAbility(target, rank));
+                        player.sendf("Removed %s rank from %s", TextUtils.optimizeText(target.getName()));
+                        return true;
+                    }
+                },
+                new Command("giverank", new CommandInput<>(World::playerIsOnline, "Player", "An Online Player"), new CommandInput<Integer>(integer -> Rank.forIndex(integer) != null && Rank.forIndex(integer) != Rank.PLAYER, "Integer", "Rank Index not equal to player")) {
+                    @Override
+                    protected boolean execute(Player player, String[] input) {
+                        final Player target = World.getPlayerByName(input[0].trim());
+                        final Rank rank = Rank.forIndex(Integer.parseInt(input[1].trim()));
+                        target.setPlayerRank(Rank.addAbility(target, rank));
+                        target.sendf("You've been give '%s'", rank);
+                        player.sendf("%s has been given the rank: %s", target.getName(), rank);
+                        return true;
+                    }
+                },
+                new Command("rankids") {
+                    @Override
+                    protected boolean execute(Player player, String[] input) {
+                        Arrays.asList(Rank.values()).stream().forEach(rank -> player.sendf("[%s]:%,d", String.valueOf(rank), rank.ordinal()));
+                        return true;
+                    }
+                },
+                new Command("spawnitem", new CommandInput<Integer>(integer -> ItemDefinition.forId(integer) != null, "Item ID", "A valid Item"), new CommandInput<Integer>(integer -> integer >= 0 && integer <= Integer.MAX_VALUE, "Item Amount", "An integer Between 0 and MAX_VALUE")) {
+                    @Override
+                    protected boolean execute(Player player, String[] input) {
+                        final int id = Integer.parseInt(input[0]), amount = Integer.parseInt(input[1]);
+                        final Item item = Item.create(id, amount);
+                        if (player.getInventory().hasRoomFor(item)) {
+                            player.getInventory().add(item);
+                        } else {
+                            player.getBank().add(item);
+                        }
+                        return true;
+                    }
+                },
+                new Command("givedp", new CommandInput<>(World::playerIsOnline, "Player", "An Online Player"), new CommandInput<Integer>(integer -> integer > Integer.MIN_VALUE && integer < Integer.MAX_VALUE, "Integer", String.format("An amount between %,d & %,d", Integer.MIN_VALUE, Integer.MAX_VALUE)), new CommandInput<Integer>(value -> value > -1 && value < 2, "0 [Bought] : 1 [Not Bought]", "Bought [True or False]")) {
+                    @Override
+                    protected boolean execute(Player player, String[] input) {
+                        final Player target = World.getPlayerByName(input[0].trim());
+                        final int amount = Integer.parseInt(input[1].trim());
+                        final boolean bought = Integer.parseInt(input[2].trim()) == 0;
+                        target.getPoints().increaseDonatorPoints(amount, bought);
+                        player.sendf("You have given '%s' '%,dx' Donator Points, they now have %,d", TextUtils.optimizeText(target.getName()), amount, target.getPoints().getDonatorPoints());
+                        return true;
+                    }
+                },
+                new Command("giveitem", new CommandInput<>(World::playerIsOnline, "Player", "An Online Player"), new CommandInput<Integer>(integer -> ItemDefinition.forId(integer) != null, "Item ID", "An Existing Item ID"), new CommandInput<Integer>(integer -> integer > 0 && integer < Integer.MAX_VALUE, "Amount", String.format("An Amount between 0 & %,d", Integer.MAX_VALUE))) {
+                    @Override
+                    protected boolean execute(Player player, String[] input) {
+                        final Player target = World.getPlayerByName(input[0].trim());
+                        final int id = Integer.parseInt(input[1].trim());
+                        final int amount = Integer.parseInt(input[2].trim());
+                        final Item item = Item.create(id, amount);
+                        final boolean room = target.getInventory().hasRoomFor(item);
+                        if (room) {
+                            target.getInventory().add(item);
+                        } else {
+                            target.getBank().add(item);
+                        }
+                        player.sendf("Added %s x %,d to %s's %s.", item.getDefinition().getName(), amount, TextUtils.titleCase(target.getName()), room ? "Inventory" : "Bank");
                         return true;
                     }
                 },

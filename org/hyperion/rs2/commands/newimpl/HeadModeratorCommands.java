@@ -65,7 +65,7 @@ public class HeadModeratorCommands implements NewCommandExtension {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         final Player target = World.getPlayerByName(input[0].trim());
-                        if (!Rank.hasAbility(player, Rank.getPrimaryRank(target.getPlayerRank()))) {
+                        if (Rank.getPrimaryRank(player.getPlayerRank()).ordinal() < Rank.getPrimaryRank(target.getPlayerRank()).ordinal()) {
                             player.sendMessage("You cannot do this to those with a greater rank than yours.");
                             return true;
                         }

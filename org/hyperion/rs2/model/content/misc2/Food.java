@@ -203,7 +203,7 @@ public class Food implements ContentTemplate {
 			case 15333:
 			case 15334:
 			case 15335:
-				if(player.getSkills().getLevel(3) < 51) {
+				if(player.getSkills().getLevel(Skills.HITPOINTS) < 51) {
 					ContentEntity.sendMessage(player, "Not enough hitpoints to use an overload potion");
 					return true;
 				}

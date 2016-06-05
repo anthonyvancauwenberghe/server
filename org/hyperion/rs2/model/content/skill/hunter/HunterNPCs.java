@@ -1,6 +1,10 @@
 package org.hyperion.rs2.model.content.skill.hunter;
 
+import org.hyperion.engine.task.Task;
+import org.hyperion.engine.task.impl.NpcDeathTask;
 import org.hyperion.rs2.model.*;
+import org.hyperion.rs2.model.combat.Combat;
+import org.hyperion.rs2.model.combat.Constants;
 import org.hyperion.rs2.util.EntityList;
 
 import java.util.*;
@@ -11,7 +15,6 @@ import java.util.*;
  */
 public class HunterNPCs {
 
-    final static Map<Spawn, Integer> map = new HashMap<>();
     private static final int MAXIMUM_NPCS = 250;
     private static final EntityList<NPC> imps = new EntityList<>(MAXIMUM_NPCS);
 
@@ -42,9 +45,10 @@ public class HunterNPCs {
     }
 
     private static void remove(final NPC npc) {
-        npc.destroy();
-        imps.remove(npc);
-        World.getNpcs().remove(npc);
+        if (EntityHandler.deregister(npc)) {
+            imps.remove(npc);
+            npc.destroy();
+        }
     }
 
     private enum Impling {

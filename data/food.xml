@@ -1656,7 +1656,7 @@
         <heal>0</heal>
         <newId>15325</newId>
         <skillId>4</skillId>
-        <skillAdd>23</skillAdd>
+        <skillAdd>19</skillAdd>
         <drink>true</drink>
     </foodItem>
     <foodItem>
@@ -1664,7 +1664,7 @@
         <heal>0</heal>
         <newId>15326</newId>
         <skillId>4</skillId>
-        <skillAdd>23</skillAdd>
+        <skillAdd>19</skillAdd>
         <drink>true</drink>
     </foodItem>
     <foodItem>
@@ -1672,7 +1672,7 @@
         <heal>0</heal>
         <newId>15327</newId>
         <skillId>4</skillId>
-        <skillAdd>23</skillAdd>
+        <skillAdd>19</skillAdd>
         <drink>true</drink>
     </foodItem>
     <foodItem>
@@ -1680,7 +1680,7 @@
         <heal>0</heal>
         <newId>-1</newId>
         <skillId>4</skillId>
-        <skillAdd>23</skillAdd>
+        <skillAdd>19</skillAdd>
         <drink>true</drink>
     </foodItem>
     <!-- Extreme Magic potion -->
@@ -1722,7 +1722,7 @@
         <heal>0</heal>
         <newId>15317</newId>
         <skillId>1</skillId>
-        <skillAdd>26</skillAdd>
+        <skillAdd>19</skillAdd>
         <drink>true</drink>
     </foodItem>
     <foodItem>
@@ -1730,7 +1730,7 @@
         <heal>0</heal>
         <newId>15318</newId>
         <skillId>1</skillId>
-        <skillAdd>26</skillAdd>
+        <skillAdd>19</skillAdd>
         <drink>true</drink>
     </foodItem>
     <foodItem>
@@ -1738,7 +1738,7 @@
         <heal>0</heal>
         <newId>15319</newId>
         <skillId>1</skillId>
-        <skillAdd>26</skillAdd>
+        <skillAdd>19</skillAdd>
         <drink>true</drink>
     </foodItem>
     <foodItem>
@@ -1746,7 +1746,7 @@
         <heal>0</heal>
         <newId>-1</newId>
         <skillId>1</skillId>
-        <skillAdd>26</skillAdd>
+        <skillAdd>19</skillAdd>
         <drink>true</drink>
     </foodItem>
     <!-- Extreme strength -->
@@ -1755,7 +1755,7 @@
         <heal>0</heal>
         <newId>15313</newId>
         <skillId>2</skillId>
-        <skillAdd>26</skillAdd>
+        <skillAdd>19</skillAdd>
         <drink>true</drink>
     </foodItem>
     <foodItem>
@@ -1763,7 +1763,7 @@
         <heal>0</heal>
         <newId>15314</newId>
         <skillId>2</skillId>
-        <skillAdd>26</skillAdd>
+        <skillAdd>19</skillAdd>
         <drink>true</drink>
     </foodItem>
     <foodItem>
@@ -1771,7 +1771,7 @@
         <heal>0</heal>
         <newId>15315</newId>
         <skillId>2</skillId>
-        <skillAdd>26</skillAdd>
+        <skillAdd>19</skillAdd>
         <drink>true</drink>
     </foodItem>
     <foodItem>
@@ -1779,7 +1779,7 @@
         <heal>0</heal>
         <newId>-1</newId>
         <skillId>2</skillId>
-        <skillAdd>26</skillAdd>
+        <skillAdd>19</skillAdd>
         <drink>true</drink>
     </foodItem>
     <!-- Extreme attack -->
@@ -1788,7 +1788,7 @@
         <heal>0</heal>
         <newId>15309</newId>
         <skillId>0</skillId>
-        <skillAdd>26</skillAdd>
+        <skillAdd>19</skillAdd>
         <drink>true</drink>
     </foodItem>
     <foodItem>
@@ -1796,7 +1796,7 @@
         <heal>0</heal>
         <newId>15310</newId>
         <skillId>0</skillId>
-        <skillAdd>26</skillAdd>
+        <skillAdd>19</skillAdd>
         <drink>true</drink>
     </foodItem>
     <foodItem>
@@ -1804,7 +1804,7 @@
         <heal>0</heal>
         <newId>15311</newId>
         <skillId>0</skillId>
-        <skillAdd>26</skillAdd>
+        <skillAdd>19</skillAdd>
         <drink>true</drink>
     </foodItem>
     <foodItem>
@@ -1812,7 +1812,7 @@
         <heal>0</heal>
         <newId>-1</newId>
         <skillId>0</skillId>
-        <skillAdd>26</skillAdd>
+        <skillAdd>19</skillAdd>
         <drink>true</drink>
     </foodItem>
     <!-- Antifire -->

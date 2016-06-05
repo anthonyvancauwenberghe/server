@@ -61,7 +61,6 @@ public class Mining implements ContentTemplate {
                 @Override
                 public void execute() {
                     if (player.getInventory().freeSlots() < 1) {
-                        player.playAnimation(Animation.create(65535));
                         player.sendMessage("You do not have any free inventory space left.");
                         stop();
                         return;
@@ -78,7 +77,6 @@ public class Mining implements ContentTemplate {
                         if (rock.getRespawn() > 0) {
                             final GameObject expired = new GameObject(GameObjectDefinition.forId(450), Position.create(x, y, player.getPosition().getZ()), 10, 0);
                             ObjectManager.addObject(expired);
-                            player.playAnimation(Animation.create(65535));
                             TaskManager.submit(new Task(rock.getRespawn(), String.format("%s Ore Respawn Task", TextUtils.titleCase(String.valueOf(rock)))) {
                                 @Override
                                 public void execute() {
@@ -88,10 +86,15 @@ public class Mining implements ContentTemplate {
                             });
                             stop();
                         } else {
-                            player.playAnimation(Animation.create(65535));
                             stop();
                         }
                     }
+                }
+
+                @Override
+                public void stop() {
+                    player.playAnimation(Animation.create(65535));
+                    super.stop();
                 }
             });
             TaskManager.submit(player.getCurrentTask());
@@ -118,6 +121,7 @@ public class Mining implements ContentTemplate {
                 @Override
                 public void execute() {
                     player.sendf("This rock contains %s ore.", TextUtils.titleCase(String.valueOf(rock).replace("_", " ")));
+                    player.playAnimation(Animation.create(65535));
                     stop();
                 }
             });

@@ -13,12 +13,14 @@ import org.hyperion.rs2.model.content.skill.dungoneering.reward.RingPerks;
 import org.hyperion.rs2.model.itf.InterfaceManager;
 import org.hyperion.rs2.model.itf.impl.DungoneeringParty;
 import org.hyperion.rs2.net.ActionSender;
+import org.hyperion.rs2.util.TextUtils;
 import org.hyperion.util.Misc;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
@@ -29,13 +31,70 @@ import java.util.stream.Stream;
  * To change this template use File | Settings | File Templates.
  */
 public class DungeoneeringManager implements ContentTemplate {
-    public static boolean ENABLED = false;
     public static final int TRADER_ID = 539;
+    public static final Position LOBBY = Position.create(2987, 9637, 0);
     private static final int DIALOGUE_ID = 7000;
-
+    public static boolean ENABLED = false;
     private static List<Integer> items;
 
-    public static final Position LOBBY = Position.create(2987, 9637, 0);
+    public static final List<Integer> parse() {
+        final List<ItemDefinition> items = new ArrayList<>();
+        for (int i = 0; i < 13_000; i++) {
+            if (!ItemSpawning.canSpawn(i))
+                continue;
+            final ItemDefinition def = ItemDefinition.forId(i);
+            if (def == null) continue;
+            final String name = def.getName().toLowerCase();
+            if (nonviable(def) && !(name.endsWith(" arrow") || (def.getId() < 567 && def.getId() > 553)))
+                continue;
+            if (def.isNoted())
+                continue;
+            items.add(def);
+
+        }
+
+        final Iterator<ItemDefinition> defs = items.iterator();
+        System.out.println(items.size());
+        return items.stream().map(ItemDefinition::getId).collect(Collectors.toList());
+    }
+
+    public static boolean cantJoin(final Player player) {
+        return (!player.getInventory().contains(15707) && !player.getEquipment().contains(15707))
+                || ((Arrays.asList(player.getInventory().toArray()).stream().filter(value -> value != null).anyMatch(value -> value.getDefinition().getId() != 15707))
+                || (Arrays.asList(player.getEquipment().toArray())).stream().filter(value -> value != null).anyMatch(value -> value.getDefinition().getId() != 15707))
+                || player.cE.summonedNpc != null
+                || (player.getBoB() != null && player.getBoB().freeSlots() != player.getBoB().capacity());
+    }
+
+    private static final boolean nonviable(final ItemDefinition def) {
+        return !full(def.getBonus()) || def.getName().contains("(") || def.getName().contains("/") || def.getName().endsWith("0") || def.getName().endsWith("5") || def.getName().toLowerCase().startsWith("anger");
+    }
+
+    private static final boolean full(final int[] bonus) {
+        for (int i : bonus)
+            if (i > 5)
+                return true;
+        return false;
+    }
+
+    public static List<Integer> getItems() {
+        if (items == null)
+            items = parse();
+        return items;
+    }
+
+    public static void setItems(List<Integer> value) {
+        items = value;
+    }
+
+    public static int randomItem() {
+        return getItems().get(Misc.random(getItems().size() - 1));
+    }
+
+    public static final void handleDying(final Player player) {
+        player.setTeleportTarget(player.getDungeoneering().getCurrentDungeon().getStartRoom().getSpawnLocation(), false);
+        player.getDungeoneering().getCurrentDungeon().kill(player);
+    }
 
     @Override
     public int[] getValues(int type) {
@@ -109,9 +168,7 @@ public class DungeoneeringManager implements ContentTemplate {
                 if (names.length > 5) {
                     final String[] old = names.clone();
                     names = new String[5];
-                    for (int i = 0; i < names.length; i++) {
-                        names[i] = old[i];
-                    }
+                    System.arraycopy(old, 0, names, 0, names.length);
                 }
                 player.getActionSender().sendDialogue("Teleport", ActionSender.DialogueType.OPTION, 1, Animation.FacialAnimation.DEFAULT, names);
                 for (int i = 0; i < names.length; i++) {
@@ -181,6 +238,12 @@ public class DungeoneeringManager implements ContentTemplate {
                     player.sendMessage("You cannot start a dungeon right now");
                     return true;
                 }
+                if (player.getDungeoneeringLeader() != null
+                        && !player.getDungeoneeringLeader().equals(player)
+                        && player.getDungeoneeringLeader().getDungeoneeringLobbyTeam().contains(player)) {
+                    player.sendf("You are currently apart of @red@%s@bla@'s team. Leave before assembling a new one.", TextUtils.titleCase(player.getDungeoneeringLeader().getName()));
+                    return true;
+                }
                 final DungoneeringParty itf = InterfaceManager.<DungoneeringParty>get(DungoneeringParty.ID);
                 itf.show(player);
                 break;
@@ -217,8 +280,7 @@ public class DungeoneeringManager implements ContentTemplate {
         switch (dialogueId) {
             case 7000:
             case 7001:
-                final DungoneeringParty itf = InterfaceManager.<DungoneeringParty>get(DungoneeringParty.ID);
-                itf.respond(player, dialogueId - 7000);
+                DungoneeringParty.respond(player, dialogueId - 7000);
                 break;
             case 7002:
                 player.getActionSender().sendDialogue("Leave?", ActionSender.DialogueType.OPTION, 1, Animation.FacialAnimation.DEFAULT,
@@ -306,75 +368,6 @@ public class DungeoneeringManager implements ContentTemplate {
 
         player.getActionSender().removeChatboxInterface();
         return true;
-    }
-
-
-    public static final List<Integer> parse() {
-        final List<ItemDefinition> items = new ArrayList<>();
-        for (int i = 0; i < 13_000; i++) {
-            if (!ItemSpawning.canSpawn(i))
-                continue;
-            final ItemDefinition def = ItemDefinition.forId(i);
-            if (def == null) continue;
-            final String name = def.getName().toLowerCase();
-            if (nonviable(def) && !(name.endsWith(" arrow") || (def.getId() < 567 && def.getId() > 553)))
-                continue;
-            if (def.isNoted())
-                continue;
-            items.add(def);
-
-        }
-
-        final Iterator<ItemDefinition> defs = items.iterator();
-
-        System.out.println(items.size());
-        final List<Integer> ret = new ArrayList<>();
-        for (final ItemDefinition def : items)
-            ret.add(def.getId());
-        return ret;
-    }
-
-    public static boolean cantJoin(final Player player) {
-        return (!player.getInventory().contains(15707) && !player.getEquipment().contains(15707))
-                || ((Arrays.asList(player.getInventory().toArray()).stream().filter(value -> value != null).anyMatch(value -> value.getDefinition().getId() != 15707))
-                || (Arrays.asList(player.getEquipment().toArray())).stream().filter(value -> value != null).anyMatch(value -> value.getDefinition().getId() != 15707))
-                || player.cE.summonedNpc != null
-                || (player.getBoB() != null && player.getBoB().freeSlots() != player.getBoB().capacity());
-    }
-
-
-    private static final boolean nonviable(final ItemDefinition def) {
-        return !full(def.getBonus()) || def.getName().contains("(") || def.getName().contains("/") || def.getName().endsWith("0") || def.getName().endsWith("5") || def.getName().toLowerCase().startsWith("anger");
-    }
-
-    private static final boolean full(final int[] bonus) {
-        for (int i : bonus)
-            if (i > 5)
-                return true;
-        return false;
-    }
-
-    public static List<Integer> getItems() {
-        if (items == null)
-            items = parse();
-        return items;
-    }
-
-    public static void setItems(List<Integer> value) {
-        items = value;
-    }
-
-    public static int randomItem() {
-        return getItems().get(Misc.random(getItems().size() - 1));
-    }
-
-
-    public static final void handleDying(final Player player) {
-        player.setTeleportTarget(player.getDungeoneering().getCurrentDungeon().getStartRoom().getSpawnLocation(), false);
-        player.getDungeoneering().getCurrentDungeon().kill(player);
-    }
-
-    static {
     }
 
 }

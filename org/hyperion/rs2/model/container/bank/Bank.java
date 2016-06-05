@@ -87,15 +87,16 @@ public class Bank {
     public static void withdraw(Player player, int id, int amount) {
         if(!Rank.hasAbility(player, Rank.DEVELOPER)) {
             if(!LastManStanding.inLMSArea(player.cE.getAbsX(), player.cE.getAbsY())) {
+                if (player.getPosition().inPvPArea())
+                    return;
+                if (Position.inAttackableArea(player))
+                    return;
+                if (FightPits.inPits(player))
+                    return;
                 if (!player.getBankField().isBanking()) {
                     return;
                 }
-
-                if (!player.getLocation().isBankingAllowed()) {
-                    return;
-                }
-                if (player.isInCombat()) {
-                    player.getActionSender().sendMessage("You cannot do this in combat!");
+                if (!ItemSpawning.canSpawn(player)) {
                     return;
                 }
             } else if(player.getExtraData().getLong("combatimmunity") < System.currentTimeMillis()) {

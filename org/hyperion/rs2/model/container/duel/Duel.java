@@ -7,6 +7,7 @@ import org.hyperion.rs2.logging.FileLogging;
 import org.hyperion.rs2.model.*;
 import org.hyperion.rs2.model.achievements.AchievementHandler;
 import org.hyperion.rs2.model.combat.Combat;
+import org.hyperion.rs2.model.combat.CombatEntity;
 import org.hyperion.rs2.model.container.Container;
 import org.hyperion.rs2.model.container.Equipment;
 import org.hyperion.rs2.model.container.duel.DuelRule.DuelRules;
@@ -563,6 +564,7 @@ public class Duel {
         }
         healup(player);
         player.setTeleportTarget(Position.create(3360 + Combat.random(17), 3274 + Combat.random(3), 0), false);
+        Combat.resetAttack(player.cE);
         player.playAnimation(Animation.create(-1));
         player.getActionSender().sendMessage("You have " + (won ? "won" : "lost") + " the duel.");
         player.getActionSender().sendPlayerOption("Trade", 4, 0);

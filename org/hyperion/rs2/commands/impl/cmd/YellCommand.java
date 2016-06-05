@@ -107,15 +107,10 @@ public class YellCommand extends NewCommand {
                     }
             );
         }
-        final String finalMessage = message;
+        final String finalMessage = message.length() > 1 ? Character.toString(message.charAt(0)).toUpperCase() + message.substring(1).toLowerCase() : message.toUpperCase();
         World.getPlayers().stream().filter(target -> target != null).forEach(target -> {
             if (!Lock.isEnabled(target, Lock.YELL)) {
-                String value;
-                if (!Lock.isEnabled(target, Lock.YELL_TITLES)) {
-                    value = suffix + finalMessage;
-                } else {
-                    value = suffixWithoutTitles + finalMessage;
-                }
+                final String value = Lock.isEnabled(target, Lock.YELL_TITLES) ? suffixWithoutTitles + finalMessage : suffix + finalMessage;
                 target.sendMessage(value);
             }
         });

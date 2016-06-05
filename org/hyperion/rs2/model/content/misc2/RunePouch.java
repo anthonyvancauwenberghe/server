@@ -31,7 +31,7 @@ public class RunePouch implements ContentTemplate {
     }
 
     private static boolean isRune(Item item) {
-        if (item != null && ((item.getId() >= 554 && item.getId() <= 565) || item.getId() == 9075)) {
+        if (item != null && ((item.getId() >= 554 && item.getId() <= 566) || item.getId() == 9075)) {
             return true;
         }
         return false;

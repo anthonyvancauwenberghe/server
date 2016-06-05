@@ -301,6 +301,8 @@ public class Player extends Entity implements Persistable, Cloneable {
 	public Player beingFollowed = null;
 	public Player isFollowing = null;
 	public Player tradeWith2 = null;
+	private Player dungeoneeringLeader = null;
+	private List<Player> dungeoneeringLobbyTeam = new ArrayList<>();
 	public ArmourClass pickedClass = null;
 	private Agility agility = new Agility(this);
 	private PlayerChecker playerChecker = PlayerChecker.create();
@@ -1177,6 +1179,18 @@ public class Player extends Entity implements Persistable, Cloneable {
 
 	public Player getTrader() {
 		return tradeWith;
+	}
+
+	public Player getDungeoneeringLeader() {
+		return dungeoneeringLeader;
+	}
+
+	public void setDungeoneeringLeader(final Player value) {
+		this.dungeoneeringLeader = value;
+	}
+
+	public List<Player> getDungeoneeringLobbyTeam() {
+		return dungeoneeringLobbyTeam;
 	}
 
 	public void setTradeWith(Player p) {
@@ -2164,6 +2178,10 @@ public class Player extends Entity implements Persistable, Cloneable {
 		deathCount = dc;
 		questtab.updateComponent(QuestTab.QuestTabComponent.DEATHS);
 		questtab.updateComponent(QuestTab.QuestTabComponent.KILL_DEATH);
+	}
+
+	public boolean isExtremedBoosted() {
+		return false;
 	}
 
 	public boolean isOverloaded() {

@@ -522,7 +522,7 @@ public class Skills {
             player.getPermExtraData().remove("doubleExperience");
         }
 
-        if (true || skill == BONUS_SKILL)
+        if (skill == BONUS_SKILL)
             exp *= 2;
         else if (skill > 6 && player.getPermExtraData().getLong("doubleExperience") >= System.currentTimeMillis() && player.getPermExtraData().getLong("doubleExperience") != 0)
             exp *= 2;

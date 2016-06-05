@@ -60,8 +60,8 @@ public final class NewCommandHandler {
      * Command groups must implement {@link NewCommandExtension}.
      */
     static {
-        long initial = System.currentTimeMillis();
-        final NewCommandExtension[] COMMAND_TYPES = {new ServerCommands(),
+        final long initial = System.currentTimeMillis();
+        Arrays.asList(new ServerCommands(),
                 new PlayerCommands(),
                 new HeroCommands(),
                 new LegendCommands(),
@@ -78,8 +78,7 @@ public final class NewCommandHandler {
                 new HeadModeratorCommands(),
                 new AdministratorCommands(),
                 new DeveloperCommands(),
-                new OwnerCommands()};
-        Arrays.stream(COMMAND_TYPES).map(NewCommandExtension::init).forEach(NewCommandHandler::submit);
+                new OwnerCommands()).stream().map(NewCommandExtension::init).forEach(NewCommandHandler::submit);
         Server.getLogger().info(String.format("%,d commands submitted in %,dms", COMMANDS.size(), System.currentTimeMillis() - initial));
     }
 

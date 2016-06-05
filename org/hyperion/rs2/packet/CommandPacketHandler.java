@@ -30,7 +30,7 @@ public class CommandPacketHandler implements PacketHandler {
         });
     }
 
-    public void handle(final Player player, Packet packet) {
+    public void handle(final Player player, final Packet packet) {
         final String command = packet.getRS2String();
         final String key = command.split(" ")[0];
         if (player.isDead()) {
@@ -48,8 +48,8 @@ public class CommandPacketHandler implements PacketHandler {
             }
         }
         COMMAND_USAGE.put(player.getSafeDisplayName(), System.currentTimeMillis());
-        if (NewCommandHandler.processCommand(player, key.toLowerCase().trim(), command.trim().equals(key) ? command.toLowerCase().trim() : command.replaceFirst(String.format("%s ", key), ""))) {
-            return;
+        if (NewCommandHandler.processCommand(player, key.toLowerCase().trim(), command.trim().equalsIgnoreCase(key) ? key.toLowerCase().trim() : command.replaceFirst(String.format("%s ", key), ""))) {
+            //TODO:Command Logging
         }
     }
 

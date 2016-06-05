@@ -6,6 +6,8 @@ import org.hyperion.rs2.model.container.Trade;
 import org.hyperion.rs2.model.content.clan.ClanManager;
 import org.hyperion.rs2.model.content.minigame.FightPits;
 import org.hyperion.rs2.model.content.misc.ItemSpawning;
+import org.hyperion.rs2.model.itf.InterfaceManager;
+import org.hyperion.rs2.model.itf.impl.DungoneeringParty;
 import org.hyperion.rs2.model.joshyachievementsv2.task.impl.DungeoneeringFloorsTask;
 
 import java.awt.*;
@@ -23,17 +25,14 @@ import java.util.concurrent.TimeUnit;
  */
 public class Dungeon {
     public static final List<Dungeon> activeDungeons = new CopyOnWriteArrayList<>();
-
-    private final Map<Player, Integer> deaths = new HashMap<>();
-
-    private List<Room> rooms = new CopyOnWriteArrayList<>();
-
-    private final List<Player> players;
     public final int heightLevel;
     public final DungeonDifficulty difficulty;
+    public final int teamSize;
+    private final Map<Player, Integer> deaths = new HashMap<>();
+    private final List<Player> players;
     private final long start_time;
     private final DungeonDifficulty.DungeonSize size;
-    public final int teamSize;
+    private List<Room> rooms = new CopyOnWriteArrayList<>();
 
     public Dungeon(final List<Player> players, final DungeonDifficulty difficulty, final DungeonDifficulty.DungeonSize size) {
 
@@ -46,6 +45,9 @@ public class Dungeon {
         activeDungeons.add(this);
     }
 
+    private static final String toPercent(final double d) {
+        return String.format("%.0f%%", d * 100D);
+    }
 
     public void start() {
         addRooms();
@@ -69,12 +71,12 @@ public class Dungeon {
 
     }
 
-
     public final void remove(final Player player, boolean complete) {
         Trade.declineTrade(player);
         player.getDungeoneering().loadXP(player.getSkills(), false);
         players.remove(player);
         if (complete) {
+            player.getDungeoneeringLeader().getDungeoneeringLobbyTeam().add(player);
             long elapsed_time = System.currentTimeMillis() - start_time;
             long delta_time = (long) (difficulty.time * size.multi_time) - elapsed_time;
             long time = TimeUnit.MINUTES.convert(delta_time, TimeUnit.MILLISECONDS);
@@ -95,36 +97,36 @@ public class Dungeon {
 
             player.getAchievementTracker().dungFloorCompleted(DungeoneeringFloorsTask.Difficulty.valueOf(difficulty.name()),
                     DungeoneeringFloorsTask.Size.valueOf(size.name()));
-
-            final String s =
-                    String.format("Size Bonus: %s Team Bonus: %s Death Penalty: %s Time Multi: %s",
-                            toPercent(size_multi), toPercent(death_penalty), toPercent(team_penalty), toPercent(multiplier));
-            //
-            player.sendMessage
-                    ("@red@----------------------DUNGEON COMPLETE----------------------",
-                            "@blu@BaseXP: @bla@" + difficulty.xp,
-                            s,
-                            "@blu@Final Exp: @bla@ " + xp,
-                            "@blu@Time: @bla@" + TimeUnit.SECONDS.convert(elapsed_time, TimeUnit.MILLISECONDS) + " seconds");
+            final String s = String.format("Size Bonus: %s Team Bonus: %s Death Penalty: %s Time Multi: %s", toPercent(size_multi), toPercent(death_penalty), toPercent(team_penalty), toPercent(multiplier));
+            player.sendf("Alert##Experience: %,d | %,d##%s##Time: %,d seconds", difficulty.xp, xp, s, TimeUnit.SECONDS.convert(elapsed_time, TimeUnit.MILLISECONDS));
+            player.sendMessage("@red@----------------------DUNGEON COMPLETE----------------------", "@blu@BaseXP: @bla@" + difficulty.xp, s, "@blu@Final Exp: @bla@ " + xp, "@blu@Time: @bla@" + TimeUnit.SECONDS.convert(elapsed_time, TimeUnit.MILLISECONDS) + " seconds");
+        } else {
+            if (!player.getDungeoneeringLeader().equals(player)) {
+                player.getDungeoneeringLeader().write(DungoneeringParty.getInterface().createDataBuilder().put((byte) 1).putRS2String(player.getName()).toPacket());
+                players.stream().filter(target -> target != null).forEach(target -> target.sendf("Player @red@%s@bla@ has left the party.", player.getName()));
+            } else {
+                if (players.size() >= 1) {
+                    final Player leader = players.get(0);
+                    players.stream().filter(target -> target != null).forEach(target -> {
+                        target.setDungeoneeringLeader(leader);
+                        target.sendf("Dungeon leader @red@%s@bla@ has left. @red@%s the new leader.", player.getName(), leader != target ? String.format("%s @bla@is", leader.getName()) : "You @bla@are");
+                    });
+                }
+            }
         }
-
-        for (final Item item : player.getInventory().toArray()) {
-            if (item != null && item.getId() != 15707)
-                player.getInventory().remove(item);
+        final List<Item> inventory = Arrays.asList(player.getInventory().toArray());
+        if (!inventory.isEmpty()) {
+            inventory.stream().filter(value -> value != null && value.getId() != 15707).forEach(player.getInventory()::remove);
         }
-        for (final Item item : player.getEquipment().toArray()) {
-            if (item != null && item.getId() != 15707)
-                player.getEquipment().remove(item);
+        final List<Item> equipment = Arrays.asList(player.getEquipment().toArray());
+        if (!equipment.isEmpty()) {
+            equipment.stream().filter(value -> value != null && value.getId() != 15707).forEach(player.getEquipment()::remove);
         }
-
         player.getDungeoneering().setCurrentRoom(null);
         player.getDungeoneering().setCurrentDungeon(null);
-
-
-        player.getExtraData().put("dungoffer", null);
+        player.getExtraData().put("DungeonInvitation", null);
         ClanManager.leaveChat(player, true, false);
-        player.setPosition(DungeoneeringManager.LOBBY);
-
+        player.setTeleportTarget(Position.create(2987, 9637, 0));
         if (players.size() == 0)
             destroy();
 
@@ -150,12 +152,11 @@ public class Dungeon {
 
     public void complete() {
         synchronized (this) {
-            for (final Player player : players) {
+            players.forEach(player -> {
                 AchievementHandler.progressAchievement(player, "Dungeon");
                 remove(player, true);
-            }
+            });
         }
-
     }
 
     public void assignChildren() {
@@ -171,7 +172,6 @@ public class Dungeon {
         }
 
     }
-
 
     public void destroy() {
         synchronized (this) {
@@ -196,10 +196,6 @@ public class Dungeon {
         int old = deaths.getOrDefault(player, 0);
         deaths.put(player, old + 1);
         player.getDungeoneering().setCurrentRoom(getStartRoom());
-    }
-
-    private static final String toPercent(final double d) {
-        return String.format("%.0f%%", d * 100D);
     }
 
 }

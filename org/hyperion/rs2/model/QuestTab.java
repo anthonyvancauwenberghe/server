@@ -43,7 +43,8 @@ public class QuestTab {
 
             @Override
             public boolean handle(Player player, int id) {
-                player.getActionSender().openPlayersInterface();
+                final List<Player> list = World.getPlayers().stream().filter(other -> !other.isHidden()).collect(Collectors.toList());
+                player.sendf("There is currently '%,d' player%s playing ArteroPk.", list.size(), list.size() != 1 ? "s" : "");
                 return true;
             }
         },

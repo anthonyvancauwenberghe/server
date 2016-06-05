@@ -101,7 +101,7 @@ public abstract class NewCommand {
         String modelInput = "::" + getKey() + " ";
         for (CommandInput inputString : requiredInput)
             modelInput += inputString.getShortDescription() + NewCommandHandler.SPLITTER + " ";
-        return  modelInput.substring(0, modelInput.length() - NewCommandHandler.SPLITTER.length() - 1); //this will remove the unnecessary comma without us having to do a lot of extra work.
+        return  modelInput.trim().endsWith(",") ? modelInput.trim().substring(0, modelInput.length() - NewCommandHandler.SPLITTER.length() - 1) : modelInput; //this will remove the unnecessary comma without us having to do a lot of extra work.
     }
 
     public final String filterInput(String input) {

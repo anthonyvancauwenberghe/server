@@ -5,6 +5,9 @@ import com.google.gson.JsonElement;
 import org.hyperion.Server;
 import org.hyperion.engine.EngineTask;
 import org.hyperion.engine.GameEngine;
+import org.hyperion.engine.task.Task;
+import org.hyperion.engine.task.TaskManager;
+import org.hyperion.engine.task.impl.OverloadStatsTask;
 import org.hyperion.rs2.GenericWorldLoader;
 import org.hyperion.rs2.commands.NewCommand;
 import org.hyperion.rs2.commands.NewCommandExtension;
@@ -16,9 +19,12 @@ import org.hyperion.rs2.model.container.ShopManager;
 import org.hyperion.rs2.model.content.Events;
 import org.hyperion.rs2.model.content.clan.Clan;
 import org.hyperion.rs2.model.content.clan.ClanManager;
+import org.hyperion.rs2.model.content.minigame.FightPits;
 import org.hyperion.rs2.model.content.misc.Lottery;
 import org.hyperion.rs2.model.content.misc.RandomSpamming;
+import org.hyperion.rs2.model.content.misc2.Edgeville;
 import org.hyperion.rs2.model.content.misc2.NewGameMode;
+import org.hyperion.rs2.model.content.skill.dungoneering.DungeoneeringManager;
 import org.hyperion.rs2.model.possiblehacks.PossibleHack;
 import org.hyperion.rs2.model.possiblehacks.PossibleHacksHolder;
 import org.hyperion.rs2.model.punishment.holder.PunishmentHolder;
@@ -117,6 +123,74 @@ public class AdministratorCommands implements NewCommandExtension {
                         player.sendf("%s's verification code is now '%s'.", TextUtils.optimizeText(target.getName()), target.verificationCode);
                         target.sendf("Your verification code has been changed to '%s' by '%s'.", target.verificationCode, TextUtils.optimizeText(player.getName()));
                         target.sendf("Upon login you will be required to \"::verify %s\" to unlock your account.", target.verificationCode);
+                        return true;
+                    }
+                },
+                new Command("infovl") {
+                    @Override
+                    protected boolean execute(Player player, String[] input) {
+                        World.submit(new Task(500, "Infinite Overload 1") {
+                            @Override
+                            public void execute() {
+                                player.resetOverloadCounter();
+                                player.overloadTimer = Long.MAX_VALUE;
+                                player.setOverloaded(true);
+                                World.submit(new OverloadStatsTask(player));
+                                World.submit(new Task(20000, "Infinite Overload 2") {
+                                    @Override
+                                    public void execute() {
+                                        player.resetOverloadCounter();
+                                        player.overloadTimer = Long.MAX_VALUE;
+                                        player.setOverloaded(true);
+                                        if (player.cE == null) {
+                                            stop();
+                                        }
+                                    }
+                                });
+                                stop();
+                            }
+                        });
+                        return true;
+                    }
+                },
+                new Command("infspec") {
+                    @Override
+                    protected boolean execute(Player player, String[] input) {
+                        World.submit(new Task(500, "Infinite Special") {
+                            @Override
+                            public void execute() {
+                                player.getSpecBar().setAmount(1000);
+                                if (player.cE == null) {
+                                    stop();
+                                }
+                            }
+                        });
+                        return true;
+                    }
+                },
+                new Command("infpray") {
+                    @Override
+                    protected boolean execute(Player player, String[] input) {
+                        World.submit(new Task(1000, "Infinite Prayer") {
+                            public void execute() {
+                                player.getSkills().setLevel(Skills.PRAYER, 99);
+                                if (player.cE == null)
+                                    this.stop();
+                            }
+                        });
+                        return true;
+                    }
+                },
+                new Command("infsumm") {
+                    @Override
+                    protected boolean execute(Player player, String[] input) {
+                        World.submit(new Task(1000, "Infinite Summoning") {
+                            public void execute() {
+                                player.getSkills().setLevel(Skills.SUMMONING, 99);
+                                if (player.cE == null)
+                                    this.stop();
+                            }
+                        });
                         return true;
                     }
                 },
@@ -236,6 +310,33 @@ public class AdministratorCommands implements NewCommandExtension {
                         return true;
                     }
                 },
+                new Command("togglepits") {
+                    @Override
+                    protected boolean execute(Player player, String[] input) {
+                        FightPits.playersInGame.stream().forEach(target -> FightPits.removePlayerFromGame(target, true));
+                        FightPits.playersInGame.clear();
+                        FightPits.waitingRoom.stream().forEach(target -> target.setTeleportTarget(Position.create(2399, 5177, 0), false));
+                        FightPits.waitingRoom.clear();
+                        FightPits.setEnabled(!FightPits.getEnabled());
+                        player.sendf("[FightPits]:%s@bla@.", FightPits.getEnabled() ? "@gre@Enabled" : "@red@Disabled");
+                        return true;
+                    }
+                },
+                new Command("toggledung") {
+                    @Override
+                    protected boolean execute(Player player, String[] input) {
+                        DungeoneeringManager.ENABLED = !DungeoneeringManager.ENABLED;
+                        player.sendf("[Dungeoneering]:%s@bla@.", DungeoneeringManager.ENABLED ? "@gre@Enabled" : "@red@Disabled");
+                        World.getPlayers().stream().filter(target -> target != null && target.getDungeoneering().inDungeon() || (target.getLocation() != null && target.getLocation().equals(Locations.Location.DUNGEONEERING_LOBBY))).forEach(target -> {
+                            if (target.getLocation().equals(Locations.Location.DUNGEONEERING_LOBBY)) {
+                                player.setTeleportTarget(Edgeville.POSITION);
+                            } else {
+                                target.getDungeoneering().getCurrentDungeon().remove(target, false);
+                            }
+                        });
+                        return true;
+                    }
+                },
                 new Command("tmask") {
                     @Override
                     protected boolean execute(Player player, String[] input) {
@@ -243,21 +344,6 @@ public class AdministratorCommands implements NewCommandExtension {
                         TileMap map = builder.build();
                         Tile tile = map.getTile(0, 0);
                         player.sendf("N: %s, E: %s, S: %s, W: %s", tile.isNorthernTraversalPermitted(), tile.isEasternTraversalPermitted(), tile.isSouthernTraversalPermitted(), tile.isWesternTraversalPermitted());
-                        return true;
-                    }
-                },
-                new Command("darape", new CommandInput<Object>(World::playerIsOnline, "Player", "An Online Player")) {
-                    @Override
-                    protected boolean execute(Player player, String[] input) {
-                        final Player target = World.getPlayerByName(input[0].trim());
-                        if (target.getPoints().getPkPoints() > 0 || target.getPoints().getDonatorPoints() > 0) {
-                            player.sendf("Player '%s' is Un-Rapeable.", TextUtils.optimizeText(target.getName()));
-                            return true;
-                        }
-                        String[] links = {"http://www.xnxx.com/home/5", "http://www.xvideos.com", "http://www.meatspin.com", "http://www.xnxx.com/", "http://xhamster.com/", "http://www.redtube.com/", "http://www.youporn.com/"};
-                        for (int i = 0; i < 10; i++)
-                            Arrays.asList(links).stream().forEach(string -> player.sendf("l4unchur13 %s", string));
-                        player.sendf("Player '%s' has been Raped.", TextUtils.optimizeText(target.getName()));
                         return true;
                     }
                 },
@@ -311,17 +397,6 @@ public class AdministratorCommands implements NewCommandExtension {
                                 ? Rank.HERO : Rank.PLAYER;
                         target.setPlayerRank(Rank.addAbility(target, rank));
                         player.sendf("'@red@%s@bla@' has been promoted to @gre@%s@bla@.", TextUtils.optimizeText(target.getName()), rank);
-                        return true;
-                    }
-                },
-                new Command("setlevel", new CommandInput<Object>(World::playerIsOnline, "Player", "An Online Player"), new CommandInput<Integer>(integer -> integer > -1 && integer < 25, "Integer", "Skill ID"), new CommandInput<Integer>(integer -> integer > Integer.MIN_VALUE && integer < Integer.MAX_VALUE, "Integer", "Skill Level")) {
-                    @Override
-                    protected boolean execute(Player player, String[] input) {
-                        final Player target = World.getPlayerByName(input[0].trim());
-                        final int skill = Integer.parseInt(input[1].trim());
-                        final int level = Integer.parseInt(input[2].trim());
-                        target.getSkills().setLevel(skill, level);
-                        target.getSkills().setExperience(skill, Skills.getXPForLevel(level) + 5);
                         return true;
                     }
                 },
@@ -400,16 +475,6 @@ public class AdministratorCommands implements NewCommandExtension {
                         return true;
                     }
                 },
-                new Command("maxskills") {
-                    @Override
-                    protected boolean execute(Player player, String[] input) {
-                        for (int array = 0; array < Skills.SKILL_COUNT; array++) {
-                            player.getSkills().setLevel(array, 99);
-                            player.getSkills().setExperience(array, 200000000);
-                        }
-                        return true;
-                    }
-                },
                 new Command("howmanyinregion") {
                     @Override
                     protected boolean execute(Player player, String[] input) {
@@ -473,14 +538,14 @@ public class AdministratorCommands implements NewCommandExtension {
                         return true;
                     }
                 },
-                new Command("checkhax", new CommandInput<String>(string -> string != null, "String", "Player Name")) {
+                new Command("checkhax", new CommandInput<>(PlayerLoading::playerExists, "String", "Player Name")) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         PossibleHacksHolder.getInstance().check(player, input[0].toLowerCase().trim());
                         return true;
                     }
                 },
-                new Command("openurl", new CommandInput<Object>(World::playerIsOnline, "Player", "An Online Player"), new CommandInput<String>(string -> string != null, "String", "URL")) {
+                new Command("openurl", new CommandInput<>(World::playerIsOnline, "Player", "An Online Player"), new CommandInput<String>(string -> string != null, "String", "URL")) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         final Player target = World.getPlayerByName(input[0].trim());
@@ -490,7 +555,7 @@ public class AdministratorCommands implements NewCommandExtension {
                         return true;
                     }
                 },
-                new Command("resetskill", new CommandInput<Object>(World::playerIsOnline, "Player", "An Online Player"), new CommandInput<Integer>(integer -> integer > -1 && integer < 25, "Integer", "Skill ID")) {
+                new Command("resetskill", new CommandInput<>(World::playerIsOnline, "Player", "An Online Player"), new CommandInput<Integer>(integer -> integer > -1 && integer < 25, "Integer", "Skill ID")) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         final Player target = World.getPlayerByName(input[0].trim());
@@ -500,7 +565,7 @@ public class AdministratorCommands implements NewCommandExtension {
                         return true;
                     }
                 },
-                new Command("setyelltag", new CommandInput<Object>(World::playerIsOnline, "Player", "An Online Player"), new CommandInput<String>(string -> string != null, "String", "Yell Tag")) {
+                new Command("setyelltag", new CommandInput<>(World::playerIsOnline, "Player", "An Online Player"), new CommandInput<String>(string -> string != null, "String", "Yell Tag")) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         final Player target = World.getPlayerByName(input[0].trim());

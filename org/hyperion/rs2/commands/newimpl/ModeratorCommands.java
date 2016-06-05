@@ -105,9 +105,16 @@ public class ModeratorCommands implements NewCommandExtension {
                             @Override
                             public Boolean call() throws Exception {
                                 List<String> usedIps = DbHub.getPlayerDb().getLogs().getIpForPlayer(targetName).stream().map(IPLog::getIp).collect(Collectors.toList());
+                                if (usedIps.isEmpty()) {
+                                    player.sendf("No used Protocols for player %s.", targetName);
+                                    return true;
+                                }
                                 usedIps = usedIps.stream().filter(ip -> !GenericWorldLoader.isIpAllowed(ip)).collect(Collectors.toList());
-
                                 List<IPLog> alts = new ArrayList<>();
+                                if (alts.isEmpty()) {
+                                    player.sendf("No Alternate Accounts for player %s.", targetName);
+                                    return true;
+                                }
                                 usedIps.forEach(entry -> DbHub.getPlayerDb().getLogs().getAltsByIp(entry).forEach(alts::add));
                                 player.sendMessage("@dre@" + Misc.formatPlayerName(targetName) + " has " + alts.size() + " alt" + (alts.size() == 1 ? "" : "s") + ".");
                                 alts.forEach(alt -> player.sendMessage("@dre@" + Misc.formatPlayerName(alt.getPlayerName() + " @bla@- Last login: @dre@" + alt.getFormattedTimestamp() + "@bla@ IP used: @dre@" + alt.getIp())));
@@ -529,8 +536,15 @@ public class ModeratorCommands implements NewCommandExtension {
                     protected boolean execute(Player player, String[] input) {
                         final List<String> list = new ArrayList<>();
                         World.getPlayers().forEach(value -> list.add(String.format("%s:%d,%d,%d,%d,%d", TextUtils.titleCase(value.getName()), Rank.getPrimaryRank(value).ordinal(), value.getSkills().getCombatLevel(), value.getPosition().getX(), value.getPosition().getY(), value.getPosition().getZ())));
-                        Collections.sort(list, (one, two) -> new String(one.split(":")[0]).compareTo(two.split(":")[0]));
+                        Collections.sort(list, (one, two) -> one.split(":")[0].compareTo(two.split(":")[0]));
                         list.forEach(player::sendMessage);
+                        return true;
+                    }
+                },
+                new Command("players3") {
+                    @Override
+                    protected boolean execute(Player player, String[] input) {
+                        player.getActionSender().openPlayersInterface();
                         return true;
                     }
                 }

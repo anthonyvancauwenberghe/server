@@ -22,7 +22,7 @@ import org.hyperion.rs2.model.content.misc2.SkillCapeShops;
 import org.hyperion.rs2.model.content.pvptasks.PvPTask;
 import org.hyperion.rs2.model.content.specialareas.SpecialArea;
 import org.hyperion.rs2.model.content.specialareas.SpecialAreaHolder;
-import org.hyperion.rs2.model.content.transport.TeleTabs;
+import org.hyperion.rs2.model.content.transport.tabs.Tab;
 import org.hyperion.rs2.model.sets.SetData;
 import org.hyperion.rs2.model.sets.SetUtility;
 import org.hyperion.rs2.net.ActionSender.DialogueType;
@@ -1142,9 +1142,10 @@ public class DialogueManager {
 			case 173:
 				final Player opp = player.getBountyHunter().getTarget();
 				if(opp != null) {
-					final int x = opp.getPosition().getX();
-					final int y = opp.getPosition().getY();
-                    TeleTabs.TeleTab(player, opp.getPosition().getX(), opp.getPosition().getY(), opp.getPosition().getZ(), 18806);
+					final Tab tab = Tab.getByIntegerValue(18806);
+					if (tab != null) {
+						tab.process(player);
+					}
                 }
 				break;
             case 174:

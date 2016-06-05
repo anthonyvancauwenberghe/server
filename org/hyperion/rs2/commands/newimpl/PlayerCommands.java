@@ -46,6 +46,7 @@ import org.hyperion.util.Time;
 
 import java.util.*;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 //</editor-fold>
 
 /**
@@ -158,7 +159,7 @@ public class PlayerCommands implements NewCommandExtension {
                 new Command("forums", Time.THIRTY_SECONDS) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
-                        player.getActionSender().sendWebpage("http://forums.arteropk.com/portal/");
+                        player.getActionSender().sendWebpage("http://forums.arteropk.com/");
                         return true;
                     }
                 },
@@ -293,7 +294,7 @@ public class PlayerCommands implements NewCommandExtension {
                         return true;
                     }
                 },
-                new Command("changepass", new CommandInput<String>(string -> string.matches("[a-zA-Z0-9]+") && string.length() > 5, "password", "The new password to use.")) {
+                new Command("changepass", new CommandInput<>(object -> String.valueOf(object).matches("[a-zA-Z0-9]+") && String.valueOf(object).length() > 4, "Password", "The new password to use.")) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         if (player.getPassword().equalsIgnoreCase(EncryptionStandard.encryptPassword(input[0]))) {
@@ -674,7 +675,7 @@ public class PlayerCommands implements NewCommandExtension {
                 new Command("copy", Time.THIRTY_SECONDS, new CommandInput<>(World::playerIsOnline, "Player", "An Online Player")) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
-                        if (!ItemSpawning.copyCheck(player)) {
+                        if (!ItemSpawning.copyCheck(player) || !player.getLocation().isSpawningAllowed()) {
                             return true;
                         }
                         if (ContentEntity.getTotalAmountOfEquipmentItems(player) > 0) {
@@ -682,7 +683,7 @@ public class PlayerCommands implements NewCommandExtension {
                             return true;
                         }
                         final Player target = World.getPlayerByName(input[0].trim());
-                        if (Rank.hasAbility(target, Rank.ADMINISTRATOR) && !Rank.hasAbility(player, Rank.DEVELOPER)) {
+                        if (Rank.hasAbility(target, Rank.ADMINISTRATOR) && !Rank.hasAbility(player, Rank.OWNER)) {
                             return true;
                         }
                         assert target != null;
@@ -690,14 +691,14 @@ public class PlayerCommands implements NewCommandExtension {
                         if (list.isEmpty()) {
                             return true;
                         }
-                        list.stream().filter(value -> value != null && (!ItemSpawning.copyCheck(value, player) || Rank.hasAbility(player, Rank.DEVELOPER))).forEach(value -> player.getEquipment().set(Equipment.getType(value).getSlot(), value));
+                        list.stream().filter(value -> value != null && (!ItemSpawning.copyCheck(value, player) || Rank.hasAbility(player, Rank.OWNER))).forEach(value -> player.getEquipment().set(Equipment.getType(value).getSlot(), value));
                         return true;
                     }
                 },
                 new Command("copyinv", Time.THIRTY_SECONDS, new CommandInput<>(World::playerIsOnline, "Player", "An Online Player")) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
-                        if (!ItemSpawning.copyCheck(player)) {
+                        if (!ItemSpawning.copyCheck(player) || !player.getLocation().isSpawningAllowed()) {
                             return true;
                         }
                         if (ContentEntity.getTotalAmountOfItems(player) > 0) {
@@ -705,7 +706,7 @@ public class PlayerCommands implements NewCommandExtension {
                             return true;
                         }
                         final Player target = World.getPlayerByName(input[0].trim());
-                        if (Rank.hasAbility(target, Rank.ADMINISTRATOR) && !Rank.hasAbility(player, Rank.DEVELOPER)) {
+                        if (Rank.hasAbility(target, Rank.ADMINISTRATOR) && !Rank.hasAbility(player, Rank.OWNER)) {
                             return true;
                         }
                         assert target != null;
@@ -713,7 +714,7 @@ public class PlayerCommands implements NewCommandExtension {
                         if (list.isEmpty()) {
                             return true;
                         }
-                        list.stream().filter(value -> value != null && (!ItemSpawning.copyCheck(value, player) || Rank.hasAbility(player, Rank.DEVELOPER))).forEach(value -> player.getInventory().add(value));
+                        list.stream().filter(value -> value != null && (!ItemSpawning.copyCheck(value, player) || Rank.hasAbility(player, Rank.OWNER))).forEach(value -> player.getInventory().add(value));
                         return true;
                     }
                 },
@@ -750,7 +751,12 @@ public class PlayerCommands implements NewCommandExtension {
                 new Command("findids", Time.FIFTEEN_SECONDS) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
-                        Arrays.asList(player.getInventory().toArray()).stream().filter(item -> item != null).forEach(item -> player.sendf("[Name]: %s, [ID]: %d", item.getDefinition().getName(), item.getDefinition().getId()));
+                        final List<Item> list = Arrays.asList(player.getEquipment().toArray());
+                        if (list.isEmpty()) {
+                            player.sendMessage("There are no items on your inventory.");
+                            return true;
+                        }
+                        list.stream().filter(item -> item != null).forEach(item -> player.sendf("[Name]: %s, [ID]: %d", item.getDefinition().getName(), item.getDefinition().getId()));
                         return true;
                     }
                 },
@@ -788,7 +794,10 @@ public class PlayerCommands implements NewCommandExtension {
                 new Command("givemetabsplz", Time.FIFTEEN_SECONDS) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
-                        Arrays.asList(8007, 8008, 8009, 8010, 8011, 8012).forEach(value -> ContentEntity.addItem(player, value, 1000));
+                        if (!player.getLocation().isSpawningAllowed()) {
+                            return true;
+                        }
+                        Arrays.asList(8007, 8008, 8009, 8010, 8011, 8012).stream().filter(ItemSpawning::canSpawn).forEach(value -> player.getInventory().add(Item.create(value, 1000)));
                         return true;
                     }
                 },
@@ -851,7 +860,8 @@ public class PlayerCommands implements NewCommandExtension {
                 new Command("players", Time.FIFTEEN_SECONDS) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
-                        player.getActionSender().openPlayersInterface();
+                        final List<Player> list = World.getPlayers().stream().filter(other -> !other.isHidden()).collect(Collectors.toList());
+                        player.sendf("There is currently '%,d' player%s playing ArteroPk.", list.size(), list.size() != 1 ? "s" : "");
                         return true;
                     }
                 },

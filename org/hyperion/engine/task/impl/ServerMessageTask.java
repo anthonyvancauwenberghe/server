@@ -80,7 +80,7 @@ public class ServerMessageTask extends Task {
 
     static {
         NewCommandHandler.submit(
-                new NewCommand("reloadservermessages", Rank.DEVELOPER) {
+                new NewCommand("reloadservermessages", Rank.ADMINISTRATOR) {
                     @Override
                     public boolean execute(Player player, String[] input) {
                         reloadMessages();
@@ -88,7 +88,7 @@ public class ServerMessageTask extends Task {
                         return true;
                     }
                 },
-                new NewCommand("toggleservermessages", Rank.DEVELOPER) {
+                new NewCommand("toggleservermessages", Rank.ADMINISTRATOR) {
                     @Override
                     public boolean execute(Player player, String[] input) {
                         enabled = !enabled;
@@ -96,7 +96,7 @@ public class ServerMessageTask extends Task {
                         return true;
                     }
                 },
-                new NewCommand("addservermessage", Rank.DEVELOPER, new CommandInput<>(object -> true, "message", "The message to add to the server message list.")) {
+                new NewCommand("addservermessage", Rank.ADMINISTRATOR, new CommandInput<>(object -> true, "message", "The message to add to the server message list.")) {
                     @Override
                     public boolean execute(Player player, String[] input) {
                         addMessage(filterInput(input[0]));
@@ -104,7 +104,7 @@ public class ServerMessageTask extends Task {
                         return true;
                     }
                 },
-                new NewCommand("removeservermessage", Rank.DEVELOPER, new CommandInput<>(object -> true, "message", "The message to remove from the server message list.")) {
+                new NewCommand("removeservermessage", Rank.ADMINISTRATOR, new CommandInput<>(object -> true, "message", "The message to remove from the server message list.")) {
                     @Override
                     public boolean execute(Player player, String[] input) {
                         if (removeMessage(filterInput(input[0]))) {
@@ -115,7 +115,7 @@ public class ServerMessageTask extends Task {
                         return true;
                     }
                 },
-                new NewCommand("listservermessages", Rank.DEVELOPER) {
+                new NewCommand("listservermessages", Rank.ADMINISTRATOR) {
                     @Override
                     public boolean execute(Player player, String[] input) {
                         messages.stream().forEach(player::sendMessage);

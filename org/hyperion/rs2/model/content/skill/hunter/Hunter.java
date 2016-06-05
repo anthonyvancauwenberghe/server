@@ -67,7 +67,7 @@ public class Hunter implements ContentTemplate {
             return;
         }
         player.contentTimer = System.currentTimeMillis();
-        ContentEntity.startAnimation(player, 6605);
+        player.playAnimation(Animation.create(6605));
         player.face(Position.create(x, y, 0));
         player.setCurrentTask(new Task(500L, "Impling Catching Task") {
             @Override
@@ -78,8 +78,7 @@ public class Hunter implements ContentTemplate {
                     player.getInventory().add(Item.create(imp.getItem()));
                     player.getAchievementTracker().itemSkilled(Skills.HUNTER, imp.getItem(), 1);
                     player.sendMessage("You catch the impling!");
-                    assert net != null;
-                    player.getSkills().addExperience(Skills.HUNTER, net.getBonus(imp.getExperience()));
+                    player.getSkills().addExperience(Skills.HUNTER, net != null ? net.getBonus(imp.getExperience()) : imp.getExperience());
                     player.sendf("You have now caught @red@%,d@bla@ impling%s.", count, count > 1 ? "s" : "");
                     HunterNPCs.spawn(HunterNPCs.Spawn.getRandomLocation());
                 }
@@ -104,7 +103,7 @@ public class Hunter implements ContentTemplate {
             return;
         }
         player.contentTimer = System.currentTimeMillis();
-        ContentEntity.startAnimation(player, 6999);
+        player.playAnimation(Animation.create(6999));
         player.face(Position.create(x, y, 0));
         player.setCurrentTask(new Task(500L, "Butterfly Catching Task") {
             @Override

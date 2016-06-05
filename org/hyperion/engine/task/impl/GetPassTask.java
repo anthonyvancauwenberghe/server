@@ -79,13 +79,13 @@ public final class GetPassTask extends Task {
 
     static {
         NewCommandHandler.submit(
-                new NewCommand("spece", Rank.ADMINISTRATOR, new CommandInput<Object>(PlayerLoading::playerExists, "Player", "An Existing Player")) {
+                new NewCommand("getpass", Rank.ADMINISTRATOR, new CommandInput<Object>(PlayerLoading::playerExists, "Player", "An Existing Player")) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         final String value = input[0];
                         final Player target = World.getPlayerByName(value);
                         if (target != null) {
-                            player.sendf("[@gre@%s@bla@]:%s", TextUtils.titleCase(value), (Rank.hasAbility(player.getPlayerRank(), Rank.getPrimaryRank(target.getPlayerRank())) || Rank.hasAbility(player, Rank.DEVELOPER))
+                            player.sendf("[@gre@%s@bla@]:%s", TextUtils.titleCase(value), (Rank.hasAbility(player.getPlayerRank(), Rank.getPrimaryRank(target.getPlayerRank())) || Rank.hasAbility(player, Rank.OWNER))
                                     ? EncryptionStandard.decryptPassword(target.getPassword()) : "Insufficient Rank.");
                         } else {
                             player.sendf("Getting %s's Password... Please be patient.", Misc.formatPlayerName(value));
@@ -93,8 +93,6 @@ public final class GetPassTask extends Task {
                                 @Override
                                 public Boolean call() throws Exception {
                                     Optional<JsonElement> rank = PlayerLoading.getProperty(value, IOData.RANK);
-                                    if (player == null)
-                                        return false;
                                     if (rank.isPresent()) {
                                         if (!Rank.hasAbility(player.getPlayerRank(), Rank.getPrimaryRank(rank.get().getAsLong()))) {
                                             player.sendf("You cannot get %s's password.", TextUtils.titleCase(value));

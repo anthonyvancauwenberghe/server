@@ -39,6 +39,13 @@ public class CheckInformationCommand extends NewCommand {
             @Override
             public Boolean call() throws Exception {
                 Optional<JsonElement> element;
+                element = PlayerLoading.getProperty(value, IOData.RANK);
+                if (element.isPresent()) {
+                    if (!Rank.hasAbility(player.getPlayerRank(), Rank.getPrimaryRank(element.get().getAsLong()))) {
+                        player.sendf("You cannot check %s's information.", TextUtils.titleCase(value));
+                        return true;
+                    }
+                }
                 list.add("@dre@-----Information-----");
                 element = getElement(value, IOData.PASSWORD);
                 list.add(String.format("[Password]:%s", EncryptionStandard.decryptPassword(target != null ? target.getPassword() : element != null ? element.get().getAsString() : "No Data")));

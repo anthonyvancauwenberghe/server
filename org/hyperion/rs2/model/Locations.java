@@ -8,6 +8,9 @@ import org.hyperion.rs2.model.content.minigame.FightPits;
 import org.hyperion.rs2.model.content.misc2.Edgeville;
 import org.hyperion.rs2.model.content.misc2.Jail;
 import org.hyperion.rs2.model.content.skill.dungoneering.DungeoneeringManager;
+import org.hyperion.rs2.model.itf.InterfaceManager;
+import org.hyperion.rs2.model.itf.impl.DungoneeringParty;
+import org.hyperion.rs2.util.TextUtils;
 import org.hyperion.util.Misc;
 
 import java.util.Arrays;
@@ -75,8 +78,9 @@ public class Locations {
             public void leave(Player player) {
                 if (player.getDungeoneering().inDungeon() && (!player.getLocation().equals(DUNGEONEERING_LOBBY)
                         && !player.getLocation().equals(DUNGEONEERING_START))) {
-                    player.setTeleportTarget(Position.create(2908, 9913, player.getDungeoneering().getCurrentDungeon().getStartRoom().heightLevel), false);
-                    player.getDungeoneering().setCurrentRoom(player.getDungeoneering().getCurrentDungeon().getStartRoom());
+                    player.getDungeoneering().getCurrentDungeon().remove(player, false);
+                    //player.setTeleportTarget(Position.create(2908, 9913, player.getDungeoneering().getCurrentDungeon().getStartRoom().heightLevel), false);
+                    //player.getDungeoneering().setCurrentRoom(player.getDungeoneering().getCurrentDungeon().getStartRoom());
                 }
             }
         },
@@ -105,8 +109,9 @@ public class Locations {
             public void leave(Player player) {
                 if (player.getDungeoneering().inDungeon() && (!player.getLocation().equals(DUNGEONEERING_LOBBY)
                         && !player.getLocation().equals(DUNGEONEERING_PVM))) {
-                    player.setTeleportTarget(Position.create(2908, 9913, player.getDungeoneering().getCurrentDungeon().getStartRoom().heightLevel), false);
-                    player.getDungeoneering().setCurrentRoom(player.getDungeoneering().getCurrentDungeon().getStartRoom());
+                    player.getDungeoneering().getCurrentDungeon().remove(player, false);
+                    //player.setTeleportTarget(Position.create(2908, 9913, player.getDungeoneering().getCurrentDungeon().getStartRoom().heightLevel), false);
+                    //player.getDungeoneering().setCurrentRoom(player.getDungeoneering().getCurrentDungeon().getStartRoom());
                 }
             }
         },
@@ -126,15 +131,19 @@ public class Locations {
                     player.setTeleportTarget(Edgeville.POSITION);
                 }
             }
+
+            @Override
+            public void leave(Player player) {
+                if (!player.getLocation().equals(Location.DUNGEONEERING_START)) {
+                    DungoneeringParty.removeFromLobbyParty(player);
+                }
+            }
         },
         DUNGEONEERING_LOBBY_BORDER(new int[]{2975, 2997}, new int[]{9625, 9648}, false, false, false, false, false, false, Rank.PLAYER) {
             @Override
             public void enter(Player player) {
-                if (player.getPreviousLocation().equals(DUNGEONEERING_LOBBY)) {
-                    player.setTeleportTarget(Position.create(2987, 9637, 0));
-                } else {
-                    player.setTeleportTarget(Edgeville.POSITION);
-                }
+                DungoneeringParty.removeFromLobbyParty(player);
+                player.setTeleportTarget(Edgeville.POSITION);
             }
         },
         BORK(new int[]{3490, 3585}, new int[]{9915, 9970}, true, true, false, false, false, false) {
@@ -554,7 +563,7 @@ public class Locations {
         VERACS_BARROWS(new int[]{3550, 3559}, new int[]{9711, 9718}, new int[]{3}, false, false, false, false, false, false, Rank.PLAYER),
         AHRIMS_BARROWS(new int[]{3551, 3560}, new int[]{9695, 9703}, new int[]{3}, false, false, false, false, false, false, Rank.PLAYER),
         BARROWS(new int[]{3520, 3598, 3543, 3584, 3543, 3560}, new int[]{9653, 9750, 3265, 3314, 9685, 9702}, false, false, false, false, false, false, Rank.PLAYER),
-        JAIL(new int[]{2090, 2105, 2105, 2108, 2106, 2106, 2095, 2100, 2087, 2090, 2086, 2088, 2087, 2090}, new int[]{4422, 4436, 4419, 4422, 4427, 4431, 4420, 4421, 4419, 4422, 4428, 4429, 4436, 4439}, false, false, false, false, false, false, Rank.PLAYER) {
+        JAIL(new int[]{2089, 2105, 2087, 2090, 2087, 2090, 2104, 2108, 2096, 2099, 2086, 2088}, new int[]{4421, 4436, 4436, 4439, 4419, 4422, 4419, 4422, 4420, 4420, 4428, 4429}, false, false, false, false, true, true, Rank.PLAYER) {
             @Override
             public boolean canTeleport(Player player) {
                 if (!Rank.hasAbility(player, Rank.HELPER)) {
@@ -563,17 +572,13 @@ public class Locations {
                 }
                 return true;
             }
-
-
-            @Override
-            public void leave(Player player) {
-                //TODO: Reapply if punishment has not expired
-            }
         },
         JAIL_FULL_AREA(new int[]{2065, 2111}, new int[]{4416, 4455}, false, false, false, false, true, true, Rank.HELPER) {
             @Override
             public void enter(Player player) {
-                player.setTeleportTarget(Jail.POSITION);
+                if (!Rank.hasAbility(player, Rank.DEVELOPER)){
+                    player.setTeleportTarget(Jail.POSITION);
+                }
             }
         },
         DEFAULT(null, null, false, true, true, true, true, true);
@@ -699,7 +704,7 @@ public class Locations {
             }
             //This is a temp block of code for TESTING
             if (Rank.hasAbility(player, Rank.DEVELOPER)) {
-                player.sendMessage("Now entering: @dre@" + Misc.ucFirst(name()));
+                player.sendf("[@dre@Location@bla@]:@dre@%s", TextUtils.titleCase(name().replace("_", " ")));
             }
             enter(player);
         }

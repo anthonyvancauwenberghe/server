@@ -1,24 +1,24 @@
 package org.hyperion.rs2.model.itf.impl;
 
-import org.hyperion.engine.task.Task;
 import org.hyperion.rs2.model.*;
 import org.hyperion.rs2.model.content.clan.ClanManager;
 import org.hyperion.rs2.model.itf.Interface;
+import org.hyperion.rs2.model.itf.InterfaceManager;
 import org.hyperion.rs2.net.ActionSender;
 import org.hyperion.rs2.net.Packet;
+import org.hyperion.rs2.util.TextUtils;
 
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
- * Created with IntelliJ IDEA.
- * User: Wasay
- * Date: 2/22/15
- * Time: 4:05 PM
- * To change this template use File | Settings | File Templates.
+ * @author Daniel
  */
 public class DungoneeringParty extends Interface {
-
 
     public static final int ID = 13;
 
@@ -26,84 +26,183 @@ public class DungoneeringParty extends Interface {
         super(ID);
     }
 
+    public static Interface getInterface() {
+        return InterfaceManager.get(ID);
+    }
 
-    private static final int START = 0;
-    private static final int INVITE = 1;
+    public static void respond(final Player player, final int value) {
+        final Player leader = (Player) player.getExtraData().get("DungeonInvitation");
+        if (leader != null && leader.getLocation().equals(Locations.Location.DUNGEONEERING_LOBBY)) {
+            leader.write(getInterface().createDataBuilder().put((byte) value).putRS2String(player.getName()).toPacket());
+            if (value == 0) {
+                if (player.getDungeoneeringLeader() != null) {
+                    if (player.getDungeoneeringLeader().getDungeoneeringLobbyTeam().contains(player)) {
+                        player.getDungeoneeringLeader().getDungeoneeringLobbyTeam().remove(player);
+                    }
+                }
+                player.setDungeoneeringLeader(leader);
+                player.getDungeoneeringLeader().getDungeoneeringLobbyTeam().add(player);
+                final String party = String.format("Party %s", leader.getName());
+                if (!player.getClanName().equalsIgnoreCase(party)) {
+                    ClanManager.leaveChat(player, true, true);
+                    ClanManager.joinClanChat(player, party, false);
+                }
+            }
+            leader.sendf("Player @red@%s@bla@ has %s@bla@ your invite request.", TextUtils.titleCase(player.getName()), value != 0 ? "@red@declined" : "@gre@accepted");
+            player.getExtraData().remove("DungeonInvitation");
+        } else {
+            player.sendf("This Dungeoneering invitation has expired.");
+        }
+    }
 
+    public static void removeFromLobbyParty(final Player player) {
+        final Player leader = player.getDungeoneeringLeader();
+        if (leader != null) {
+            if (leader != player) {
+                if (leader.getDungeoneeringLobbyTeam().contains(player)) {
+                    leader.getDungeoneeringLobbyTeam().remove(player);
+                    leader.write(getInterface().createDataBuilder().put((byte) 1).putRS2String(player.getName()).toPacket());
+                    leader.sendf("Player @red@%s@bla@ has been removed from your lobby party.", TextUtils.titleCase(player.getName()));
+                }
+                player.setDungeoneeringLeader(null);
+            } else {
+                if (!player.getDungeoneeringLobbyTeam().isEmpty()) {
+                    player.getDungeoneeringLobbyTeam().stream().filter(target -> target != null && target != player).forEach(target -> {
+                        player.write(getInterface().createDataBuilder().put((byte) 1).putRS2String(target.getName()).toPacket());
+                        player.sendf("Player @red@%s@bla@ has been removed from your lobby party.", TextUtils.titleCase(target.getName()));
+                        target.sendf("You have been removed from @red@%s@bla@'s Dungeoneering Party.", TextUtils.titleCase(player.getName()));
+                        target.setDungeoneeringLeader(null);
+                    });
+                    player.getDungeoneeringLobbyTeam().clear();
+                }
+            }
+        }
+    }
 
     @Override
-    public void handle(Player player, Packet pkt) {
-        final int id = pkt.getByte();
-        final DungeonDifficulty difficulty = DungeonDifficulty.values()[pkt.getByte()];
+    public void handle(final Player player, final Packet packet) {
+        final Button button = Button.getByIntegerValue(packet.getByte());
+        if (button != null) {
+            button.process(player, packet, DungeonDifficulty.values()[packet.getByte()]);
+        }
+    }
 
-        switch(id) {
-            case START:
-                int sizeIndex = pkt.getByte();
-                if(sizeIndex < 0)
+    private enum Button {
+        START(0) {
+            public void process(final Player player, final Packet packet, final DungeonDifficulty difficulty) {
+                final int index = packet.getByte();
+                if (index < 0) {
                     return;
-                final DungeonDifficulty.DungeonSize size = DungeonDifficulty.DungeonSize.values()[sizeIndex];
-                final String[] playerStrings = new String[pkt.getByte()];
-                for(int i = 0; i < playerStrings.length; i++) {
-                    playerStrings[i] = pkt.getRS2String();
                 }
-                final List<Player> players = new CopyOnWriteArrayList<>();
-
-                for(final String s : playerStrings) {
-                    final Player p = World.getPlayerByName(s);
-                    if(p == null || !p.getPosition().inDungeonLobby()) {
-                        player.sendMessage("%s cannot join party, removed from group", s);
-                    } else {
-                        if(p.getSkills().getLevel(Skills.DUNGEONEERING) < difficulty.min_level)
-                            player.sendMessage("%s does not meet difficulty level requirements, removed from group", s);
-                        if(!players.contains(p))
-                            players.add(p);
+                if (player.getDungeoneeringLeader() != player) {
+                    if (player.getDungeoneeringLeader() != null && player.getDungeoneeringLeader().getDungeoneeringLobbyTeam().contains(player)) {
+                        player.getDungeoneeringLeader().getDungeoneeringLobbyTeam().remove(player);
                     }
-
-
+                    player.setDungeoneeringLeader(player);
                 }
-
-                World.submit(new Task(1000,"dung party") {
-                    @Override
-                    public void execute() {
-                        players.add(player);
-                        player.getDungeoneering().start(players, difficulty, size);
-                        this.stop();
+                if (!player.getDungeoneeringLobbyTeam().contains(player)) {
+                    player.getDungeoneeringLobbyTeam().add(player);
+                }
+                final List<Player> list = new CopyOnWriteArrayList<>();
+                player.getDungeoneeringLobbyTeam().stream()
+                        .filter(target -> target != null && target.getLocation().equals(Locations.Location.DUNGEONEERING_LOBBY))
+                        .forEach(target -> {
+                    if (target.getSkills().getLevel(Skills.DUNGEONEERING) < difficulty.min_level) {
+                        player.sendf("Player @red@%s@bla@ does not meet the Dungeon requirements and has been removed.", target.getName());
+                        player.write(getInterface().createDataBuilder().put((byte) 1).putRS2String(target.getName()).toPacket());
+                    } else {
+                        list.add(target);
                     }
                 });
-                hide(player);
-                break;
-            case INVITE:
-                ClanManager.joinClanChat(player, "Party "+player.getName(), false);
-                final String name = pkt.getRS2String();
-                final Player p = World.getPlayerByName(name);
-                if(name.equalsIgnoreCase(player.getName())) {
-                    player.sendMessage("You cannot invite yourself!");
-                    return;
+                player.getDungeoneeringLobbyTeam().clear();
+                getInterface().hide(player);
+                player.getDungeoneering().start(list, difficulty, DungeonDifficulty.DungeonSize.values()[index]);
+            }
+        },
+        INVITE(1) {
+            public void process(final Player player, final Packet packet, final DungeonDifficulty difficulty) {
+                if (player.getLocation().equals(Locations.Location.DUNGEONEERING_LOBBY)) {
+                    player.getDungeoneeringLobbyTeam().stream().filter(target -> target != null && !target.getLocation().equals(Locations.Location.DUNGEONEERING_LOBBY)).forEach(target -> {
+                        player.getDungeoneeringLobbyTeam().remove(target);
+                        target.setDungeoneeringLeader(null);
+                        player.write(getInterface().createDataBuilder().put((byte) 1).putRS2String(target.getName()).toPacket());
+                    });
+                    final String name = packet.getRS2String();
+                    final Player target = World.getPlayerByName(name);
+                    if (player != target) {
+                        if (player.getDungeoneeringLeader() != player) {
+                            if (player.getDungeoneeringLeader() != null && player.getDungeoneeringLeader().getDungeoneeringLobbyTeam().contains(player)) {
+                                player.getDungeoneeringLeader().getDungeoneeringLobbyTeam().remove(player);
+                            }
+                            player.setDungeoneeringLeader(player);
+                        }
+                        if (!player.getDungeoneeringLobbyTeam().contains(player)) {
+                            player.getDungeoneeringLobbyTeam().add(player);
+                        }
+                        final String party = String.format("Party %s", player.getName());
+                        if (!player.getClanName().equalsIgnoreCase(party)) {
+                            ClanManager.leaveChat(player, true, true);
+                            ClanManager.joinClanChat(player, party, false);
+                        }
+                        if (target != null) {
+                            if (player.getDungeoneeringLobbyTeam().contains(target)) {
+                                player.sendf("Player @red@%s @bla@is already apart of your Dungeoneering Team.", TextUtils.titleCase(target.getName()));
+                            } else {
+                                if (player.getDungeoneeringLobbyTeam().size() >= 5) {
+                                    player.sendMessage("Your Dungeoneering Party is currently full.");
+                                    return;
+                                }
+                                if (target.getSkills().getLevel(Skills.DUNGEONEERING) < difficulty.min_level || !target.getLocation().equals(Locations.Location.DUNGEONEERING_LOBBY)) {
+                                    player.write(getInterface().createDataBuilder().put((byte) 1).putRS2String(target.getName()).toPacket());
+                                    return;
+                                }
+                                target.getActionSender().sendDialogue(String.format("Join %s?", TextUtils.titleCase(player.getName())), ActionSender.DialogueType.OPTION, 1, Animation.FacialAnimation.DEFAULT, "Yes, I want to join this dungeon.", "No, I don't want to join this dungeon.");
+                                target.getExtraData().put("DungeonInvitation", player);
+                                target.getInterfaceState().setNextDialogueId(0, 7000);
+                                target.getInterfaceState().setNextDialogueId(1, 7001);
+                            }
+                        }
+                    } else {
+                        player.sendMessage("You cannot invite yourself!");
+                    }
                 }
-                if(p == null || p.getSkills().getLevel(Skills.DUNGEONEERING) < difficulty.min_level || !p.getPosition().inDungeonLobby()) {
-                    player.write(createDataBuilder().put((byte) 1).putRS2String(name).toPacket());
-                    break;
+            }
+        },
+        DELETE(2) {
+            @Override
+            public void process(final Player player, final Packet packet, final DungeonDifficulty difficulty) {
+                final String name = packet.getRS2String();
+                final Player target = World.getPlayerByName(name);
+                if (target != null) {
+                    if (player != target) {
+                        if (target.getExtraData().get("DungeonInvitation") != null) {
+                            target.getExtraData().remove("DungeonInvitation");
+                        }
+                        if (player.getDungeoneeringLobbyTeam().contains(target)) {
+                            player.getDungeoneeringLobbyTeam().remove(target);
+                            target.sendf("You have been removed from %s's Dungeoneering Party.", TextUtils.titleCase(player.getName()));
+                        }
+                    }
                 }
+            }
+        };
 
+        private static final Map<Integer, Button> BY_INTEGER_VALUE = Stream.of(values()).collect(Collectors.toMap(Button::getValue, Function.identity()));
 
-                p.getActionSender().sendDialogue("Join "+player.getName()+"?", ActionSender.DialogueType.OPTION, 1, Animation.FacialAnimation.DEFAULT,
-                        "Yes, I want to join this dungeon", "No");
-                p.getExtraData().put("dungoffer", player);
-                p.getInterfaceState().setNextDialogueId(0, 7000);
-                p.getInterfaceState().setNextDialogueId(1, 7001);
-                break;
+        private final int value;
+
+        Button(int value) {
+            this.value = value;
         }
 
+        public static Button getByIntegerValue(final int value) {
+            return BY_INTEGER_VALUE.get(value);
+        }
+
+        public int getValue() {
+            return value;
+        }
+
+        public abstract void process(Player player, Packet packet, DungeonDifficulty difficulty);
     }
-
-    public void respond(final Player player, int response) {
-        final Player holder = (Player)player.getExtraData().get("dungoffer");
-        holder.write(createDataBuilder().put((byte) response).putRS2String(player.getName()).toPacket());
-        if(response == 0)
-            ClanManager.joinClanChat(player, "Party "+holder.getName(), false);
-        player.getExtraData().put("dungoffer", null);
-    }
-
-
-
 }

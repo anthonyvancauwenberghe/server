@@ -104,7 +104,7 @@ public class ModeratorCommands implements NewCommandExtension {
 
                             @Override
                             public Boolean call() throws Exception {
-                                List<String> usedIps = DbHub.getPlayerDb().getLogs().getIpForPlayer(targetName).stream().map(IPLog::getIp).collect(Collectors.toList());
+                                List<String> usedIps = DbHub.getPlayerDb().getLogs().getIpForPlayer(targetName).stream().filter(value -> value != null).map(IPLog::getIp).collect(Collectors.toList());
                                 if (usedIps.isEmpty()) {
                                     player.sendf("No used Protocols for player %s.", targetName);
                                     return true;
@@ -154,9 +154,9 @@ public class ModeratorCommands implements NewCommandExtension {
                         final Map<String, List<Player>> map = new HashMap<>();
                         World.getPlayers().stream().filter(target -> target != null &&
                                 (target.getLocation().equals(Locations.Location.WILDERNESS)
-                                || target.getLocation().equals(Locations.Location.WILDERNESS_MULTI)
-                                || target.getLocation().equals(Locations.Location.WILDERNESS_DUNGEON)
-                                || target.getLocation().equals(Locations.Location.KBD_WILDERNESS_ENTRANCE))).forEach(target -> {
+                                        || target.getLocation().equals(Locations.Location.WILDERNESS_MULTI)
+                                        || target.getLocation().equals(Locations.Location.WILDERNESS_DUNGEON)
+                                        || target.getLocation().equals(Locations.Location.KBD_WILDERNESS_ENTRANCE))).forEach(target -> {
                             final String protocol = target.getShortIP();
                             if (!map.containsKey(protocol)) {
                                 map.put(protocol, new ArrayList<>());
@@ -505,18 +505,6 @@ public class ModeratorCommands implements NewCommandExtension {
                             player.sendf("[Giles]: %d, %d, %d, %sDead, %sServerKilled, %sTeleporting", npc.getPosition().getX(), npc.getPosition().getY(), npc.getPosition().getZ(), npc.isDead() ? "=" : "!", npc.serverKilled ? "=" : "!", npc.isTeleporting() ? "=" : "!");
                             npc.vacateSquare();
                         });
-                        return true;
-                    }
-                },
-                new Command("namenpc", new CommandInput<String>(string -> string != null, "String", "NPC Name")) {
-                    @Override
-                    protected boolean execute(Player player, String[] input) {
-                        final String value = input[0].trim();
-                        for (int array = 0; array < 6693; array++) {
-                            if (NPCDefinition.forId(array).name().toLowerCase().contains(value.toLowerCase())) {
-                                player.sendf("[Name]: %s, [ID]: %,d", NPCDefinition.forId(array).getName(), array);
-                            }
-                        }
                         return true;
                     }
                 },

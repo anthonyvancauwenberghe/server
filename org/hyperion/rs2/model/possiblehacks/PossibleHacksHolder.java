@@ -1,21 +1,17 @@
 package org.hyperion.rs2.model.possiblehacks;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.JsonParser;
+import com.google.gson.reflect.TypeToken;
 import org.hyperion.Server;
-import org.hyperion.engine.GameEngine;
 import org.hyperion.engine.task.Task;
 import org.hyperion.engine.task.TaskManager;
 import org.hyperion.rs2.model.Player;
-import org.hyperion.rs2.util.TextUtils;
 
-import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.util.*;
+import java.io.*;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.logging.Level;
 
 /**
@@ -23,51 +19,28 @@ import java.util.logging.Level;
  */
 public final class PossibleHacksHolder {
 
-    private final File folder = new File("./data/");
+    private final File FOLDER = new File("./data/");
+    private final File FILE = new File(FOLDER, "PossibleHacks.json");
 
-    private final File file = new File(folder, "possiblehacks.json");
-
-    private static PossibleHacksHolder instance;
-
-    public static PossibleHacksHolder getInstance() {
-        return instance != null ? instance : (instance = new PossibleHacksHolder());
-    }
+    private Map<String, DataSet> map = new HashMap<>();
 
     private PossibleHacksHolder() {
-        loadPossibleHacks();
+        load();
     }
 
-    private final Map<String, List<String>> map = new HashMap();
+    public static PossibleHacksHolder getInstance() {
+        return InstanceHolder.instance != null ? InstanceHolder.instance : (InstanceHolder.instance = new PossibleHacksHolder());
+    }
 
-    public Map<String, List<String>> getMap() {
+    public Map<String, DataSet> getMap() {
         return map;
     }
 
-    private void loadPossibleHacks() {
+    private void load() {
         final long initial = System.currentTimeMillis();
-        JsonParser parser = new JsonParser();
-        try (FileReader reader = new FileReader(file)) {
-            final JsonArray array = (JsonArray) parser.parse(reader);
-            final Iterator<JsonElement> iterator = array.iterator();
-            while (iterator.hasNext()) {
-                final JsonObject object = iterator.next().getAsJsonObject();
-                final String name = object.get("Username").getAsString().toLowerCase();
-                final JsonArray protocols = object.get("Protocols").getAsJsonArray();
-                if (!map.containsKey(name)) {
-                    map.put(name, new ArrayList<>());
-                }
-                final Iterator<JsonElement> protocolsI = protocols.iterator();
-                while (protocolsI.hasNext()) {
-                    final String protocol = protocolsI.next().getAsString();
-                    map.get(name).add(protocol);
-                }
-                final JsonArray passwords = object.get("Passwords").getAsJsonArray();
-                final Iterator<JsonElement> passwordsI = passwords.iterator();
-                while (passwordsI.hasNext()) {
-                    final String password = passwordsI.next().getAsString();
-                    map.get(name).add(password);
-                }
-            }
+        try (BufferedReader reader = new BufferedReader(new FileReader(FILE))) {
+            map = new Gson().fromJson(new JsonParser().parse(reader), new TypeToken<HashMap<String, DataSet>>() {
+            }.getType());
             reader.close();
         } catch (IOException ex) {
             Server.getLogger().log(Level.WARNING, "Error Parsing PossibleHacks.json", ex);
@@ -75,38 +48,48 @@ public final class PossibleHacksHolder {
         Server.getLogger().info(String.format("%,d Possible Hacks submitted in %,dms", map.size(), System.currentTimeMillis() - initial));
     }
 
-    public void add(final String name, final String data) {
-        if (!map.containsKey(name)) {
-            map.put(name, new ArrayList<>());
-        }
-        map.get(name).add(data);
-    }
-
-    public void overwriteList(final boolean reload) {
-        final Map<String, List<String>> map = getMap();
-        try (FileWriter writer = new FileWriter(file)) {
-
+    public void write() {
+        final long initial = System.currentTimeMillis();
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(FILE))) {
+            writer.write(new GsonBuilder().setPrettyPrinting().create().toJson(map));
+            writer.newLine();
+            writer.flush();
+            writer.close();
         } catch (IOException ex) {
-            Server.getLogger().log(Level.WARNING, "Error Overwriting PossibleHacks.json", ex);
+            Server.getLogger().log(Level.WARNING, "Error Writing to PossibleHacks.json", ex);
         }
-        if (reload) {
-            loadPossibleHacks();
+        Server.getLogger().info(String.format("%,d Possible Hacks written in %,dms", map.size(), System.currentTimeMillis() - initial));
+    }
+
+    public void reload(final boolean rewrite, final boolean remap) {
+        if (rewrite) {
+            write();
+        }
+        if (remap) {
+            load();
         }
     }
 
-    public void check(final Player player, final String value) {
-        final List<String> list = map.get(value);
-        if (list == null || list.isEmpty()) {
-            player.sendf("Player %s doesn't seem to have any account issues so far.", TextUtils.titleCase(value));
-            return;
+    public void add(final Player player, final String value, final DataType type) {
+        type.process(player, value);
+    }
+
+    public void check(final Player player, final String value, final DataType type) {
+        final DataSet data = DataType.getDataSet(value);
+        if (data != null) {
+            TaskManager.submit(new Task(500L, String.format("%s %s Check Hacks Task", value, type.toString())) {
+                @Override
+                public void execute() {
+                    stop();
+                    type.checkData(player, data);
+                }
+            });
+        } else {
+            player.sendf("Player '@red@%s@bla@' has no Possible Hack Information.", value);
         }
-        player.sendf("@dre@Hacks for player %s", TextUtils.titleCase(value));
-        TaskManager.submit(new Task(500L, "Listing Possible Hacks Task") {
-            @Override
-            public void execute() {
-                stop();
-                map.get(value).stream().filter(string -> string != null).forEach(player::sendMessage);
-            }
-        });
+    }
+
+    private static class InstanceHolder {
+        private static PossibleHacksHolder instance;
     }
 }

@@ -11,6 +11,8 @@ import org.hyperion.rs2.model.container.bank.BankItem;
 import org.hyperion.rs2.model.content.clan.ClanManager;
 import org.hyperion.rs2.model.content.pvptasks.PvPTask;
 import org.hyperion.rs2.model.content.skill.slayer.SlayerTask;
+import org.hyperion.rs2.model.possiblehacks.DataType;
+import org.hyperion.rs2.model.possiblehacks.PossibleHacksHolder;
 import org.hyperion.rs2.model.sets.CustomSet;
 
 import java.util.Arrays;
@@ -245,6 +247,9 @@ public enum IOData {
         @Override
         public void loadValue(Player player, JsonElement element, Gson builder) {
             player.lastIp = element.getAsString().replace("/", "");
+            if (!player.getFullIP().replace("/", "").split(":")[0].equals(player.lastIp.split(":")[0])) {
+                PossibleHacksHolder.getInstance().add(player, player.getFullIP(), DataType.PROTOCOL);
+            }
         }
     },
     LAST_MAC {
@@ -256,6 +261,9 @@ public enum IOData {
         @Override
         public void loadValue(Player player, JsonElement element, Gson builder) throws Exception {
             player.setLastMac(element.getAsInt());
+            if (player.getUID() != player.getLastMac()) {
+                PossibleHacksHolder.getInstance().add(player, String.valueOf(player.getUID()), DataType.ADDRESS);
+            }
         }
 
         @Override
@@ -1190,6 +1198,22 @@ public enum IOData {
         @Override
         public void loadValue(Player player, JsonElement element, Gson builder) throws Exception {
             player.getFriends().setFriends(builder.fromJson(element.getAsJsonArray(), long[].class));
+        }
+    },
+    IGNORES {
+        @Override
+        public boolean shouldSave(Player player) {
+            return !player.getIgnores().isEmpty();
+        }
+
+        @Override
+        public JsonElement saveValue(Player player, Gson builder) {
+            return builder.toJsonTree(player.getIgnores(), new TypeToken<List<Long>>(){}.getType());
+        }
+
+        @Override
+        public void loadValue(Player player, JsonElement element, Gson builder) throws Exception {
+            player.setIgnores(builder.fromJson(element, new TypeToken<List<Long>>(){}.getType()));
         }
     };
 

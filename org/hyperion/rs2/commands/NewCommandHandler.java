@@ -152,7 +152,7 @@ public final class NewCommandHandler {
             player.sendf("Command '@red@%s@bla@' is currently disabled.", key);
             return false;
         }
-        if (COMMANDS_USED.containsKey(player.getName()) && COMMANDS_USED.get(player.getName()).stream().filter(commandUsage -> commandUsage.equalsIgnoreCase(key)).count() > 0)
+        if (!Rank.hasAbility(player, Rank.DEVELOPER) && COMMANDS_USED.containsKey(player.getName()) && COMMANDS_USED.get(player.getName()).stream().filter(commandUsage -> commandUsage.equalsIgnoreCase(key)).count() > 0)
             return false;
         //After we split the input, if the command is just the key we skip a part.
         List<NewCommand> fittingCommands;

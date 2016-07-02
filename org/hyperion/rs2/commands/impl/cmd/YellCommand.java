@@ -18,9 +18,9 @@ import org.hyperion.util.Time;
  */
 public class YellCommand extends NewCommand {
 
-    public static final int NORMAL_YELL_DELAY = 240000;
-    public static final int DONATOR_YELL_DELAY = 180000;
-    public static final int SUPER_YELL_DELAY = 120000;
+    public static final int NORMAL_YELL_DELAY = 120000;//240000;
+    public static final int DONATOR_YELL_DELAY = 60000;//180000;
+    public static final int SUPER_YELL_DELAY = 30000;//120000;
 
     public static int minYellRank = 0;
 

@@ -104,7 +104,7 @@ public class Mining implements ContentTemplate {
     }
 
     private int getCycles(final Player player, final Pickaxe pickaxe, final Rock rock) {
-        return Misc.inclusiveRandom((int) (rock.getTicks() - (player.getSkills().getLevel(Skills.HUNTER) * 0.01) + pickaxe.getSpeed()), rock.getTicks());
+        return Misc.inclusiveRandom((int) (rock.getTicks() - (player.getSkills().getLevel(Skills.MINING) * 0.01) + pickaxe.getSpeed()), rock.getTicks());
     }
 
     private boolean prospect(final Player player, final int id, final int x, final int y) {

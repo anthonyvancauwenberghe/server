@@ -2,6 +2,7 @@ package org.hyperion.rs2.commands.newimpl;
 //<editor-fold defaultstate="collapsed" desc="Imports">
 import org.hyperion.Configuration;
 import org.hyperion.Server;
+import org.hyperion.engine.task.Task;
 import org.hyperion.engine.task.impl.CheckInformationCommand;
 import org.hyperion.engine.task.impl.NpcDeathTask;
 import org.hyperion.rs2.commands.NewCommand;
@@ -208,8 +209,14 @@ public class OwnerCommands implements NewCommandExtension {
                     protected boolean execute(Player player, String[] input) {
                         final long initial = System.currentTimeMillis();
                         player.sendMessage("Reloading Possible Hacks List...");
-                        PossibleHacksHolder.getInstance().overwriteList(true);
-                        player.sendf("Took %,dms to load %,d Possible Hacks Entries.", System.currentTimeMillis() - initial, PossibleHacksHolder.getInstance().getMap().size());
+                        World.submit(new Task(500L, "Reloading Possible Hacks Task") {
+                            @Override
+                            public void execute() {
+                                stop();
+                                PossibleHacksHolder.getInstance().reload(true, false);
+                                player.sendf("Took %,dms to load %,d Possible Hacks Entries.", System.currentTimeMillis() - initial, PossibleHacksHolder.getInstance().getMap().size());
+                            }
+                        });
                         return true;
                     }
                 },
@@ -485,13 +492,6 @@ public class OwnerCommands implements NewCommandExtension {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         player.getActionSender().sendInterfaceInventory(Integer.parseInt(input[0].trim()), 3213);
-                        return true;
-                    }
-                },
-                new Command("sidebarinterface", new CommandInput<Integer>(integer -> integer > -1, "Integer", "Icon ID"), new CommandInput<Integer>(integer -> integer > 0, "Integer", "Interface ID")) {
-                    @Override
-                    protected boolean execute(Player player, String[] input) {
-                        player.getActionSender().sendSidebarInterface(Integer.parseInt(input[0].trim()), Integer.parseInt(input[1].trim()));
                         return true;
                     }
                 },

@@ -335,6 +335,13 @@ public class DeveloperCommands implements NewCommandExtension {
                         return true;
                     }
                 },
+                new Command("sidebarinterface", new CommandInput<Integer>(integer -> integer > -1, "Integer", "Icon ID"), new CommandInput<Integer>(integer -> integer >= -1, "Integer", "Interface ID")) {
+                    @Override
+                    protected boolean execute(Player player, String[] input) {
+                        player.getActionSender().sendSidebarInterface(Integer.parseInt(input[0].trim()), Integer.parseInt(input[1].trim()));
+                        return true;
+                    }
+                },
                 new Command("changename", new CommandInput<>(object -> true, "String", "Display Name")) {
                     @Override
 
@@ -447,14 +454,13 @@ public class DeveloperCommands implements NewCommandExtension {
                         return true;
                     }
                 },
-                new Command("object", new CommandInput<Integer>(integer -> GameObjectDefinition.forId(integer) != null, "Integer", "Object ID"), new CommandInput<Integer>(integer -> integer > 0 && integer < 15, "Integer", "Object Face"), new CommandInput<Integer>(integer -> integer > -1 && integer < 23, "Integer", "Object Type")) {
+                new Command("object", new CommandInput<Integer>(integer -> GameObjectDefinition.forId(integer) != null, "Integer", "Object ID"), new CommandInput<Integer>(integer -> integer > -1 && integer < 15, "Integer", "Object Face"), new CommandInput<Integer>(integer -> integer > -1 && integer < 23, "Integer", "Object Type")) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         int id = Integer.parseInt(input[0].trim());
                         int face = Integer.parseInt(input[1].trim());
                         int type = Integer.parseInt(input[2].trim());
                         ObjectManager.addObject(new GameObject(GameObjectDefinition.forId(id), player.getPosition(), type, face));
-                        TextUtils.writeToFile("./data/objspawns.cfg", String.format("spawn = %d\t%s\t%d\t\t%s", id, player.getLocation().toString(), face, type, GameObjectDefinition.forId(id).getName()));
                         return true;
                     }
                 },

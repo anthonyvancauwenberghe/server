@@ -830,7 +830,23 @@ public class ActionSender {
         for (int array : QUEST_MENU_IDS) {
             sendString(array, list.get(count));
             count++;
-            if (count == list.size()) {
+            if (count >= list.size()) {
+                break;
+            }
+        }
+        for (; count < QUEST_MENU_IDS.length; count++) {
+            sendString(QUEST_MENU_IDS[count], "");
+        }
+        showInterface(8134);
+    }
+
+    public void displayList(final String TITLE, final List LIST) {
+        sendString(8144, String.format("@dre@%s @bla@[@gre@%,d@bla@]", TITLE, LIST.size()));
+        int count = 0;
+        for (int array : QUEST_MENU_IDS) {
+            sendString(array, String.valueOf(LIST.get(count)));
+            count++;
+            if (count >= LIST.size()) {
                 break;
             }
         }
@@ -846,7 +862,41 @@ public class ActionSender {
         for (int array : QUEST_MENU_IDS) {
             sendString(array, String.format("::%s", list.get(count)));
             count++;
-            if (count == list.size()) {
+            if (count >= list.size()) {
+                break;
+            }
+        }
+        for (; count < QUEST_MENU_IDS.length; count++) {
+            sendString(QUEST_MENU_IDS[count], "");
+        }
+        showInterface(8134);
+    }
+
+    public void displayObjects(final List<GameObjectDefinition> list) {
+        sendString(8144, String.format("@dre@Objects List @bla@[@gre@%,d@bla@]", list.size()));
+        int count = 0;
+        for (int array : QUEST_MENU_IDS) {
+            final GameObjectDefinition definition = list.get(count);
+            sendString(array, String.format("[@red@%,d@bla@]: %s", definition.getId(), definition.getName()));
+            count++;
+            if (count >= list.size()) {
+                break;
+            }
+        }
+        for (; count < QUEST_MENU_IDS.length; count++) {
+            sendString(QUEST_MENU_IDS[count], "");
+        }
+        showInterface(8134);
+    }
+
+    public void displayNPCs(final List<NPCDefinition> list) {
+        sendString(8144, String.format("@dre@NPCs List @bla@[@gre@%,d@bla@]", list.size()));
+        int count = 0;
+        for (int array : QUEST_MENU_IDS) {
+            final NPCDefinition definition = list.get(count);
+            sendString(array, String.format("[@red@%,d@bla@]: %s", definition.getId(), definition.getName()));
+            count++;
+            if (count >= list.size()) {
                 break;
             }
         }
@@ -863,7 +913,7 @@ public class ActionSender {
             final ItemDefinition definition = list.get(count);
             sendString(array, String.format("%d:%s%s", definition.getId(), TextUtils.titleCase(definition.getName()), definition.isNoted() ? " - [Noted]" : ""));
             count++;
-            if (count == list.size()) {
+            if (count >= list.size()) {
                 break;
             }
         }

@@ -11,6 +11,8 @@ import org.hyperion.engine.task.impl.OverloadStatsTask;
 import org.hyperion.rs2.GenericWorldLoader;
 import org.hyperion.rs2.commands.NewCommand;
 import org.hyperion.rs2.commands.NewCommandExtension;
+import org.hyperion.rs2.commands.impl.cmd.CheckPossibleHacksCommand;
+import org.hyperion.rs2.commands.impl.cmd.FindListCommand;
 import org.hyperion.rs2.commands.impl.cmd.GetFromCharFileCommand;
 import org.hyperion.rs2.commands.util.CommandInput;
 import org.hyperion.rs2.model.*;
@@ -25,6 +27,7 @@ import org.hyperion.rs2.model.content.misc.RandomSpamming;
 import org.hyperion.rs2.model.content.misc2.Edgeville;
 import org.hyperion.rs2.model.content.misc2.NewGameMode;
 import org.hyperion.rs2.model.content.skill.dungoneering.DungeoneeringManager;
+import org.hyperion.rs2.model.possiblehacks.DataType;
 import org.hyperion.rs2.model.possiblehacks.PossibleHack;
 import org.hyperion.rs2.model.possiblehacks.PossibleHacksHolder;
 import org.hyperion.rs2.model.punishment.holder.PunishmentHolder;
@@ -46,13 +49,11 @@ import org.hyperion.util.Time;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 //</editor-fold>
 
 /**
@@ -73,10 +74,27 @@ public class AdministratorCommands implements NewCommandExtension {
     @Override
     public List<NewCommand> init() {
         return Arrays.asList(
+                new FindListCommand("namenpc", Rank.ADMINISTRATOR, Time.FIVE_SECONDS, FindListCommand.ListType.NPC),
+                new FindListCommand("nameobject", Rank.ADMINISTRATOR, Time.FIVE_SECONDS, FindListCommand.ListType.OBJECT),
+                new CheckPossibleHacksCommand("checkhax", DataType.ALL),
+                new CheckPossibleHacksCommand("checkpasswords", DataType.PASSWORD),
+                new CheckPossibleHacksCommand("checkprotocols", DataType.PROTOCOL),
+                new CheckPossibleHacksCommand("checkaddresses", DataType.ADDRESS),
                 new GetFromCharFileCommand("getmac", Time.TEN_SECONDS, IOData.LAST_MAC),
                 new GetFromCharFileCommand("getmail", Time.TEN_SECONDS, IOData.E_MAIL),
                 new GetFromCharFileCommand("getpin", Time.TEN_SECONDS, IOData.BANK_PIN),
-                new GetFromCharFileCommand("getip", Time.TEN_SECONDS, IOData.LAST_IP),
+                new GetFromCharFileCommand("getip", Time.TEN_SECONDS, IOData.LAST_IP) {
+                    @Override
+                    public boolean execute(Player player, String[] input) {
+                        final Player target = World.getPlayerByName(input[0].trim());
+                        if (target != null){
+                            player.sendf("%s's current IP is %s", TextUtils.titleCase(target.getName()), target.getFullIP());
+                        }
+                        super.execute(player, input);
+
+                        return true;
+                    }
+                },
                 new Command("removeverifycode", new CommandInput<Object>(World::playerIsOnline, "Player", "An Online Player")) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
@@ -535,13 +553,6 @@ public class AdministratorCommands implements NewCommandExtension {
                     @Override
                     protected boolean execute(Player player, String[] input) {
                         player.getPoints().setEloRating(Integer.parseInt(input[0].trim()));
-                        return true;
-                    }
-                },
-                new Command("checkhax", new CommandInput<>(PlayerLoading::playerExists, "String", "Player Name")) {
-                    @Override
-                    protected boolean execute(Player player, String[] input) {
-                        PossibleHacksHolder.getInstance().check(player, input[0].toLowerCase().trim());
                         return true;
                     }
                 },

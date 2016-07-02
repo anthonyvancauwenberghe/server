@@ -5,6 +5,7 @@ import org.hyperion.engine.task.Task;
 import org.hyperion.rs2.model.World;
 import org.hyperion.rs2.model.container.Trade;
 import org.hyperion.rs2.model.content.clan.ClanManager;
+import org.hyperion.rs2.model.possiblehacks.PossibleHacksHolder;
 import org.hyperion.rs2.saving.PlayerSaving;
 import org.hyperion.sql.impl.log.LogManager;
 import org.hyperion.util.Time;
@@ -41,6 +42,7 @@ public class Update extends Task {
             if (updateTimer == 0) {
                 World.getPlayers().stream().filter(player -> player != null).forEach(Trade::declineTrade);
                 World.getPlayers().stream().filter(player -> player != null).forEach(PlayerSaving::save);
+                PossibleHacksHolder.getInstance().reload(true, false);
                 ClanManager.save();
                 LogManager.flushAll();
                 Server.getLogger().info("Update task finished! Reason for update: " + reason);

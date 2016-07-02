@@ -189,7 +189,7 @@ public class Player extends Entity implements Persistable, Cloneable {
 	private long lastDuelUpdate = 0L;
 	private long dragonFireSpec = 0L;
 	private long lastTeleport = System.currentTimeMillis();
-	private final List<Long> ignores = new ArrayList<>(100);
+	private List<Long> ignores = new ArrayList<>(100);
 	private long locks = 0;
 	private long voteBonusEndTime = 0;
 	private long lastVoteBonus = 0L;
@@ -318,6 +318,7 @@ public class Player extends Entity implements Persistable, Cloneable {
 	private Yelling yelling = new Yelling();
 	private ExtraData extraData = new ExtraData();
 	private QuestTab questtab = new QuestTab(this);
+	private SummoningTab summoningTab = new SummoningTab(this);
 	private SpawnTab spawntab = new SpawnTab(this);
 	private AchievementTab achievementtab = new AchievementTab(this);
 	private ItemDropping itemDropping = new ItemDropping();
@@ -668,6 +669,8 @@ public class Player extends Entity implements Persistable, Cloneable {
 	public QuestTab getQuestTab() {
 		return questtab;
 	}
+
+	public SummoningTab getSummoningTab() { return summoningTab; }
 
 	public SpawnTab getSpawnTab() {
 		return spawntab;
@@ -2310,6 +2313,10 @@ public class Player extends Entity implements Persistable, Cloneable {
 
 	public List<Long> getIgnores() {
 		return ignores;
+	}
+
+	public void setIgnores(final List<Long> VALUE) {
+		ignores = VALUE;
 	}
 
 	public int getVoteStreak() {

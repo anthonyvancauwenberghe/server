@@ -4,10 +4,7 @@ package org.hyperion.rs2.commands.newimpl;
 import org.hyperion.rs2.commands.NewCommand;
 import org.hyperion.rs2.commands.NewCommandExtension;
 import org.hyperion.rs2.commands.NewCommandHandler;
-import org.hyperion.rs2.commands.impl.cmd.ClanCommand;
-import org.hyperion.rs2.commands.impl.cmd.SkillSetCommand;
-import org.hyperion.rs2.commands.impl.cmd.SpawnCommand;
-import org.hyperion.rs2.commands.impl.cmd.WikiCommand;
+import org.hyperion.rs2.commands.impl.cmd.*;
 import org.hyperion.rs2.commands.util.CommandInput;
 import org.hyperion.rs2.model.*;
 import org.hyperion.rs2.model.challenge.Challenge;
@@ -30,6 +27,7 @@ import org.hyperion.rs2.model.content.skill.dungoneering.DungeoneeringManager;
 import org.hyperion.rs2.model.customtrivia.CustomTriviaManager;
 import org.hyperion.rs2.model.itf.Interface;
 import org.hyperion.rs2.model.itf.InterfaceManager;
+import org.hyperion.rs2.model.itf.impl.ChangePassword;
 import org.hyperion.rs2.model.itf.impl.PlayerProfileInterface;
 import org.hyperion.rs2.model.punishment.Combination;
 import org.hyperion.rs2.model.punishment.Punishment;
@@ -46,7 +44,9 @@ import org.hyperion.util.Time;
 
 import java.util.*;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collector;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 //</editor-fold>
 
 /**
@@ -68,6 +68,8 @@ public class PlayerCommands implements NewCommandExtension {
     @Override
     public List<NewCommand> init() {
         return Arrays.asList(
+                new FindListCommand("findcommand", Rank.PLAYER, Time.FIFTEEN_SECONDS, FindListCommand.ListType.COMMAND),
+                new FindListCommand("nameitem", Rank.PLAYER, Time.FIVE_SECONDS, FindListCommand.ListType.ITEM),
                 new ClanCommand("cc"),
                 new ClanCommand("clan"),
                 new Command("yaks", Time.FIVE_SECONDS) {
@@ -294,10 +296,11 @@ public class PlayerCommands implements NewCommandExtension {
                         return true;
                     }
                 },
-                new Command("changepass", new CommandInput<>(object -> String.valueOf(object).matches("[a-zA-Z0-9]+") && String.valueOf(object).length() > 4, "Password", "The new password to use.")) {
+                new Command("changepass") {
                     @Override
                     protected boolean execute(Player player, String[] input) {
-                        if (player.getPassword().equalsIgnoreCase(EncryptionStandard.encryptPassword(input[0]))) {
+                        player.getInterfaceManager().show(ChangePassword.ID);
+                        /*if (player.getPassword().equalsIgnoreCase(EncryptionStandard.encryptPassword(input[0]))) {
                             player.sendMessage("Don't use the same password again!");
                             return true;
                         }
@@ -305,7 +308,7 @@ public class PlayerCommands implements NewCommandExtension {
                         player.setPassword(EncryptionStandard.encryptPassword(input[0].toLowerCase()));
                         player.sendImportantMessage("Your password is now " + input[0].toLowerCase());
                         player.getPermExtraData().put("passchange", System.currentTimeMillis());
-                        player.getExtraData().put("needpasschange", false);
+                        player.getExtraData().put("needpasschange", false);*/
                         return true;
                     }
                 },
@@ -464,27 +467,14 @@ public class PlayerCommands implements NewCommandExtension {
                 new Command("commands", Time.FIFTEEN_SECONDS) {
                     @Override
                     protected boolean execute(Player player, String[] input) {
-                        final List<Rank> list = new ArrayList<>(NewCommandHandler.getCommandsList().keySet());
-                        final List<String> commands = new ArrayList<>();
-                        list.stream().filter(rank -> Rank.hasAbility(player, rank)).forEach(rank -> NewCommandHandler.getCommandsList().get(rank).stream().forEach(command -> commands.add(command)));
-                        Collections.sort(commands, String.CASE_INSENSITIVE_ORDER);
-                        player.getActionSender().displayCommands(commands);
-                        return true;
-                    }
-                },
-                new Command("findcommand", Time.FIFTEEN_SECONDS, new CommandInput<String>(string -> string != null, "String", "A Command Phrase to Search for")) {
-                    @Override
-                    protected boolean execute(Player player, String[] input) {
-                        final String value = input[0].toLowerCase().trim();
-                        final List<Rank> list = new ArrayList<>(NewCommandHandler.getCommandsList().keySet());
-                        final List<String> commands = new ArrayList<>();
-                        list.stream().filter(rank -> Rank.hasAbility(player, rank)).forEach(rank -> NewCommandHandler.getCommandsList().get(rank).stream().filter(command -> command.toLowerCase().contains(value)).forEach(command -> commands.add(command.replace(value, String.format("@red@%s@bla@", value)))));
-                        if (commands.isEmpty()) {
-                            player.sendf("No commands found with the phrase '@red@%s@bla@'", value);
-                            return true;
-                        }
-                        Collections.sort(commands, String.CASE_INSENSITIVE_ORDER);
-                        player.getActionSender().displayCommands(commands);
+                        final List<String> COMMANDS = new ArrayList<>();
+                        NewCommandHandler.getCommandsList().keySet()
+                                .stream()
+                                .filter(rank -> Rank.hasAbility(player, rank))
+                                .forEach(value -> NewCommandHandler.getCommandsList().get(value)
+                                        .forEach(COMMANDS::add));
+                        Collections.sort(COMMANDS);
+                        player.getActionSender().displayCommands(COMMANDS);
                         return true;
                     }
                 },
@@ -630,21 +620,6 @@ public class PlayerCommands implements NewCommandExtension {
                             final int skill = ((day + array) % (Skills.SKILL_COUNT - 8)) + 7;
                             player.sendMessage(skill != 21 ? Misc.getSkillName(skill).trim() : "Random Skill");
                         }
-                        return true;
-                    }
-                },
-                new Command("nameitem", Time.FIVE_SECONDS, new CommandInput<>(object -> true, "String", "Item Phrase")) {
-                    @Override
-                    protected boolean execute(Player player, String[] input) {
-                        final String value = input[0].toLowerCase().trim();
-                        final List<ItemDefinition> list = new ArrayList<>();
-                        Arrays.asList(ItemDefinition.definitions).stream().filter(def -> def != null && def.getName().toLowerCase().contains(value)).forEach(list::add);
-                        if (list.isEmpty()) {
-                            player.sendf("No items found with the phrase '@red@%s@bla@'", value);
-                            return true;
-                        }
-                        Collections.sort(list, (one, two) -> one.getId() - two.getId());
-                        player.getActionSender().displayItems(list);
                         return true;
                     }
                 },

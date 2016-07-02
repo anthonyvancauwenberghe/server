@@ -1,9 +1,8 @@
 package org.hyperion.rs2.model;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
+import com.google.gson.Gson;
 import com.google.gson.JsonParser;
+import com.google.gson.reflect.TypeToken;
 import org.hyperion.Configuration;
 import org.hyperion.Server;
 import org.hyperion.cache.Cache;
@@ -16,7 +15,6 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.logging.Level;
 
@@ -27,9 +25,8 @@ import java.util.logging.Level;
  */
 public class ObjectManager {
 
-    private final static List<GameObject> list = new ArrayList<>();
-
-    private static final File file = new File("./data/ObjectSpawns.json");
+    private static final File FILE = new File("./data/ObjectSpawns.json");
+    private static List<GameObject> list = new ArrayList<>();
     private static int definitionCount = 0;
     private static int objectCount = 0;
 
@@ -56,14 +53,9 @@ public class ObjectManager {
         } catch (IOException ex) {
             Server.getLogger().log(Level.SEVERE, "Something went wrong while loading the cache.", ex);
         }
-        JsonParser parser = new JsonParser();
-        try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
-            JsonArray array = (JsonArray) parser.parse(reader);
-            Iterator<JsonElement> iterator = array.iterator();
-            while (iterator.hasNext()) {
-                JsonObject object = iterator.next().getAsJsonObject();
-                addObject(new GameObject(GameObjectDefinition.forId(object.get("Object").getAsInt()), Position.create(object.get("X").getAsInt(), object.get("Y").getAsInt(), object.get("Z").getAsInt()), object.get("Type").getAsInt(), object.get("Rotation").getAsInt()));
-            }
+        try (BufferedReader reader = new BufferedReader(new FileReader(FILE))) {
+            list = new Gson().fromJson(new JsonParser().parse(reader), new TypeToken<List<GameObject>>() {
+            }.getType());
             reader.close();
         } catch (IOException ex) {
             Server.getLogger().log(Level.SEVERE, String.format("Unable to parse Object Spawns."), ex);

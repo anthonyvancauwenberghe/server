@@ -18,6 +18,10 @@ public class GameObjectDefinition {
 	 */
 	private static GameObjectDefinition[] definitions = new GameObjectDefinition[MAX_DEFINITIONS];
 
+	public static GameObjectDefinition[] getDefinitions() {
+		return definitions;
+	}
+
 	/**
 	 * Adds a definition. TODO better way?
 	 *
